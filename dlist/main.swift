@@ -29,6 +29,7 @@ import Foundation
 
 
 // MARK: - Constants
+
 let DEVICE_PATH = "/dev/"
 
 
@@ -41,9 +42,7 @@ var argCount: Int       = 0
 var prevArg: String     = ""
 
 
-/*
- * FUNCTIONS
- */
+// MARK: - Functions
 
 /**
     Get a list of possible devices from the `/dev` directory.
@@ -52,13 +51,17 @@ var prevArg: String     = ""
  
     - Returns An array of the items in `/dev`.
  */
-private func getDevices() -> [String] {
+private func getDevices(from devicesPath: String) -> [String] {
     
     var list: [String] = []
     var finalList: [String] = []
     let fm = FileManager.default
     
-    list = try! fm.contentsOfDirectory(atPath: "/dev")
+    do {
+        list = try fm.contentsOfDirectory(atPath: devicesPath)
+    } catch {
+        reportErrorAndExit("\(devicesPath) cannot be found", 2)
+    }
     
     for device in list {
         if device.hasPrefix("cu.") {
@@ -81,6 +84,8 @@ private func getDevices() -> [String] {
               ie. connected MCU boards.
  */
 private func pruneDevices(_ devices: [String]) -> [String] {
+    
+    guard devices.count > 0 else { return devices }
     
     // This is the list of known `cu.` devices that are definitely not MCUs
     let removals = ["cu.debug-console", "cu.Bluetooth-Incoming-Port"]
@@ -116,7 +121,7 @@ private func pruneDevices(_ devices: [String]) -> [String] {
  */
 private func showDevices(_ targetDevice: Int) {
     
-    let baseList = getDevices()
+    let baseList = getDevices(from: DEVICE_PATH)
     let shortList = pruneDevices(baseList)
 
     if shortList.count > 0 {
@@ -152,10 +157,7 @@ private func showDevices(_ targetDevice: Int) {
 }
 
 
-
-/*
- * RUNTIME START
- */
+// MARK: - Runtime Start
 
 // Set up Ctrl-C trap
 configureSignalHandling()

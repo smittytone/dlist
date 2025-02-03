@@ -1,4 +1,4 @@
-# dlist 0.1.1
+# dlist 0.1.2
 
 ### Swift-based macOS CLI tool for listing connected MCUs
 
