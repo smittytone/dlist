@@ -28,6 +28,10 @@
 import Foundation
 
 
+// MARK: - Constants
+let DEVICE_PATH = "/dev/"
+
+
 // MARK: - Global Variables
 
 // CLI argument management
@@ -35,8 +39,6 @@ var argIsAValue: Bool   = false
 var argType: Int        = -1
 var argCount: Int       = 0
 var prevArg: String     = ""
-// App-specific Variables
-var targetDevice        = -1
 
 
 /*
@@ -108,25 +110,36 @@ private func pruneDevices(_ devices: [String]) -> [String] {
     If a selected device is available, write is path to STDOUT for piping.
  
     If no devices are present, write a warning to STDERR.
+ 
+    - Parameters
+        - targetDevice: The index of a specified device on a dlist-generated list.
  */
-private func showDevices() {
+private func showDevices(_ targetDevice: Int) {
     
     let baseList = getDevices()
     let shortList = pruneDevices(baseList)
 
     if shortList.count > 0 {
         if shortList.count == 1 {
+            // Warn if a device has been specified anyway
+            if targetDevice != -1 && targetDevice != 1 {
+                reportWarning("\(targetDevice) is out of range (1)")
+            }
+            
             // Write the path of the only device to STDOUT
-            writeToStdout(shortList[0])
+            writeToStdout(DEVICE_PATH + shortList[0])
         } else {
+            if targetDevice >= shortList.count {
+                reportWarning("\(targetDevice) is out of range (1-\(shortList.count))")
+            }
             var count = 1
             for device in shortList {
                 if targetDevice != -1 && count == targetDevice {
                     // Write the path of the chosen device to STDOUT
-                    writeToStdout(device)
+                    writeToStdout(DEVICE_PATH + device)
                 } else {
                     // List devices to STDERR (ie. for humans)
-                    let output = String(format: "%03d. ", count)
+                    let output = String(format: "%d. ", count)
                     reportInfo(output + device)
                 }
                 
@@ -148,8 +161,9 @@ private func showDevices() {
 configureSignalHandling()
 
 // Expand composite flags
+/*
 var args: [String] = []
-for arg in CommandLine.arguments {
+for arg in  {
     // Look for compound flags, ie. a single dash followed by
     // more than one flag identifier
     if arg.prefix(1) == "-" && arg.prefix(2) != "--" {
@@ -173,17 +187,29 @@ for arg in CommandLine.arguments {
     // It's an ordinary arg, so retain it
     args.append(arg)
 }
-
+*/
 
 // Process the (separated) arguments
-for argument in args {
+var targetDevice = -1
+for argument in CommandLine.arguments {
     // Ignore the first comand line argument
     if argCount == 0 {
         argCount += 1
         continue
     }
     
+    // Check for negative numbers
+    if argument.hasPrefix("-") {
+        reportErrorAndExit("Device reference \(argument) is invalid (negative integer)")
+    }
+    
+    // Get the device choice and conver string arg to int
     if let deviceChoice = Int(argument) {
+        // Make sure zero was not provided
+        if deviceChoice == 0 {
+            reportErrorAndExit("Device reference \(argument) is invalid (zero)")
+        }
+        
         targetDevice = deviceChoice
     } else {
         reportErrorAndExit("Device reference is not an integer. List available devices to get this value.")
@@ -193,7 +219,7 @@ for argument in args {
 }
 
 // Get and show any devices or the required device
-showDevices()
+showDevices(targetDevice)
 
 // Close cleanly
 exit(EXIT_SUCCESS)
