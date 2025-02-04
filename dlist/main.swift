@@ -157,39 +157,39 @@ private func showDevices(_ targetDevice: Int) {
 }
 
 
+/**
+    Display help
+ */
+private func showHelp() {
+
+    reportInfo("List connected USB-to-serial adaptors\n")
+    reportInfo("Usage:")
+    reportInfo("  dlist [--help] [device index]\n")
+    reportInfo("Call dlist to view or use a connected adaptor's device path.")
+    reportInfo("If multiple adaptors are connected, dlist will list them. In")
+    reportInfo("this case, to use one of them, call dlist with the requiired")
+    reportInfo("adaptor's index in the list.\n")
+    reportInfo("Examples:")
+    reportInfo("  One device connected: minicom -d $(dlist) -b 9600")
+    reportInfo("  Two devices connected, use number 1:")
+    reportInfo("  minicom -d $(dlist 1) -b 9600")
+}
+  
+
 // MARK: - Runtime Start
+
+// Look for help
+for arg in CommandLine.arguments {
+    // Look for compound flags, ie. a single dash followed by
+    // more than one flag identifier
+    if arg.lowercase() == "-h" || arg.lowercase() == "--help" {
+        showHelp()
+        exit(EXIT_SUCCESS)
+    }
+}
 
 // Set up Ctrl-C trap
 configureSignalHandling()
-
-// Expand composite flags
-/*
-var args: [String] = []
-for arg in  {
-    // Look for compound flags, ie. a single dash followed by
-    // more than one flag identifier
-    if arg.prefix(1) == "-" && arg.prefix(2) != "--" {
-        if arg.count > 2 {
-            // arg is of form '-mfs'
-            for sub_arg in arg {
-                // Check for and ignore interior dashes
-                // eg. in `-mf-l`
-                if sub_arg == "-" {
-                    continue
-                }
-                
-                // Retain the flag as a standard arg for subsequent processing
-                args.append("-\(sub_arg)")
-            }
-
-            continue
-        }
-    }
-    
-    // It's an ordinary arg, so retain it
-    args.append(arg)
-}
-*/
 
 // Process the (separated) arguments
 var targetDevice = -1
