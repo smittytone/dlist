@@ -36,10 +36,10 @@ let DEVICE_PATH = "/dev/"
 // MARK: - Global Variables
 
 // CLI argument management
-var argIsAValue: Bool   = false
-var argType: Int        = -1
-var argCount: Int       = 0
-var prevArg: String     = ""
+var argIsAValue = false
+var argType     = -1
+var argCount    = 0
+var prevArg     = ""
 
 
 // MARK: - Functions
@@ -51,7 +51,7 @@ var prevArg: String     = ""
  
     - Returns An array of the items in `/dev`.
  */
-private func getDevices(from devicesPath: String) -> [String] {
+internal func getDevices(from devicesPath: String) -> [String] {
     
     var list: [String] = []
     var finalList: [String] = []
@@ -83,7 +83,7 @@ private func getDevices(from devicesPath: String) -> [String] {
     - Returns An array containing only the devices we're interested in,
               ie. connected MCU boards.
  */
-private func pruneDevices(_ devices: [String]) -> [String] {
+internal func pruneDevices(_ devices: [String]) -> [String] {
     
     guard devices.count > 0 else { return devices }
     
@@ -119,7 +119,7 @@ private func pruneDevices(_ devices: [String]) -> [String] {
     - Parameters
         - targetDevice: The index of a specified device on a dlist-generated list.
  */
-private func showDevices(_ targetDevice: Int) {
+internal func showDevices(_ targetDevice: Int) {
     
     let baseList = getDevices(from: DEVICE_PATH)
     let shortList = pruneDevices(baseList)
@@ -177,10 +177,8 @@ private func showHelp() {
 
 // MARK: - Runtime Start
 
-// Look for help
-for arg in CommandLine.arguments {
-    // Look for compound flags, ie. a single dash followed by
-    // more than one flag identifier
+// Look for the help flag
+for arg in CommandLine.arguments { 
     if arg.lowercased() == "-h" || arg.lowercased() == "--help" {
         showHelp()
         exit(EXIT_SUCCESS)
