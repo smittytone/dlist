@@ -170,9 +170,8 @@ private func showHelp() {
     reportInfo("this case, to use one of them, call dlist with the requiired")
     reportInfo("adaptor's index in the list.\n")
     reportInfo("Examples:")
-    reportInfo("  One device connected: minicom -d $(dlist) -b 9600")
-    reportInfo("  Two devices connected, use number 1:")
-    reportInfo("  minicom -d $(dlist 1) -b 9600")
+    reportInfo("  One device connected:  minicom -d $(dlist) -b 9600")
+    reportInfo("  Two devices connected, use number 1: minicom -d $(dlist 1) -b 9600\n")
 }
   
 
@@ -182,7 +181,7 @@ private func showHelp() {
 for arg in CommandLine.arguments {
     // Look for compound flags, ie. a single dash followed by
     // more than one flag identifier
-    if arg.lowercase() == "-h" || arg.lowercase() == "--help" {
+    if arg.lowercased() == "-h" || arg.lowercased() == "--help" {
         showHelp()
         exit(EXIT_SUCCESS)
     }
