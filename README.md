@@ -1,6 +1,6 @@
-# dlist 0.1.2
+# dlist 0.1.3
 
-### Swift-based macOS CLI tool for listing connected MCUs
+### Swift-based macOS/Linux CLI tool for listing connected MCUs
 
 ## Usage
 
@@ -34,7 +34,25 @@ minicom -D $(dlist 2) -b 9600
 
 Including a numerical argument causes `dlist` to issue the specified device (by index in the list) to subsequent commands through `STDOUT`.
 
-**Note** If there is only one MCU connected and you still specify a value that is not `1`, this will generate a warning on `STERR` but will still issue the device 
+**Note** If there is only one MCU connected and you still specify a value that is not `1`, this will generate a warning on `STERR` but will still issue the device.
+
+## Compiling
+
+### macOS
+
+* Clone this repo.
+* Open the `.xcodeproj` file.
+* Set your team under **Signing & Capabilities** for the *dlist* target.
+* Select **Build** from the **Product** menu.
+
+### Linux
+
+* [Install Swift](https://www.swift.org/install/linux/)
+* Clone this repo.
+* `cd /path/to/repo`
+* `swift build -c release`
+
+Binary located in `.build/aarch64-unknown-linux-gnu/release/`
 
 
 Copyright © 2025, Tony Smith (@smittytone)

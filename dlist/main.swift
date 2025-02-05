@@ -30,16 +30,15 @@ import Foundation
 
 // MARK: - Constants
 
-let DEVICE_PATH = "/dev/"
-
-
+let DEVICE_PATH         = "/dev/"
+let SYS_PATH_LINUX      = "/sys/class/tty/"
 // MARK: - Global Variables
 
 // CLI argument management
-var argIsAValue = false
-var argType     = -1
-var argCount    = 0
-var prevArg     = ""
+var argIsAValue         = false
+var argType             = -1
+var argCount            = 0
+var prevArg             = ""
 
 
 // MARK: - Functions
@@ -56,18 +55,31 @@ internal func getDevices(from devicesPath: String) -> [String] {
     var list: [String] = []
     var finalList: [String] = []
     let fm = FileManager.default
-    
+
+    // Get the files in the target directory
     do {
         list = try fm.contentsOfDirectory(atPath: devicesPath)
     } catch {
         reportErrorAndExit("\(devicesPath) cannot be found", 2)
     }
     
+#if os(macOS)
+    // For macOS, we just look out for devices in `/dev` prefixed `cu.`
     for device in list {
         if device.hasPrefix("cu.") {
             finalList.append(device)
         }
     }
+#elseif os(Linux)
+    // We need a narrower focus for Linux: devices will be `/dev/ttyUSBx` or `/dev/ttyACMx`.
+    // These are listed even if no device is connected, so we check `/sys/class/tty/ttyUSB*` and 
+    // `/sys/class/tty/ttyACM*` which only appear when devices *are* connected
+    for device in list {
+        if device.hasPrefix("ttyUSB") || device.hasPrefix("ttyACM") {
+            finalList.append(device)
+        }
+    }
+#endif
 
     return finalList
 }
@@ -88,6 +100,7 @@ internal func pruneDevices(_ devices: [String]) -> [String] {
     guard devices.count > 0 else { return devices }
     
     // This is the list of known `cu.` devices that are definitely not MCUs
+    // NOTE These are implicitly absent under Linux
     let removals = ["cu.debug-console", "cu.Bluetooth-Incoming-Port"]
     
     var prunedDevices: [String] = []
@@ -121,9 +134,13 @@ internal func pruneDevices(_ devices: [String]) -> [String] {
  */
 internal func showDevices(_ targetDevice: Int) {
     
+#if os(macOS)
     let baseList = getDevices(from: DEVICE_PATH)
-    let shortList = pruneDevices(baseList)
+#elseif os(Linux)
+    let baseList = getDevices(from: SYS_PATH_LINUX)
+#endif
 
+    let shortList = pruneDevices(baseList)
     if shortList.count > 0 {
         if shortList.count == 1 {
             // Warn if a device has been specified anyway
@@ -162,18 +179,46 @@ internal func showDevices(_ targetDevice: Int) {
  */
 private func showHelp() {
 
-    reportInfo("List connected USB-to-serial adaptors\n")
-    reportInfo("Usage:")
-    reportInfo("  dlist [--help] [device index]\n")
-    reportInfo("Call dlist to view or use a connected adaptor's device path.")
-    reportInfo("If multiple adaptors are connected, dlist will list them. In")
-    reportInfo("this case, to use one of them, call dlist with the requiired")
-    reportInfo("adaptor's index in the list.\n")
-    reportInfo("Examples:")
-    reportInfo("  One device connected:  minicom -d $(dlist) -b 9600")
-    reportInfo("  Two devices connected, use number 1: minicom -d $(dlist 1) -b 9600\n")
+    showVersion()
+    writeToStdout(BOLD + "MISSION" + RESET + "\n  List connected USB-to-serial adaptors.\n")
+    writeToStdout(BOLD + "USAGE" + RESET + "\n  dlist [--help] [device index]\n")
+    writeToStdout("Call " + ITALIC + "dlist" + RESET + " to view or use a connected adaptor's device path.")
+    writeToStdout("If multiple adaptors are connected, " + ITALIC + "dlist" + RESET + " will list them.")
+    writeToStdout("In this case, to use one of them, call " + ITALIC + "dlist" + RESET + " with the required")
+    writeToStdout("adaptor's index as shown in the presented list.\n")
+    writeToStdout(BOLD + "EXAMPLES" + RESET)
+    writeToStdout("  One device connected:  minicom -d $(dlist) -b 9600")
+    writeToStdout("  Two devices connected, use number 1: minicom -d $(dlist 1) -b 9600\n")
 }
-  
+
+
+/**
+    Display the app version.
+ */
+func showVersion() {
+
+    showHeader()
+    writeToStdout("Copyright © 2025, Tony Smith (@smittytone). Source code available under the MIT licence.")
+}
+
+
+/**
+    Display the app's version number.
+ */
+func showHeader() {
+    
+#if os(macOS)
+    let version: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
+    let build: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String
+    let name:String = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as! String
+    writeToStdout("\(name) \(version) (\(build))")
+#else
+    // Linux output
+    // TODO Automate based on build settings
+    writeToStdout(BOLD + "dlist \(LINUX_VERSION) (\(LINUX_BUILD))" + RESET)
+#endif
+}
+
 
 // MARK: - Runtime Start
 
@@ -191,7 +236,7 @@ configureSignalHandling()
 // Process the (separated) arguments
 var targetDevice = -1
 for argument in CommandLine.arguments {
-    // Ignore the first comand line argument
+    // Ignore the first command line argument
     if argCount == 0 {
         argCount += 1
         continue
@@ -202,7 +247,7 @@ for argument in CommandLine.arguments {
         reportErrorAndExit("Device reference \(argument) is invalid (negative integer)")
     }
     
-    // Get the device choice and conver string arg to int
+    // Get the device choice and convert string arg to int
     if let deviceChoice = Int(argument) {
         // Make sure zero was not provided
         if deviceChoice == 0 {
