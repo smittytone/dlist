@@ -146,7 +146,7 @@ func writeToStdout(_ message: String) {
  */
 func writeOut(_ message: String, _ targetFileHandle: FileHandle) {
 
-    let messageAsString = message + "\r\n"
+    let messageAsString = message + "\n"
     if let messageAsData: Data = messageAsString.data(using: .utf8) {
         targetFileHandle.write(messageAsData)
     }

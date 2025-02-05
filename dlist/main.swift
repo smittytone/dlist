@@ -198,7 +198,7 @@ private func showHelp() {
 func showVersion() {
 
     showHeader()
-    writeToStdout("Copyright © 2025, Tony Smith (@smittytone). Source code available under the MIT licence.")
+    writeToStdout("Copyright © 2025, Tony Smith (@smittytone). Source code available under the MIT licence.\n")
 }
 
 
@@ -211,7 +211,7 @@ func showHeader() {
     let version: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
     let build: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String
     let name:String = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as! String
-    writeToStdout("\(name) \(version) (\(build))")
+    writeToStdout(BOLD + "\(name) \(version) (\(build))" + RESET)
 #else
     // Linux output
     // TODO Automate based on build settings
