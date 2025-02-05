@@ -153,6 +153,10 @@ func writeOut(_ message: String, _ targetFileHandle: FileHandle) {
 }
 
 
+/**
+    Set up signal handling. This is used to trap `ctrl-c` key presses
+    though this is unlikely to occur for this app: it runs too quickly!
+ */
 internal func configureSignalHandling() {
     
     // Make sure the signal does not terminate the application
