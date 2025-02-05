@@ -151,12 +151,14 @@ internal func showDevices(_ targetDevice: Int) {
             // Write the path of the only device to STDOUT
             writeToStdout(DEVICE_PATH + shortList[0])
         } else {
-            if targetDevice >= shortList.count {
+            var useDevice = targetDevice
+            if useDevice >= shortList.count {
                 reportWarning("\(targetDevice) is out of range (1-\(shortList.count))")
+                useDevice = -1
             }
             var count = 1
             for device in shortList {
-                if targetDevice != -1 && count == targetDevice {
+                if useDevice != -1 && count == useDevice {
                     // Write the path of the chosen device to STDOUT
                     writeToStdout(DEVICE_PATH + device)
                 } else {
@@ -169,7 +171,7 @@ internal func showDevices(_ targetDevice: Int) {
             }
         }
     } else {
-        reportWarning("No connected devices")
+        reportInfo("No connected devices")
     }
 }
 
