@@ -163,8 +163,7 @@ internal func showDevices(_ targetDevice: Int) {
                     writeToStdout(DEVICE_PATH + device)
                 } else {
                     // List devices to STDERR (ie. for humans)
-                    let output = String(format: "%d. ", count)
-                    reportInfo(output + device)
+                    reportInfo(String(format: "%d. " + DEVICE_PATH + device, count))
                 }
                 
                 count += 1
