@@ -32,6 +32,8 @@ import Foundation
 
 let DEVICE_PATH         = "/dev/"
 let SYS_PATH_LINUX      = "/sys/class/tty/"
+
+
 // MARK: - Global Variables
 
 // CLI argument management
@@ -63,17 +65,18 @@ internal func getDevices(from devicesPath: String) -> [String] {
         reportErrorAndExit("\(devicesPath) cannot be found", 2)
     }
     
-#if os(macOS)
     // For macOS, we just look out for devices in `/dev` prefixed `cu.`
+#if os(macOS)
     for device in list {
         if device.hasPrefix("cu.") {
             finalList.append(device)
         }
     }
-#elseif os(Linux)
+    
     // We need a narrower focus for Linux: devices will be `/dev/ttyUSBx` or `/dev/ttyACMx`.
-    // These are listed even if no device is connected, so we check `/sys/class/tty/ttyUSB*` and 
+    // These are listed even if no device is connected, so we check `/sys/class/tty/ttyUSB*` and
     // `/sys/class/tty/ttyACM*` which only appear when devices *are* connected
+#elseif os(Linux)
     for device in list {
         if device.hasPrefix("ttyUSB") || device.hasPrefix("ttyACM") {
             finalList.append(device)

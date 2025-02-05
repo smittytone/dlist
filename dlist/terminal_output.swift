@@ -28,6 +28,8 @@
 import Foundation
 
 
+// MARK: - Constants
+
 // File handles
 let STD_ERR: FileHandle         = FileHandle.standardError
 let STD_OUT: FileHandle         = FileHandle.standardOutput
@@ -41,12 +43,15 @@ let BSP: String                 = String(UnicodeScalar(8))
 // Signalling
 let EXIT_CTRL_C_CODE: Int32 = 130
 let CTRL_C_MSG: String          = "\(BSP)\(BSP)\rpdfmaker interrupted -- halting"
+let DSS: DispatchSourceSignal   = DispatchSource.makeSignalSource(signal: SIGINT, queue: DispatchQueue.main)
 
+
+// MARK: - Variables
 
 var doShowInfo: Bool            = false
-let dss: DispatchSourceSignal   = DispatchSource.makeSignalSource(signal: SIGINT,
-                                                                  queue: DispatchQueue.main)
 
+
+// MARK: - Functions
 
 /**
     Generic error display routine that also quits the app.
@@ -58,7 +63,7 @@ let dss: DispatchSourceSignal   = DispatchSource.makeSignalSource(signal: SIGINT
 func reportErrorAndExit(_ message: String, _ code: Int32 = EXIT_FAILURE) {
 
     writeToStderr(RED + BOLD + "ERROR" + RESET + " " + message + " -- exiting")
-    dss.cancel()
+    DSS.cancel()
     exit(code)
 }
 
@@ -163,12 +168,12 @@ internal func configureSignalHandling() {
     signal(SIGINT, SIG_IGN)
 
     // ...add an event handler
-    dss.setEventHandler {
+    DSS.setEventHandler {
         writeToStderr(CTRL_C_MSG)
-        dss.cancel()
+        DSS.cancel()
         exit(EXIT_CTRL_C_CODE)
     }
 
     // ...and start the event flow
-    dss.resume()
+    DSS.resume()
 }
