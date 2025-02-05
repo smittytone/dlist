@@ -54,5 +54,6 @@ Including a numerical argument causes `dlist` to issue the specified device (by 
 
 Binary located in `.build/aarch64-unknown-linux-gnu/release/`
 
+**Note** The script `bumpbuild.sh` currently only runs on macOS.
 
 Copyright © 2025, Tony Smith (@smittytone)
