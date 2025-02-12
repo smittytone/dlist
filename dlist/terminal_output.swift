@@ -149,7 +149,7 @@ func writeToStdout(_ message: String) {
         - message:          The text to print.
         - targetFileHandle: Where the message will be sent.
  */
-func writeOut(_ message: String, _ targetFileHandle: FileHandle) {
+internal func writeOut(_ message: String, _ targetFileHandle: FileHandle) {
 
     let messageAsString = message + "\n"
     if let messageAsData: Data = messageAsString.data(using: .utf8) {
@@ -162,7 +162,7 @@ func writeOut(_ message: String, _ targetFileHandle: FileHandle) {
     Set up signal handling. This is used to trap `ctrl-c` key presses
     though this is unlikely to occur for this app: it runs too quickly!
  */
-internal func configureSignalHandling() {
+func configureSignalHandling() {
     
     // Make sure the signal does not terminate the application
     signal(SIGINT, SIG_IGN)
@@ -177,3 +177,20 @@ internal func configureSignalHandling() {
     // ...and start the event flow
     DSS.resume()
 }
+
+
+/**
+    Get the value of a named shell environment variable.
+    
+    - Parameters
+        - envVar: The environment variable, eg. `TERM`.
+    
+    - Returns The environment variable's value as a string,
+              or an empty string on error/absence.
+ */
+internal func getEnvVar(_ envVar: String) -> String {
+    
+    guard let rawValue = getenv(envVar) else { return "" }
+    return String(utf8String: rawValue) ?? ""
+}
+
