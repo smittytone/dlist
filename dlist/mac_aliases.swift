@@ -1,9 +1,28 @@
-//
-//  aliases_mac.swift
-//  dlist
-//
-//  Created by Tony Smith on 12/02/2025.
-//
+/*
+    dlist
+    mac_aliases.swift
+
+    Copyright © 2025 Tony Smith. All rights reserved.
+
+    MIT License
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+*/
 
 // /usr/sbin/system_profiler SPUSBDataType | grep "Serial Number" | cut -w -f 4
 
@@ -37,11 +56,7 @@ so rather than
  */
 
 
-
-
 import Foundation
-import SystemConfiguration
-
 import IOKit
 import IOKit.ps
 import IOKit.usb
@@ -49,175 +64,99 @@ import IOKit.hid
 import IOKit.serial
 
 
-func findSerialDevices(_ deviceType: String, _ serialPortIterator: inout io_iterator_t ) -> kern_return_t {
-
-    var result: kern_return_t = KERN_FAILURE
-    if let classesToMatch = IOServiceMatching(kIOSerialBSDServiceValue) {
-        let classesToMatchNSDict = classesToMatch as NSDictionary
-        var classesToMatchDict = classesToMatchNSDict.swiftDictionary
-        classesToMatchDict[kIOSerialBSDTypeKey] = deviceType
-        let classesToMatchCFDictRef = (classesToMatchDict as NSDictionary) as CFDictionary
-        result = IOServiceGetMatchingServices(kIOMasterPortDefault, classesToMatchCFDictRef, &serialPortIterator);
+/**
+ Scan the IO registry for serial port devices.
+ 
+ - Returns A dictionary of device paths and their serial numbers, or a empty dictionary.
+ */
+func findConnectedSerialDevices() -> [String: String] {
+    
+    var portIterator: io_iterator_t = 0
+    
+    if let matchesCFDict = IOServiceMatching(kIOSerialBSDServiceValue) {
+        // Convert recieved CFDictionary to a Swift equivalent so
+        // we can easily punch in the values we want...
+        let matchesNSDict = matchesCFDict as NSDictionary
+        var matches = matchesNSDict.swiftDictionary
+        matches[kIOSerialBSDTypeKey] = kIOSerialBSDAllTypes
+        
+        // ...and convert it back again for use
+        let matchesCFDictRef = (matches as NSDictionary) as CFDictionary
+        if IOServiceGetMatchingServices(kIOMasterPortDefault, matchesCFDictRef, &portIterator) == KERN_SUCCESS {
+            // We got a port iterator back - ie. one or more matching devcies - so use it
+            defer { IOObjectRelease(portIterator) }
+            return getSerialDevices(portIterator)
+        }
     }
     
-    return result
+    // No devices found, or error
+    return [:]
 }
 
 
-func printSerialPaths(_ portIterator: io_iterator_t) {
-
-    var serialService: io_object_t
-    repeat {
-        serialService = IOIteratorNext(portIterator)
-        if serialService == 0 {
-            break
-        }
-        
-        let keya = "USB Serial Number"
-                    
-        let options : IOOptionBits = IOOptionBits(kIORegistryIterateParents) |
-            IOOptionBits(kIORegistryIterateRecursively)
-        
-        if let sSerial : CFTypeRef = IORegistryEntrySearchCFProperty(serialService, kIOServicePlane, keya as CFString, nil, options) {
-            print(String(describing: sSerial))
-        }
-        
-        let key: CFString = kIOCalloutDeviceKey as CFString
-        let bsdPathAsCFString: Any = IORegistryEntryCreateCFProperty(serialService, key, kCFAllocatorDefault, 0).takeUnretainedValue()
-        let bsdPath = bsdPathAsCFString as? String
-        if let path = bsdPath {
-            //print(serialService.name() ?? "UNKNOWN")      // Useless
-            print(path, serialService.id() ?? "UNKNOWN")          // Can we get anything useful from this???
-        }
-        
-        IOObjectRelease(serialService)
-    } while true
-}
-
-
+/**
+ Given a collection of serial devices, obtained via an iterator, get each
+ one's device file path and its unique USB serial number.
+ 
+ - Parameters
+    - portIterator: An IOKit iterator for walking a list of devices.
+ 
+ - Returns A dictionary of device paths and their serial numbers, or a empty dictionary.
+ */
 func getSerialDevices(_ portIterator: io_iterator_t) -> [String: String] {
     
-    
-    
-    var deviceDict: [String: String] = [:]
-    var serialService: io_object_t
+    var serialDevices: [String: String] = [:]
+    var serialDevice: io_service_t
     let serialKey = "USB Serial Number"
+    let bsdPathKey = kIOCalloutDeviceKey
+    
     repeat {
-        serialService = IOIteratorNext(portIterator)
-        if serialService == 0 {
+        serialDevice = IOIteratorNext(portIterator)
+        if serialDevice == 0 {
             break
         }
         
         var serialNumber = "UNKNOWN"
         let searchOptions : IOOptionBits = IOOptionBits(kIORegistryIterateParents) | IOOptionBits(kIORegistryIterateRecursively)
-        if let serialRef : CFTypeRef = IORegistryEntrySearchCFProperty(serialService, kIOServicePlane, serialKey as CFString, nil, searchOptions) {
+        if let serialRef : CFTypeRef = IORegistryEntrySearchCFProperty(serialDevice, kIOServicePlane, serialKey as CFString, nil, searchOptions) {
+            // Got a serial number - convert to text
             serialNumber = String(describing: serialRef)
         }
         
-        let key: CFString = kIOCalloutDeviceKey as CFString
-        let bsdPathAsCFString: Any = IORegistryEntryCreateCFProperty(serialService, key, kCFAllocatorDefault, 0).takeUnretainedValue()
-        let bsdPath = bsdPathAsCFString as? String
-        if let path = bsdPath {
-            if doKeepDevice(path) {
-                deviceDict[path] = serialNumber
+        // Get the Unix device path
+        let bsdPathAsCFString: CFTypeRef? = IORegistryEntryCreateCFProperty(serialDevice, bsdPathKey as CFString, kCFAllocatorDefault, 0).takeUnretainedValue()
+        if let bsdPath = bsdPathAsCFString as? String {
+            if doKeepDevice(bsdPath) {
+                serialDevices[bsdPath] = serialNumber
             }
         }
         
-        IOObjectRelease(serialService)
+        // Release the current device object
+        IOObjectRelease(serialDevice)
     } while true
     
-    return deviceDict
+    // Return the list of devices and serial numbers
+    return serialDevices
 }
 
 
+/**
+ Compare a discovered device for the standard ones macOS adds and which we
+ are not interested in.
+ 
+ - Parameter
+    - path: The device's Unix file path.
+ 
+ - Returns `true` if the device is good to use, otherwise `false`.
+ */
 func doKeepDevice(_ path: String) -> Bool {
     
     let removals = ["cu.debug-console", "cu.Bluetooth-Incoming-Port"]
     for unwantedDevice in removals {
-        if path.hasSuffix(unwantedDevice) {
+        if path.contains(unwantedDevice) {
             return false
         }
     }
     
     return true
-}
-
-
-func findMatchingPorts() -> [String: String] {
-    
-    var portIterator: io_iterator_t = 0
-    let kernResult = findSerialDevices(kIOSerialBSDAllTypes, &portIterator)
-    if kernResult == KERN_SUCCESS {
-        defer { IOObjectRelease(portIterator) }
-        return getSerialDevices(portIterator)
-    }
-    
-    // Nothing found
-    return [:]
-}
-
-
-extension io_object_t {
-    
-    func name() -> String? {
-        
-        let buf = UnsafeMutablePointer<io_name_t>.allocate(capacity: 1)
-        defer { buf.deallocate() }
-        return buf.withMemoryRebound(to: CChar.self, capacity: MemoryLayout<io_name_t>.size) {
-            if IORegistryEntryGetName(self, $0) == KERN_SUCCESS {
-                return String(cString: $0)
-            }
-            return nil
-        }
-    }
-    
-    func id() -> UInt64? {
-        
-        let buf = UnsafeMutablePointer<UInt64>.allocate(capacity: 1)
-        if IORegistryEntryGetRegistryEntryID(self, buf) == KERN_SUCCESS {
-            return buf.pointee
-        }
-        
-        return nil
-    }
-}
-
-
-/**
- NETWORK ONLY
-struct USB {
-    
-    let interfaces = SCNetworkInterfaceCopyAll() as! [SCNetworkInterface]
-    
-    func getInterfaces() {
-        for interface in interfaces {
-            let bsdName = SCNetworkInterfaceGetBSDName(interface) as String? ?? "-"
-            let displayName = SCNetworkInterfaceGetLocalizedDisplayName(interface) as String? ?? "-"
-            print("\(bsdName) -> \(displayName)")
-        }
-    }
-}
-
-
-func getInterfaces() {
-    
-    let usb = USB()
-    usb.getInterfaces()
-}
- */
-
-extension NSDictionary {
-    
-    var swiftDictionary: Dictionary<String, Any> {
-        var swiftDictionary = Dictionary<String, Any>()
-
-        for key : Any in self.allKeys {
-            let stringKey = key as! String
-            if let keyValue = self.value(forKey: stringKey){
-                swiftDictionary[stringKey] = keyValue
-            }
-        }
-
-        return swiftDictionary
-    }
 }

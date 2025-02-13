@@ -26,7 +26,9 @@
 
 
 import Foundation
+#if os(Linux)
 import Clibudev
+#endif
 
 
 // MARK: - Constants
@@ -44,9 +46,12 @@ var argType             = -1
 var argCount            = 0
 var prevArg             = ""
 // App control
-var doApplyAlias        = true
+var doApplyAlias        = false
+var alias               = ""
+var targetDevice        = -1
 // Computed
 var isRunAsSudo: Bool {
+    // This is required on Linux for access to `UDEV_RULES_PATH_LINUX`.
     get {
         if let value: String = ProcessInfo.processInfo.environment["USER"] {
             return (value == "root")
@@ -254,46 +259,91 @@ func showHeader() {
 
 // MARK: - Runtime Start
 
-print("\(isRunAsSudo ? "YES" : "NO")")
-
-// Look for the help flag
-for arg in CommandLine.arguments { 
-    if arg.lowercased() == "-h" || arg.lowercased() == "--help" {
-        showHelp()
-        exit(EXIT_SUCCESS)
-    }
-}
-
 // Set up Ctrl-C trap
 configureSignalHandling()
 
+#if os(macOS)
+let devices = findConnectedSerialDevices()
+if !devices.isEmpty {
+    for (path, serialNumber) in devices {
+        print("Connected device at \(path) has USB serial number \(serialNumber)")
+    }
+}
+#elseif os(Linux)
+print("\(isRunAsSudo ? "YES" : "NO")")
+#endif
+
 // Process the (separated) arguments
-var targetDevice = -1
 for argument in CommandLine.arguments {
-    // Ignore the first command line argument
+    // Ignore the first argument
     if argCount == 0 {
         argCount += 1
         continue
     }
-    
-    // Check for negative numbers
-    if argument.hasPrefix("-") {
-        reportErrorAndExit("Device reference \(argument) is invalid (negative integer)")
-    }
-    
-    // Get the device choice and convert string arg to int
-    if let deviceChoice = Int(argument) {
-        // Make sure zero was not provided
-        if deviceChoice == 0 {
-            reportErrorAndExit("Device reference \(argument) is invalid (zero)")
+
+    if argIsAValue {
+        // Make sure we're not reading in an option rather than a value
+        if argument.prefix(1) == "-" {
+            reportErrorAndExit("Missing value for \(prevArg)")
         }
-        
-        targetDevice = deviceChoice
+
+        switch argType {
+        case 0:
+            alias = argument
+            doApplyAlias = true
+        default:
+            reportErrorAndExit("Unknown argument: \(argument)")
+        }
+
+        argIsAValue = false
     } else {
-        reportErrorAndExit("Device reference is not an integer. List available devices to get this value.")
+        switch argument {
+            case "-a":
+                fallthrough
+            case "--alias":
+                argType = 0
+                argIsAValue = true
+            case "-h":
+                fallthrough
+            case "--help":
+                showHelp()
+                exit(EXIT_SUCCESS)
+            case "--version":
+                showVersion()
+                exit(EXIT_SUCCESS)
+            default:
+                if argument.prefix(1) == "-" {
+                    reportErrorAndExit("Unknown argument: \(argument)")
+                }
+                
+                // Get the device choice and convert string arg to int
+                if let deviceChoice = Int(argument) {
+                    // Make sure zero was not provided
+                    if deviceChoice == 0 {
+                        reportErrorAndExit("Device reference \(argument) is invalid (zero)")
+                    }
+                    
+                    targetDevice = deviceChoice
+                } else {
+                    /*
+                    if checkAlias(argument) {
+                        targetDevice = getAliasIndex(argument)
+                    } else {
+                        reportErrorAndExit("Device reference is not an integer. List available devices to get this value.")
+                    }
+                     */
+                }
+        }
+
+        prevArg = argument
     }
 
     argCount += 1
+
+    // Trap commands that come last and therefore have missing args
+    if argCount == CommandLine.arguments.count && argIsAValue {
+        reportErrorAndExit("Missing value for \(argument)")
+    }
 }
 
 // Get and show any devices or the required device
