@@ -12,7 +12,8 @@ let package = Package(
             path: "dlist",
             exclude: [
                 // File not needed for Linux build (so far...)
-                "Info.plist"    
+                "Info.plist",
+                "mac_aliases.swift"    
             ]
         ),
         .systemLibrary(
