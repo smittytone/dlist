@@ -38,24 +38,41 @@ func getSerialNumber(_ device: String) -> String? {
     return String(cString: serial)
 }
 
+// SYMLINK+="TEST2"
 
-func apply(alias: String, to serial: String) -> Bool {
+func apply(alias: String, to serial: String, path: String = "") -> Bool {
 
+    // TODO Update deviceLine for ttyACMx devices too
     let deviceLine = "KERNEL==\"ttyUSB?\", ATTRS{serial}==\"\(serial)\", SYMLINK+=\"\(alias)\", MODE=\"0666\"\n"
     let fm = FileManager.default
     if fm.fileExists(atPath: UDEV_RULES_PATH_LINUX) {
         do {
-            if let rulesFileUrl = URL.init(string: UDEV_RULES_PATH_LINUX) {
-                print(rulesFileUrl)
-                var rulesFileText = try String(contentsOf: rulesFileUrl, encoding: .ascii)
-                rulesFileText += deviceLine
-                return writeRules(rulesFileText)
-            } else {
-                print("URL FAIL")
+            var rulesFileText = try String(contentsOfFile: UDEV_RULES_PATH_LINUX)
+            
+            // Make sure the alias is not in use
+            if rulesFileText.contains("SYMLINK+=\"\(alias)\"") {
+                reportErrorAndExit("Alias \(alias) already in use", 3)
             }
+
+            // Check the serial number
+            // If it already exists, update its alias
+            if let matchSerial = rulesFileText.firstMatch(of: #/ATTRS{serial}=="(.*?)"/#) {
+                let oldSerial = String(matchSerial.1) 
+
+                if let matchAlias = rulesFileText.firstMatch(of: #/SYMLINK\+="(.*?)"/#) {
+                    let oldAlias = String(matchAlias.1) 
+                    if oldAlias != alias {
+                        rulesFileText = rulesFileText.replacingOccurrences(of: "+=\"\(oldAlias)", with: "+=\"\(alias)")
+                        reportInfo("Alias changed from \(oldAlias) to \(alias) -- reconnect your device to make use of it")
+                    }
+                }
+            } else {
+                rulesFileText += deviceLine
+            }
+
+            return writeRules(rulesFileText)
         } catch {
             // Fallthrough
-            print("READ FAIL")
         }
     } else {
         return writeRules(deviceLine)
@@ -67,16 +84,12 @@ func apply(alias: String, to serial: String) -> Bool {
 
 func writeRules(_ fileContents: String) -> Bool {
 
-    if let rulesFileUrl = URL.init(string: UDEV_RULES_PATH_LINUX) {
-        do {
-            try fileContents.write(to: rulesFileUrl, atomically: false, encoding: .utf8)
-            return true
-        } catch {
-            // Fallthrough
-            print("WRITE FAIL")
-        }
-    } else {
-        print("URL FAIL")
+    do {
+        try fileContents.write(toFile: UDEV_RULES_PATH_LINUX, atomically: false, encoding: .utf8)
+        return true
+    } catch {
+        // Fallthrough
+        print("WRITE FAIL")
     }
 
     return false
