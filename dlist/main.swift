@@ -26,12 +26,14 @@
 
 
 import Foundation
+import Clibudev
 
 
 // MARK: - Constants
 
-let DEVICE_PATH         = "/dev/"
-let SYS_PATH_LINUX      = "/sys/class/tty/"
+let DEVICE_PATH             = "/dev/"
+let SYS_PATH_LINUX          = "/sys/class/tty/"
+let UDEV_RULES_PATH_LINUX   = "/etc/udev/rules.d/99-dlist-usb-serial-devices.rules"
 
 
 // MARK: - Global Variables
@@ -41,6 +43,18 @@ var argIsAValue         = false
 var argType             = -1
 var argCount            = 0
 var prevArg             = ""
+// App control
+var doApplyAlias        = true
+// Computed
+var isRunAsSudo: Bool {
+    get {
+        if let value: String = ProcessInfo.processInfo.environment["USER"] {
+            return (value == "root")
+        }
+
+        return false
+    }
+}
 
 
 // MARK: - Functions
@@ -153,6 +167,20 @@ internal func showDevices(_ targetDevice: Int) {
             
             // Write the path of the only device to STDOUT
             writeToStdout(DEVICE_PATH + shortList[0])
+
+#if os(Linux)
+            // FROM 0.2.0
+            if doApplyAlias {
+                if let serialNumber = getSerialNumber(shortList[0]) {
+                    let alias = "TEST"
+                    if apply(alias: alias, to: serialNumber) {
+                        reportInfo("Alias \(alias) applied to device \(shortList[0])")
+                    } else {
+                        reportErrorAndExit("Alias \(alias) could not be applied to device \(shortList[0])")
+                    }
+                }
+            }
+#endif
         } else {
             var useDevice = targetDevice
             if useDevice >= shortList.count {
@@ -225,6 +253,8 @@ func showHeader() {
 
 
 // MARK: - Runtime Start
+
+print("\(isRunAsSudo ? "YES" : "NO")")
 
 // Look for the help flag
 for arg in CommandLine.arguments { 
