@@ -1,4 +1,4 @@
-# dlist 0.1.3
+# dlist 0.1.4
 
 #### A Swift-based macOS/Linux CLI utility for listing connected MCU boards and USB-to-Serial adaptors
 
@@ -40,6 +40,12 @@ $ minicom -D $(dlist 2) -b 115200
 Including a numerical argument causes `dlist` to issue the specified device (by index in the list) to subsequent commands through `STDOUT`.
 
 **Note** If there is only one MCU connected and you still specify a value but one that is not `1`, this will generate a warning on `STERR` but will still issue the single device's path.
+
+## Options
+
+Including `--info` or `-i` as a `dlist` argument will force it into list mode, however many devices are connected. 
+
+Because the output is intended to be readable by people, it is not suitable for piping into another command. Make sure you don’t include the flag if you’re using `dlist` to pipe the device path.
 
 ## Compiling
 
