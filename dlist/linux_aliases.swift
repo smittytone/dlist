@@ -1,5 +1,32 @@
-import Clibudev
+/*
+    dlist
+    linux_aliases.swift
+
+    Copyright © 2025 Tony Smith. All rights reserved.
+
+    MIT License
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+*/
+
+
 import Foundation
+import Clibudev
 
 
 /**
@@ -13,7 +40,7 @@ import Foundation
     - device: The device name, eg. `ttyUSB0`.
 
  - Returns The device's serial number, or `nil` on error.
- */
+ 
 func getSerialNumber(_ device: String) -> String? {
 
     // Get the `/sys` path to the specified device
@@ -38,8 +65,59 @@ func getSerialNumber(_ device: String) -> String? {
 
     return String(cString: serial)
 }
+ */
 
 
+/**
+ Use udev to get a USB-connected serial adaptor's USB Serial Number
+ and other data.
+
+ - Parameters
+    - device: The device name, eg. `ttyUSB0`.
+
+ - Returns The device's data, or an unpopulated struct on error.
+ */
+func getDeviceInfo(_ device: String) -> SerialDeviceInfo {
+
+    var serialDeviceInfo = SerialDeviceInfo()
+
+    // Get the `/sys` path to the specified device
+    let devicePath = SYS_PATH_LINUX + device
+
+    // udev access must begin with `udev_new()` (see `man udev`)
+    // and, if we get a pointer to the struct, we have to free it
+    // before the function exits
+    guard let udev = udev_new() else { return serialDeviceInfo }
+    defer { udev_unref(udev) }
+    
+    // Get the udev representation of the specified device.
+    // Again, make sure we free it before the function exits
+    guard var dev = udev_device_new_from_syspath(udev, devicePath) else { return serialDeviceInfo }
+    defer { udev_device_unref(dev) }
+
+    // Get the device's parent node and then its USB serial number
+    dev = udev_device_get_parent_with_subsystem_devtype(dev, "usb", "usb_device")
+    if let value = udev_device_get_sysattr_value(dev, "serial") {
+        serialDeviceInfo.serialNumber = String(cString: value)
+    }
+
+    // Get the device's product data
+    if let value = udev_device_get_sysattr_value(dev, "product") {
+        serialDeviceInfo.productType = String(cString: value).trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    // Get the device's vendor name. If that fails, try for the ID
+    if let value = udev_device_get_sysattr_value(dev, "manufacturer") {
+        serialDeviceInfo.vendorName = String(cString: value).trimmingCharacters(in: .whitespacesAndNewlines)
+    } else if let value = udev_device_get_sysattr_value(dev, "idVendor") {
+        serialDeviceInfo.vendorName = "0x" + String(cString: value).trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    
+    return serialDeviceInfo
+}
+
+
+/*
 func apply(alias: String, to serial: String, path: String = "") -> Bool {
 
     // TODO Update deviceLine for ttyACMx devices too
@@ -94,3 +172,4 @@ func writeRules(_ fileContents: String) -> Bool {
     
     return false
 }
+*/

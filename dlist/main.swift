@@ -174,20 +174,6 @@ internal func showDevices(_ targetDevice: Int) {
             
             // Write the path of the only device to STDOUT
             writeToStdout(DEVICE_PATH + deviceList[0])
-
-#if os(Linux)
-            // FROM 0.2.0
-            if doApplyAlias {
-                if let serialNumber = getSerialNumber(shortList[0]) {
-                    let alias = "TEST"
-                    if apply(alias: alias, to: serialNumber) {
-                        reportInfo("Alias \(alias) applied to device \(shortList[0])")
-                    } else {
-                        reportErrorAndExit("Alias \(alias) could not be applied to device \(shortList[0])")
-                    }
-                }
-            }
-#endif
         } else {
 #if os(macOS)
             let deviceData = findConnectedSerialDevices()
@@ -206,10 +192,10 @@ internal func showDevices(_ targetDevice: Int) {
                     // List devices to STDERR (ie. for humans)
 #if os(macOS)
                     let sd = deviceData[DEVICE_PATH + device] ?? SerialDeviceInfo()
-                    reportInfo(String(format: "%d. %@\t\t[%@ %@]", count, DEVICE_PATH + device, sd.vendorName, sd.productType))
 #else
-                    reportInfo(String(format: "%d. %@", count, DEVICE_PATH + device))
+                    let sd = getDeviceInfo(device)
 #endif
+                    reportInfo(String(format: "%d. %@\t\t[%@, %@]", count, DEVICE_PATH + device, sd.productType, sd.vendorName))
                 }
                 
                 count += 1
