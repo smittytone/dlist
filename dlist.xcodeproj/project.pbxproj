@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		3B0C90192D5CABD2003FD494 /* mac_aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0C90182D5CABD2003FD494 /* mac_aliases.swift */; };
 		3B3BF18B2D5F50970083DE56 /* entities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3BF18A2D5F50970083DE56 /* entities.swift */; };
+		3B3BF1972D5F57800083DE56 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF2DC6D2D50E0A900520F48 /* main.swift */; };
+		3B3BF1982D5F57890083DE56 /* mac_aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0C90182D5CABD2003FD494 /* mac_aliases.swift */; };
+		3B3BF1992D5F57BD0083DE56 /* entities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3BF18A2D5F50970083DE56 /* entities.swift */; };
+		3B3BF19C2D5F5A780083DE56 /* terminal_output.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF2DC6E2D50E0A900520F48 /* terminal_output.swift */; };
+		3B3BF19D2D5F5A820083DE56 /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B8D30F92D5E21EF0019031C /* extensions.swift */; };
 		3B8D30FA2D5E21EF0019031C /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B8D30F92D5E21EF0019031C /* extensions.swift */; };
 		3BAE669F2D539A3300AB79D3 /* linux_version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BAE669E2D539A3300AB79D3 /* linux_version.swift */; };
 		3BF2DC702D50E0A900520F48 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF2DC6D2D50E0A900520F48 /* main.swift */; };
@@ -30,6 +35,7 @@
 /* Begin PBXFileReference section */
 		3B0C90182D5CABD2003FD494 /* mac_aliases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mac_aliases.swift; sourceTree = "<group>"; };
 		3B3BF18A2D5F50970083DE56 /* entities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = entities.swift; sourceTree = "<group>"; };
+		3B3BF1902D5F57400083DE56 /* testDlist.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = testDlist.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B8D30F92D5E21EF0019031C /* extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extensions.swift; sourceTree = "<group>"; };
 		3BAE669E2D539A3300AB79D3 /* linux_version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = linux_version.swift; sourceTree = "<group>"; };
 		3BAE66A12D53A1FE00AB79D3 /* bumpbuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = bumpbuild.sh; sourceTree = "<group>"; };
@@ -41,7 +47,22 @@
 		3BF2DC922D50ECB600520F48 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		3B3BF1912D5F57400083DE56 /* testDlist */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = testDlist;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
+		3B3BF18D2D5F57400083DE56 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3BF2DC572D50C07E00520F48 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -57,6 +78,7 @@
 			children = (
 				3BF2DC6F2D50E0A900520F48 /* dlist */,
 				3BF2DC8E2D50EC8700520F48 /* Misc */,
+				3B3BF1912D5F57400083DE56 /* testDlist */,
 				3BF2DC5B2D50C07E00520F48 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -65,6 +87,7 @@
 			isa = PBXGroup;
 			children = (
 				3BF2DC5A2D50C07E00520F48 /* dlist */,
+				3B3BF1902D5F57400083DE56 /* testDlist.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -96,6 +119,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		3B3BF18F2D5F57400083DE56 /* testDlist */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3B3BF1942D5F57400083DE56 /* Build configuration list for PBXNativeTarget "testDlist" */;
+			buildPhases = (
+				3B3BF18C2D5F57400083DE56 /* Sources */,
+				3B3BF18D2D5F57400083DE56 /* Frameworks */,
+				3B3BF18E2D5F57400083DE56 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				3B3BF1912D5F57400083DE56 /* testDlist */,
+			);
+			name = testDlist;
+			packageProductDependencies = (
+			);
+			productName = testDlist;
+			productReference = 3B3BF1902D5F57400083DE56 /* testDlist.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		3BF2DC592D50C07E00520F48 /* dlist */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3BF2DC612D50C07E00520F48 /* Build configuration list for PBXNativeTarget "dlist" */;
@@ -125,6 +170,9 @@
 				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
+					3B3BF18F2D5F57400083DE56 = {
+						CreatedOnToolsVersion = 16.2;
+					};
 					3BF2DC592D50C07E00520F48 = {
 						CreatedOnToolsVersion = 16.2;
 					};
@@ -145,11 +193,34 @@
 			projectRoot = "";
 			targets = (
 				3BF2DC592D50C07E00520F48 /* dlist */,
+				3B3BF18F2D5F57400083DE56 /* testDlist */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		3B3BF18E2D5F57400083DE56 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
+		3B3BF18C2D5F57400083DE56 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3B3BF1972D5F57800083DE56 /* main.swift in Sources */,
+				3B3BF1982D5F57890083DE56 /* mac_aliases.swift in Sources */,
+				3B3BF19D2D5F5A820083DE56 /* extensions.swift in Sources */,
+				3B3BF1992D5F57BD0083DE56 /* entities.swift in Sources */,
+				3B3BF19C2D5F5A780083DE56 /* terminal_output.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3BF2DC562D50C07E00520F48 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -166,6 +237,38 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		3B3BF1952D5F57400083DE56 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Y5J3K52DNA;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 11.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bps.testDlist;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		3B3BF1962D5F57400083DE56 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Y5J3K52DNA;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 11.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bps.testDlist;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		3BF2DC5F2D50C07E00520F48 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -335,6 +438,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		3B3BF1942D5F57400083DE56 /* Build configuration list for PBXNativeTarget "testDlist" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3B3BF1952D5F57400083DE56 /* Debug */,
+				3B3BF1962D5F57400083DE56 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		3BF2DC552D50C07E00520F48 /* Build configuration list for PBXProject "dlist" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -156,15 +156,8 @@ internal func pruneDevices(_ devices: [String]) -> [String] {
     - Parameters
         - targetDevice: The index of a specified device on a dlist-generated list.
  */
-internal func showDevices(_ targetDevice: Int) {
+internal func showDevices(_ deviceList: ArraySlice<String>, _ targetDevice: Int) {
     
-#if os(macOS)
-    let deviceList = getDevices(from: DEVICE_PATH)
-#elseif os(Linux)
-    let deviceList = getDevices(from: SYS_PATH_LINUX)
-#endif
-
-    //let shortList = pruneDevices(baseList)
     if deviceList.count > 0 {
         if deviceList.count == 1 && !doShowData {
             // Warn if a device has been specified anyway
@@ -175,9 +168,7 @@ internal func showDevices(_ targetDevice: Int) {
             // Write the path of the only device to STDOUT
             writeToStdout(DEVICE_PATH + deviceList[0])
         } else {
-#if os(macOS)
-            let deviceData = findConnectedSerialDevices()
-#endif
+            // Check any specified index is valid
             var useDevice = targetDevice
             if useDevice > deviceList.count {
                 reportWarning("\(targetDevice) is out of range (1-\(deviceList.count))")
@@ -185,12 +176,15 @@ internal func showDevices(_ targetDevice: Int) {
             }
             
             // Write the path of the valid chosen device to STDOUT
-            if useDevice != -1 {
+            if useDevice != -1 && !doShowData {
                 writeToStdout(DEVICE_PATH + deviceList[useDevice - 1])
                 return
             }
             
             // List devices to STDERR (ie. for humans)
+#if os(macOS)
+            let deviceData = findConnectedSerialDevices()
+#endif
             var count = 1
             for device in deviceList {// List devices to STDERR (ie. for humans)
 #if os(macOS)
@@ -198,7 +192,15 @@ internal func showDevices(_ targetDevice: Int) {
 #else
                 let sd = getDeviceInfo(device)
 #endif
-                reportInfo(String(format: "%d. %@\t\t[%@, %@]", count, DEVICE_PATH + device, sd.productType, sd.vendorName))
+                
+                if useDevice == -1 {
+                    // No device specified so output all
+                    reportInfo(String(format: "%d. %@\t\t[%@, %@]", count, DEVICE_PATH + device, sd.productType, sd.vendorName))
+                } else if useDevice == count {
+                    // Device specified so no need to present its index
+                    reportInfo(String(format: "%@\t\t[%@, %@]", DEVICE_PATH + device, sd.productType, sd.vendorName))
+                }
+                
                 count += 1
             }
         }
@@ -334,8 +336,14 @@ if !alias.isEmpty {
     print("ALIAS: \(alias)")
 }
 
+#if os(macOS)
+    let deviceList = getDevices(from: DEVICE_PATH)
+#elseif os(Linux)
+    let deviceList = getDevices(from: SYS_PATH_LINUX)
+#endif
+
 // Get and show any devices or the required device
-showDevices(targetDevice)
+showDevices(deviceList[...], targetDevice)
 
 // Close cleanly
 exit(EXIT_SUCCESS)
