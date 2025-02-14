@@ -115,7 +115,7 @@ func getSerialDevices(_ portIterator: io_iterator_t) -> [String: SerialDeviceInf
                 if let serialRef : CFTypeRef = IORegistryEntrySearchCFProperty(serialDevice, kIOServicePlane, kUSBVendorString as CFString, nil, searchOptions) {
                     serialDeviceInfo.vendorName = String(describing: serialRef).trimmingCharacters(in: .whitespacesAndNewlines)
                 } else if let serialRef : CFTypeRef = IORegistryEntrySearchCFProperty(serialDevice, kIOServicePlane, kUSBVendorID as CFString, nil, searchOptions) {
-                    serialDeviceInfo.vendorName = String(describing: serialRef).trimmingCharacters(in: .whitespacesAndNewlines)
+                    serialDeviceInfo.vendorName = "0x" + String(describing: serialRef).trimmingCharacters(in: .whitespacesAndNewlines)
                 }
                 
                 serialDevices[devicePath] = serialDeviceInfo

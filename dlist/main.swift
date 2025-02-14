@@ -179,25 +179,26 @@ internal func showDevices(_ targetDevice: Int) {
             let deviceData = findConnectedSerialDevices()
 #endif
             var useDevice = targetDevice
-            if useDevice >= deviceList.count {
+            if useDevice > deviceList.count {
                 reportWarning("\(targetDevice) is out of range (1-\(deviceList.count))")
                 useDevice = -1
             }
+            
+            // Write the path of the valid chosen device to STDOUT
+            if useDevice != -1 {
+                writeToStdout(DEVICE_PATH + deviceList[useDevice - 1])
+                return
+            }
+            
+            // List devices to STDERR (ie. for humans)
             var count = 1
-            for device in deviceList {
-                if useDevice != -1 && count == useDevice {
-                    // Write the path of the chosen device to STDOUT
-                    writeToStdout(DEVICE_PATH + device)
-                } else {
-                    // List devices to STDERR (ie. for humans)
+            for device in deviceList {// List devices to STDERR (ie. for humans)
 #if os(macOS)
-                    let sd = deviceData[DEVICE_PATH + device] ?? SerialDeviceInfo()
+                let sd = deviceData[DEVICE_PATH + device] ?? SerialDeviceInfo()
 #else
-                    let sd = getDeviceInfo(device)
+                let sd = getDeviceInfo(device)
 #endif
-                    reportInfo(String(format: "%d. %@\t\t[%@, %@]", count, DEVICE_PATH + device, sd.productType, sd.vendorName))
-                }
-                
+                reportInfo(String(format: "%d. %@\t\t[%@, %@]", count, DEVICE_PATH + device, sd.productType, sd.vendorName))
                 count += 1
             }
         }
@@ -215,16 +216,15 @@ private func showHelp() {
     showVersion()
     writeToStdout(BOLD + "MISSION" + RESET + "\n  List connected USB-to-serial adaptors.\n")
     writeToStdout(BOLD + "USAGE" + RESET + "\n  dlist [--info] [--help] [device index]\n")
-    writeToStdout("Call " + ITALIC + "dlist" + RESET + " to view or use a connected adaptor's device path.")
-    writeToStdout("If multiple adaptors are connected, " + ITALIC + "dlist" + RESET + " will list them.")
-    writeToStdout("In this case, to use one of them, call " + ITALIC + "dlist" + RESET + " with the required")
+    writeToStdout("Call " + ITALIC + "dlist" + RESET + " to view or use a connected adaptor's device path. If multiple adaptors are connected,")
+    writeToStdout(ITALIC + "dlist" + RESET + " will list them. In this case, to use one of them, call " + ITALIC + "dlist" + RESET + " with the required")
     writeToStdout("adaptor's index as shown in the presented list.\n")
     writeToStdout(BOLD + "OPTIONS" + RESET + "\n")
-    writeToStdout("  -i/--info          Present extra, human-readable device info (macOS only)")
-    writeToStdout("  -h/--help          This help screen")
+    writeToStdout("  -i | --info          Present extra, human-readable device info: product type, manufacturer")
+    writeToStdout("  -h | --help          This help screen\n")
     writeToStdout(BOLD + "EXAMPLES" + RESET)
-    writeToStdout("  One device connected:  minicom -d $(dlist) -b 9600")
-    writeToStdout("  Two devices connected, use number 1: minicom -d $(dlist 1) -b 9600\n")
+    writeToStdout("  One device connected:                  minicom -d $(dlist) -b 9600")
+    writeToStdout("  Two devices connected, use number 1:   minicom -d $(dlist 1) -b 9600\n")
 }
 
 
