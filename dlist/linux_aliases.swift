@@ -1,6 +1,7 @@
 import Clibudev
 import Foundation
 
+
 /**
  Use udev to get a USB-connected serial adaptor's USB Serial Number.
 
@@ -29,7 +30,7 @@ func getSerialNumber(_ device: String) -> String? {
     guard var dev = udev_device_new_from_syspath(udev, devicePath) else { return nil }
     defer { udev_device_unref(dev) }
 
-    // Target the 
+    // Get the device's parent node
     dev = udev_device_get_parent_with_subsystem_devtype(dev, "usb", "usb_device")
     let serial = udev_device_get_sysattr_value(dev, "serial")!
     // For some reason the following yields 'cannot find 'free' in scope' in Swift 6
@@ -38,7 +39,6 @@ func getSerialNumber(_ device: String) -> String? {
     return String(cString: serial)
 }
 
-// SYMLINK+="TEST2"
 
 func apply(alias: String, to serial: String, path: String = "") -> Bool {
 
@@ -53,12 +53,12 @@ func apply(alias: String, to serial: String, path: String = "") -> Bool {
             if rulesFileText.contains("SYMLINK+=\"\(alias)\"") {
                 reportErrorAndExit("Alias \(alias) already in use", 3)
             }
-
+            
             // Check the serial number
             // If it already exists, update its alias
             if let matchSerial = rulesFileText.firstMatch(of: #/ATTRS{serial}=="(.*?)"/#) {
                 let oldSerial = String(matchSerial.1) 
-
+                
                 if let matchAlias = rulesFileText.firstMatch(of: #/SYMLINK\+="(.*?)"/#) {
                     let oldAlias = String(matchAlias.1) 
                     if oldAlias != alias {
@@ -69,7 +69,7 @@ func apply(alias: String, to serial: String, path: String = "") -> Bool {
             } else {
                 rulesFileText += deviceLine
             }
-
+            
             return writeRules(rulesFileText)
         } catch {
             // Fallthrough
@@ -83,7 +83,7 @@ func apply(alias: String, to serial: String, path: String = "") -> Bool {
 
 
 func writeRules(_ fileContents: String) -> Bool {
-
+    
     do {
         try fileContents.write(toFile: UDEV_RULES_PATH_LINUX, atomically: false, encoding: .utf8)
         return true
@@ -91,6 +91,6 @@ func writeRules(_ fileContents: String) -> Bool {
         // Fallthrough
         print("WRITE FAIL")
     }
-
+    
     return false
 }
