@@ -1,5 +1,5 @@
 /*
-    dlisst
+    dlist
     linux_version.swift
 
     Copyright © 2025 Tony Smith. All rights reserved.
@@ -26,6 +26,6 @@
 
 #if os(Linux)
     // TODO Update from macOS Info.plist
-    let LINUX_VERSION: String = "0.1.3"
-    let LINUX_BUILD: Int = 17
+    let LINUX_VERSION: String = "0.1.4"
+    let LINUX_BUILD: Int = 18
 #endif
