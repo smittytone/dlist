@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3B0C90192D5CABD2003FD494 /* mac_aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0C90182D5CABD2003FD494 /* mac_aliases.swift */; };
+		3B8D30FA2D5E21EF0019031C /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B8D30F92D5E21EF0019031C /* Extensions.swift */; };
 		3BAE669F2D539A3300AB79D3 /* linux_version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BAE669E2D539A3300AB79D3 /* linux_version.swift */; };
 		3BF2DC702D50E0A900520F48 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF2DC6D2D50E0A900520F48 /* main.swift */; };
 		3BF2DC712D50E0A900520F48 /* terminal_output.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF2DC6E2D50E0A900520F48 /* terminal_output.swift */; };
@@ -25,6 +27,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3B0C90182D5CABD2003FD494 /* mac_aliases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mac_aliases.swift; sourceTree = "<group>"; };
+		3B8D30F92D5E21EF0019031C /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		3BAE669E2D539A3300AB79D3 /* linux_version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = linux_version.swift; sourceTree = "<group>"; };
 		3BAE66A12D53A1FE00AB79D3 /* bumpbuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = bumpbuild.sh; sourceTree = "<group>"; };
 		3BF2DC5A2D50C07E00520F48 /* dlist */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dlist; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -68,6 +72,8 @@
 			children = (
 				3BF2DC6D2D50E0A900520F48 /* main.swift */,
 				3BF2DC6E2D50E0A900520F48 /* terminal_output.swift */,
+				3B0C90182D5CABD2003FD494 /* mac_aliases.swift */,
+				3B8D30F92D5E21EF0019031C /* Extensions.swift */,
 				3BAE669E2D539A3300AB79D3 /* linux_version.swift */,
 				3BF2DC6C2D50E0A900520F48 /* Info.plist */,
 			);
@@ -145,8 +151,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B8D30FA2D5E21EF0019031C /* Extensions.swift in Sources */,
 				3BAE669F2D539A3300AB79D3 /* linux_version.swift in Sources */,
 				3BF2DC702D50E0A900520F48 /* main.swift in Sources */,
+				3B0C90192D5CABD2003FD494 /* mac_aliases.swift in Sources */,
 				3BF2DC712D50E0A900520F48 /* terminal_output.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -284,12 +292,14 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = Y5J3K52DNA;
 				DSTROOT = $SRCROOT/build/pkgroot;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = dlist/Info.plist;
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
+				MARKETING_VERSION = 0.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bps.dlist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -303,12 +313,14 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = Y5J3K52DNA;
 				DSTROOT = $SRCROOT/build/pkgroot;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = dlist/Info.plist;
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
+				MARKETING_VERSION = 0.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bps.dlist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

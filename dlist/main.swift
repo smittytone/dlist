@@ -26,12 +26,16 @@
 
 
 import Foundation
+#if os(Linux)
+import Clibudev
+#endif
 
 
 // MARK: - Constants
 
-let DEVICE_PATH         = "/dev/"
-let SYS_PATH_LINUX      = "/sys/class/tty/"
+let DEVICE_PATH             = "/dev/"
+let SYS_PATH_LINUX          = "/sys/class/tty/"
+let UDEV_RULES_PATH_LINUX   = "/etc/udev/rules.d/99-dlist-usb-serial-devices.rules"
 
 
 // MARK: - Global Variables
@@ -41,6 +45,22 @@ var argIsAValue         = false
 var argType             = -1
 var argCount            = 0
 var prevArg             = ""
+// App control
+var doApplyAlias        = false
+var doShowData          = false
+var alias               = ""
+var targetDevice        = -1
+// Computed
+var isRunAsSudo: Bool {
+    // This is required on Linux for access to `UDEV_RULES_PATH_LINUX`.
+    get {
+        if let value: String = ProcessInfo.processInfo.environment["USER"] {
+            return (value == "root")
+        }
+
+        return false
+    }
+}
 
 
 // MARK: - Functions
@@ -65,10 +85,11 @@ internal func getDevices(from devicesPath: String) -> [String] {
         reportErrorAndExit("\(devicesPath) cannot be found", 2)
     }
     
-    // For macOS, we just look out for devices in `/dev` prefixed `cu.`
+    // For macOS, we just look out for devices in `/dev` prefixed `cu.`,
+    // and make sure we ignore macOS-added items, eg. `cu.Bluetooth-Incoming`.
 #if os(macOS)
     for device in list {
-        if device.hasPrefix("cu.") {
+        if device.hasPrefix("cu.") && doKeepDevice(device) {
             finalList.append(device)
         }
     }
@@ -138,37 +159,46 @@ internal func pruneDevices(_ devices: [String]) -> [String] {
 internal func showDevices(_ targetDevice: Int) {
     
 #if os(macOS)
-    let baseList = getDevices(from: DEVICE_PATH)
+    let deviceList = getDevices(from: DEVICE_PATH)
 #elseif os(Linux)
-    let baseList = getDevices(from: SYS_PATH_LINUX)
+    let deviceList = getDevices(from: SYS_PATH_LINUX)
 #endif
 
-    let shortList = pruneDevices(baseList)
-    if shortList.count > 0 {
-        if shortList.count == 1 {
+    //let shortList = pruneDevices(baseList)
+    if deviceList.count > 0 {
+        if deviceList.count == 1 && !doShowData {
             // Warn if a device has been specified anyway
             if targetDevice != -1 && targetDevice != 1 {
                 reportWarning("\(targetDevice) is out of range (1)")
             }
             
             // Write the path of the only device to STDOUT
-            writeToStdout(DEVICE_PATH + shortList[0])
+            writeToStdout(DEVICE_PATH + deviceList[0])
         } else {
+#if os(macOS)
+            let deviceData = findConnectedSerialDevices()
+#endif
             var useDevice = targetDevice
-            if useDevice >= shortList.count {
-                reportWarning("\(targetDevice) is out of range (1-\(shortList.count))")
+            if useDevice > deviceList.count {
+                reportWarning("\(targetDevice) is out of range (1-\(deviceList.count))")
                 useDevice = -1
             }
+            
+            // Write the path of the valid chosen device to STDOUT
+            if useDevice != -1 {
+                writeToStdout(DEVICE_PATH + deviceList[useDevice - 1])
+                return
+            }
+            
+            // List devices to STDERR (ie. for humans)
             var count = 1
-            for device in shortList {
-                if useDevice != -1 && count == useDevice {
-                    // Write the path of the chosen device to STDOUT
-                    writeToStdout(DEVICE_PATH + device)
-                } else {
-                    // List devices to STDERR (ie. for humans)
-                    reportInfo(String(format: "%d. " + DEVICE_PATH + device, count))
-                }
-                
+            for device in deviceList {// List devices to STDERR (ie. for humans)
+#if os(macOS)
+                let sd = deviceData[DEVICE_PATH + device] ?? SerialDeviceInfo()
+#else
+                let sd = getDeviceInfo(device)
+#endif
+                reportInfo(String(format: "%d. %@\t\t[%@, %@]", count, DEVICE_PATH + device, sd.productType, sd.vendorName))
                 count += 1
             }
         }
@@ -185,14 +215,16 @@ private func showHelp() {
 
     showVersion()
     writeToStdout(BOLD + "MISSION" + RESET + "\n  List connected USB-to-serial adaptors.\n")
-    writeToStdout(BOLD + "USAGE" + RESET + "\n  dlist [--help] [device index]\n")
-    writeToStdout("Call " + ITALIC + "dlist" + RESET + " to view or use a connected adaptor's device path.")
-    writeToStdout("If multiple adaptors are connected, " + ITALIC + "dlist" + RESET + " will list them.")
-    writeToStdout("In this case, to use one of them, call " + ITALIC + "dlist" + RESET + " with the required")
+    writeToStdout(BOLD + "USAGE" + RESET + "\n  dlist [--info] [--help] [device index]\n")
+    writeToStdout("Call " + ITALIC + "dlist" + RESET + " to view or use a connected adaptor's device path. If multiple adaptors are connected,")
+    writeToStdout(ITALIC + "dlist" + RESET + " will list them. In this case, to use one of them, call " + ITALIC + "dlist" + RESET + " with the required")
     writeToStdout("adaptor's index as shown in the presented list.\n")
+    writeToStdout(BOLD + "OPTIONS" + RESET + "\n")
+    writeToStdout("  -i | --info          Present extra, human-readable device info: product type, manufacturer")
+    writeToStdout("  -h | --help          This help screen\n")
     writeToStdout(BOLD + "EXAMPLES" + RESET)
-    writeToStdout("  One device connected:  minicom -d $(dlist) -b 9600")
-    writeToStdout("  Two devices connected, use number 1: minicom -d $(dlist 1) -b 9600\n")
+    writeToStdout("  One device connected:                  minicom -d $(dlist) -b 9600")
+    writeToStdout("  Two devices connected, use number 1:   minicom -d $(dlist 1) -b 9600\n")
 }
 
 
@@ -226,44 +258,80 @@ func showHeader() {
 
 // MARK: - Runtime Start
 
-// Look for the help flag
-for arg in CommandLine.arguments { 
-    if arg.lowercased() == "-h" || arg.lowercased() == "--help" {
-        showHelp()
-        exit(EXIT_SUCCESS)
-    }
-}
-
 // Set up Ctrl-C trap
 configureSignalHandling()
 
 // Process the (separated) arguments
-var targetDevice = -1
 for argument in CommandLine.arguments {
-    // Ignore the first command line argument
+    // Ignore the first argument
     if argCount == 0 {
         argCount += 1
         continue
     }
-    
-    // Check for negative numbers
-    if argument.hasPrefix("-") {
-        reportErrorAndExit("Device reference \(argument) is invalid (negative integer)")
-    }
-    
-    // Get the device choice and convert string arg to int
-    if let deviceChoice = Int(argument) {
-        // Make sure zero was not provided
-        if deviceChoice == 0 {
-            reportErrorAndExit("Device reference \(argument) is invalid (zero)")
+
+    if argIsAValue {
+        // Make sure we're not reading in an option rather than a value
+        if argument.prefix(1) == "-" {
+            reportErrorAndExit("Missing value for \(prevArg)")
         }
-        
-        targetDevice = deviceChoice
+
+        switch argType {
+        case 0:
+            alias = argument
+            doApplyAlias = true
+        default:
+            reportErrorAndExit("Unknown argument: \(argument)")
+        }
+
+        argIsAValue = false
     } else {
-        reportErrorAndExit("Device reference is not an integer. List available devices to get this value.")
+        switch argument {
+            case "-a":
+                fallthrough
+            case "--alias":
+                argType = 0
+                argIsAValue = true
+            case "-i":
+                fallthrough
+            case "--info":
+                doShowData = true
+            case "-h":
+                fallthrough
+            case "--help":
+                showHelp()
+                exit(EXIT_SUCCESS)
+            case "--version":
+                showVersion()
+                exit(EXIT_SUCCESS)
+            default:
+                if argument.prefix(1) == "-" {
+                    reportErrorAndExit("Unknown argument: \(argument)")
+                }
+                
+                // Get the device choice and convert string arg to int
+                if let deviceChoice = Int(argument) {
+                    // Make sure zero was not provided
+                    if deviceChoice == 0 {
+                        reportErrorAndExit("Device reference \(argument) is invalid (zero)")
+                    }
+                    
+                    targetDevice = deviceChoice
+                }
+        }
+
+        prevArg = argument
     }
 
     argCount += 1
+
+    // Trap commands that come last and therefore have missing args
+    if argCount == CommandLine.arguments.count && argIsAValue {
+        reportErrorAndExit("Missing value for \(argument)")
+    }
+}
+
+if !alias.isEmpty {
+    print("ALIAS: \(alias)")
 }
 
 // Get and show any devices or the required device

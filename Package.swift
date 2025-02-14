@@ -8,11 +8,18 @@ let package = Package(
     targets: [
         .executableTarget(
             name: "dlist",
+            dependencies: ["Clibudev"],
             path: "dlist",
             exclude: [
                 // File not needed for Linux build (so far...)
-                "Info.plist"    
+                "Info.plist",
+                "mac_aliases.swift"    
             ]
+        ),
+        .systemLibrary(
+            name: "Clibudev",
+            path: "clibudev",
+            pkgConfig: "udev"
         )
     ]
 )

@@ -1,6 +1,6 @@
 /*
     dlist
-    linux_version.swift
+    entities.swift
 
     Copyright © 2025 Tony Smith. All rights reserved.
 
@@ -24,8 +24,15 @@
     SOFTWARE.
 */
 
-#if os(Linux)
-    // TODO Update from macOS Info.plist
-    let LINUX_VERSION: String = "0.1.4"
-    let LINUX_BUILD: Int = 18
-#endif
+
+import Foundation
+
+
+/*
+ Basic structure to hold a subset of device information for use later
+ */
+struct SerialDeviceInfo {
+    var serialNumber: String    = "UNKNOWN"
+    var productType: String     = "UNKNOWN PRODUCT TYPE"
+    var vendorName: String      = "UNKNOWN MANUFACTURER"
+}
