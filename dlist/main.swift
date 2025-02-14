@@ -217,15 +217,17 @@ private func showHelp() {
 
     showVersion()
     writeToStdout(BOLD + "MISSION" + RESET + "\n  List connected USB-to-serial adaptors.\n")
-    writeToStdout(BOLD + "USAGE" + RESET + "\n  dlist [--info] [--help] [device index]\n")
+    writeToStdout(BOLD + "USAGE" + RESET + "\n  dlist [--info] [--version] [--help] [device index]\n")
     writeToStdout("Call " + ITALIC + "dlist" + RESET + " to view or use a connected adaptor's device path. If multiple adaptors are connected,")
     writeToStdout(ITALIC + "dlist" + RESET + " will list them. In this case, to use one of them, call " + ITALIC + "dlist" + RESET + " with the required")
     writeToStdout("adaptor's index as shown in the presented list.\n")
     writeToStdout(BOLD + "OPTIONS" + RESET + "\n")
     writeToStdout("  -i | --info          Present extra, human-readable device info: product type, manufacturer")
+    writeToStdout("  -v | --version       Utility version information")
     writeToStdout("  -h | --help          This help screen\n")
     writeToStdout(BOLD + "EXAMPLES" + RESET)
     writeToStdout("  One device connected:                  minicom -d $(dlist) -b 9600")
+    writeToStdout("  Two devices connected, list them:      dlist")
     writeToStdout("  Two devices connected, use number 1:   minicom -d $(dlist 1) -b 9600\n")
 }
 
@@ -302,6 +304,8 @@ for argument in CommandLine.arguments {
             case "--help":
                 showHelp()
                 exit(EXIT_SUCCESS)
+            case "-v":
+                fallthrough
             case "--version":
                 showVersion()
                 exit(EXIT_SUCCESS)
