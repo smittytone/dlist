@@ -24,57 +24,35 @@
     SOFTWARE.
 */
 
-// /usr/sbin/system_profiler SPUSBDataType | grep "Serial Number" | cut -w -f 4
-
-
-/*
- Get USB Serial Nuumber.
- Store alias, mapped to USBSN
- User specifies alias
-    - get USBSN from alias
-    - Check USBSN is present
-        - Reject alias if not present
-    - Get device name for USBSN device
-    - Issue device name + path
- 
- 
-so rather than
-    minicom -D $(dlist)
- or
-    minicom -D $(dlist 2)
- we have
-    minicom -D $(dlist FART)
- 
- look up FART in store for its USBSN
- no match?
-    report error
- check connected devices' USBSNs
- if there is a match
-    get the device's /dev/path
-    write /dev/path to stdout
- else report error
- */
-
 
 import Foundation
 import IOKit
-import IOKit.ps
-import IOKit.usb
-import IOKit.hid
+// Extra imports required to access certain constants
 import IOKit.serial
+import IOKit.usb
+
+
+/*
+ Basic structure to hold a subset of device information for use later
+ */
+struct SerialDeviceInfo {
+    var serialNumber: String    = "UNKNOWN"
+    var productType: String     = "UNKNOWN"
+    var vendorName: String      = "UNKNOWN"
+}
 
 
 /**
  Scan the IO registry for serial port devices.
  
- - Returns A dictionary of device paths and their serial numbers, or a empty dictionary.
+ - Returns A dictionary of device data keyed by device path, or an empty dictionary.
  */
-func findConnectedSerialDevices() -> [String: String] {
+func findConnectedSerialDevices() -> [String: SerialDeviceInfo] {
     
     var portIterator: io_iterator_t = 0
     
     if let matchesCFDict = IOServiceMatching(kIOSerialBSDServiceValue) {
-        // Convert recieved CFDictionary to a Swift equivalent so
+        // Convert received CFDictionary to a Swift equivalent so
         // we can easily punch in the values we want...
         let matchesNSDict = matchesCFDict as NSDictionary
         var matches = matchesNSDict.swiftDictionary
@@ -101,14 +79,12 @@ func findConnectedSerialDevices() -> [String: String] {
  - Parameters
     - portIterator: An IOKit iterator for walking a list of devices.
  
- - Returns A dictionary of device paths and their serial numbers, or a empty dictionary.
+ - Returns A dictionary of device data keyed by device path, or an empty dictionary.
  */
-func getSerialDevices(_ portIterator: io_iterator_t) -> [String: String] {
+func getSerialDevices(_ portIterator: io_iterator_t) -> [String: SerialDeviceInfo] {
     
-    var serialDevices: [String: String] = [:]
+    var serialDevices: [String: SerialDeviceInfo] = [:]
     var serialDevice: io_service_t
-    let serialKey = "USB Serial Number"
-    let bsdPathKey = kIOCalloutDeviceKey
     
     repeat {
         serialDevice = IOIteratorNext(portIterator)
@@ -116,18 +92,33 @@ func getSerialDevices(_ portIterator: io_iterator_t) -> [String: String] {
             break
         }
         
-        var serialNumber = "UNKNOWN"
-        let searchOptions : IOOptionBits = IOOptionBits(kIORegistryIterateParents) | IOOptionBits(kIORegistryIterateRecursively)
-        if let serialRef : CFTypeRef = IORegistryEntrySearchCFProperty(serialDevice, kIOServicePlane, serialKey as CFString, nil, searchOptions) {
-            // Got a serial number - convert to text
-            serialNumber = String(describing: serialRef)
-        }
-        
         // Get the Unix device path
-        let bsdPathAsCFString: CFTypeRef? = IORegistryEntryCreateCFProperty(serialDevice, bsdPathKey as CFString, kCFAllocatorDefault, 0).takeUnretainedValue()
-        if let bsdPath = bsdPathAsCFString as? String {
-            if doKeepDevice(bsdPath) {
-                serialDevices[bsdPath] = serialNumber
+        // Only if we have this do we continue to get the other device data points
+        let devicePathAsCFString: CFTypeRef? = IORegistryEntryCreateCFProperty(serialDevice, kIOCalloutDeviceKey as CFString, kCFAllocatorDefault, 0).takeUnretainedValue()
+        if let devicePath = devicePathAsCFString as? String {
+            // Make sure we don't include cu.Bluetooth etc
+            if doKeepDevice(devicePath) {
+                var serialDeviceInfo = SerialDeviceInfo()
+                let searchOptions : IOOptionBits = IOOptionBits(kIORegistryIterateParents) | IOOptionBits(kIORegistryIterateRecursively)
+                
+                // Try to get the device's USB serial number
+                if let serialRef : CFTypeRef = IORegistryEntrySearchCFProperty(serialDevice, kIOServicePlane, "USB Serial Number" as CFString, nil, searchOptions) {
+                    serialDeviceInfo.serialNumber = String(describing: serialRef)
+                }
+                
+                // Try to get the device's product type
+                if let serialRef : CFTypeRef = IORegistryEntrySearchCFProperty(serialDevice, kIOServicePlane, kUSBProductString as CFString, nil, searchOptions) {
+                    serialDeviceInfo.productType = String(describing: serialRef).trimmingCharacters(in: .whitespacesAndNewlines)
+                }
+                
+                // Try to get the device's vendor. Go for the name, but if that fails fall back to the ID
+                if let serialRef : CFTypeRef = IORegistryEntrySearchCFProperty(serialDevice, kIOServicePlane, kUSBVendorString as CFString, nil, searchOptions) {
+                    serialDeviceInfo.vendorName = String(describing: serialRef).trimmingCharacters(in: .whitespacesAndNewlines)
+                } else if let serialRef : CFTypeRef = IORegistryEntrySearchCFProperty(serialDevice, kIOServicePlane, kUSBVendorID as CFString, nil, searchOptions) {
+                    serialDeviceInfo.vendorName = String(describing: serialRef).trimmingCharacters(in: .whitespacesAndNewlines)
+                }
+                
+                serialDevices[devicePath] = serialDeviceInfo
             }
         }
         

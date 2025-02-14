@@ -47,6 +47,7 @@ var argCount            = 0
 var prevArg             = ""
 // App control
 var doApplyAlias        = false
+var doShowData          = false
 var alias               = ""
 var targetDevice        = -1
 // Computed
@@ -84,10 +85,11 @@ internal func getDevices(from devicesPath: String) -> [String] {
         reportErrorAndExit("\(devicesPath) cannot be found", 2)
     }
     
-    // For macOS, we just look out for devices in `/dev` prefixed `cu.`
+    // For macOS, we just look out for devices in `/dev` prefixed `cu.`,
+    // and make sure we ignore macOS-added items, eg. `cu.Bluetooth-Incoming`.
 #if os(macOS)
     for device in list {
-        if device.hasPrefix("cu.") {
+        if device.hasPrefix("cu.") && doKeepDevice(device) {
             finalList.append(device)
         }
     }
@@ -157,21 +159,21 @@ internal func pruneDevices(_ devices: [String]) -> [String] {
 internal func showDevices(_ targetDevice: Int) {
     
 #if os(macOS)
-    let baseList = getDevices(from: DEVICE_PATH)
+    let deviceList = getDevices(from: DEVICE_PATH)
 #elseif os(Linux)
-    let baseList = getDevices(from: SYS_PATH_LINUX)
+    let deviceList = getDevices(from: SYS_PATH_LINUX)
 #endif
 
-    let shortList = pruneDevices(baseList)
-    if shortList.count > 0 {
-        if shortList.count == 1 {
+    //let shortList = pruneDevices(baseList)
+    if deviceList.count > 0 {
+        if deviceList.count == 1 && !doShowData {
             // Warn if a device has been specified anyway
             if targetDevice != -1 && targetDevice != 1 {
                 reportWarning("\(targetDevice) is out of range (1)")
             }
             
             // Write the path of the only device to STDOUT
-            writeToStdout(DEVICE_PATH + shortList[0])
+            writeToStdout(DEVICE_PATH + deviceList[0])
 
 #if os(Linux)
             // FROM 0.2.0
@@ -187,19 +189,27 @@ internal func showDevices(_ targetDevice: Int) {
             }
 #endif
         } else {
+#if os(macOS)
+            let deviceData = findConnectedSerialDevices()
+#endif
             var useDevice = targetDevice
-            if useDevice >= shortList.count {
-                reportWarning("\(targetDevice) is out of range (1-\(shortList.count))")
+            if useDevice >= deviceList.count {
+                reportWarning("\(targetDevice) is out of range (1-\(deviceList.count))")
                 useDevice = -1
             }
             var count = 1
-            for device in shortList {
+            for device in deviceList {
                 if useDevice != -1 && count == useDevice {
                     // Write the path of the chosen device to STDOUT
                     writeToStdout(DEVICE_PATH + device)
                 } else {
                     // List devices to STDERR (ie. for humans)
-                    reportInfo(String(format: "%d. " + DEVICE_PATH + device, count))
+#if os(macOS)
+                    let sd = deviceData[DEVICE_PATH + device] ?? SerialDeviceInfo()
+                    reportInfo(String(format: "%d. %@\t\t[%@ %@]", count, DEVICE_PATH + device, sd.vendorName, sd.productType))
+#else
+                    reportInfo(String(format: "%d. %@", count, DEVICE_PATH + device))
+#endif
                 }
                 
                 count += 1
@@ -218,11 +228,14 @@ private func showHelp() {
 
     showVersion()
     writeToStdout(BOLD + "MISSION" + RESET + "\n  List connected USB-to-serial adaptors.\n")
-    writeToStdout(BOLD + "USAGE" + RESET + "\n  dlist [--help] [device index]\n")
+    writeToStdout(BOLD + "USAGE" + RESET + "\n  dlist [--info] [--help] [device index]\n")
     writeToStdout("Call " + ITALIC + "dlist" + RESET + " to view or use a connected adaptor's device path.")
     writeToStdout("If multiple adaptors are connected, " + ITALIC + "dlist" + RESET + " will list them.")
     writeToStdout("In this case, to use one of them, call " + ITALIC + "dlist" + RESET + " with the required")
     writeToStdout("adaptor's index as shown in the presented list.\n")
+    writeToStdout(BOLD + "OPTIONS" + RESET + "\n")
+    writeToStdout("  -i/--info          Present extra, human-readable device info (macOS only)")
+    writeToStdout("  -h/--help          This help screen")
     writeToStdout(BOLD + "EXAMPLES" + RESET)
     writeToStdout("  One device connected:  minicom -d $(dlist) -b 9600")
     writeToStdout("  Two devices connected, use number 1: minicom -d $(dlist 1) -b 9600\n")
@@ -262,17 +275,6 @@ func showHeader() {
 // Set up Ctrl-C trap
 configureSignalHandling()
 
-#if os(macOS)
-let devices = findConnectedSerialDevices()
-if !devices.isEmpty {
-    for (path, serialNumber) in devices {
-        print("Connected device at \(path) has USB serial number \(serialNumber)")
-    }
-}
-#elseif os(Linux)
-print("\(isRunAsSudo ? "YES" : "NO")")
-#endif
-
 // Process the (separated) arguments
 for argument in CommandLine.arguments {
     // Ignore the first argument
@@ -303,6 +305,10 @@ for argument in CommandLine.arguments {
             case "--alias":
                 argType = 0
                 argIsAValue = true
+            case "-i":
+                fallthrough
+            case "--info":
+                doShowData = true
             case "-h":
                 fallthrough
             case "--help":
@@ -324,14 +330,6 @@ for argument in CommandLine.arguments {
                     }
                     
                     targetDevice = deviceChoice
-                } else {
-                    /*
-                    if checkAlias(argument) {
-                        targetDevice = getAliasIndex(argument)
-                    } else {
-                        reportErrorAndExit("Device reference is not an integer. List available devices to get this value.")
-                    }
-                     */
                 }
         }
 
@@ -344,6 +342,10 @@ for argument in CommandLine.arguments {
     if argCount == CommandLine.arguments.count && argIsAValue {
         reportErrorAndExit("Missing value for \(argument)")
     }
+}
+
+if !alias.isEmpty {
+    print("ALIAS: \(alias)")
 }
 
 // Get and show any devices or the required device
