@@ -4,6 +4,8 @@
 
 ## Usage
 
+![dlist usage](imagess/terminal.webp)
+
 Run `dlist` to get a list of connected MCUs, eg. Raspberry Pi Pico boards.
 
 If only one board is connected, its path within the `/dev/` directory will be provided. For example:
