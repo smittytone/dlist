@@ -32,16 +32,6 @@ import IOKit.serial
 import IOKit.usb
 
 
-/*
- Basic structure to hold a subset of device information for use later
- */
-struct SerialDeviceInfo {
-    var serialNumber: String    = "UNKNOWN"
-    var productType: String     = "UNKNOWN"
-    var vendorName: String      = "UNKNOWN"
-}
-
-
 /**
  Scan the IO registry for serial port devices.
  
