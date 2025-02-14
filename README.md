@@ -4,7 +4,7 @@
 
 ## Usage
 
-![dlist usage](imagess/terminal.webp)
+![dlist usage](images/terminal.webp)
 
 Run `dlist` to get a list of connected MCUs, eg. Raspberry Pi Pico boards.
 
