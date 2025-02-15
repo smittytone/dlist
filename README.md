@@ -65,6 +65,8 @@ Because the output is intended to be readable by people, it is not suitable for 
 * `cd /path/to/repo`
 * `swift build -c release`
 
+**Note** Use `swift build -c release --static-swift-stdlib` on the Raspberry Pi 5 to avoid 'backtrace' runtime messages.
+
 The binary will be located in `.build/aarch64-unknown-linux-gnu/release/`
 
 **Note** The script `bumpbuild.sh`, used in `dlist` development, currently only runs on macOS.
