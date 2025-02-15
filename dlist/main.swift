@@ -110,38 +110,6 @@ internal func getDevices(from devicesPath: String) -> [String] {
 
 
 /**
-    Get a list of possible devices from the `/dev` directory.
-    At this point we don't parse the list: we just obtain it.
- 
-    - Parameters
-        - devices: An array of `cu.*` entries from `/dev`.
- 
-    - Returns An array containing only the devices we're interested in,
-              ie. connected MCU boards.
- */
-internal func pruneDevices(_ devices: [String]) -> [String] {
-    
-    guard devices.count > 0 else { return devices }
-    
-    // This is the list of known `cu.` devices that are definitely not MCUs
-    // NOTE These are implicitly absent under Linux
-    let removals = ["cu.debug-console", "cu.Bluetooth-Incoming-Port"]
-    
-    var prunedDevices: [String] = []
-    for device in devices {
-        if removals.contains(device) {
-            continue
-        }
-        
-        prunedDevices.append(device)
-    }
-    
-    
-    return prunedDevices
-}
-
-
-/**
     List any and all available connected MCUs.
     
     If only one is available, write its path to STDOUT for piping.
@@ -279,6 +247,7 @@ for argument in CommandLine.arguments {
             reportErrorAndExit("Missing value for \(prevArg)")
         }
 
+        /*
         switch argType {
         case 0:
             alias = argument
@@ -288,13 +257,9 @@ for argument in CommandLine.arguments {
         }
 
         argIsAValue = false
+        */
     } else {
         switch argument {
-            case "-a":
-                fallthrough
-            case "--alias":
-                argType = 0
-                argIsAValue = true
             case "-i":
                 fallthrough
             case "--info":
@@ -336,17 +301,14 @@ for argument in CommandLine.arguments {
     }
 }
 
-if !alias.isEmpty {
-    print("ALIAS: \(alias)")
-}
-
+// Get a list of appropriate devices
 #if os(macOS)
     let deviceList = getDevices(from: DEVICE_PATH)
 #elseif os(Linux)
     let deviceList = getDevices(from: SYS_PATH_LINUX)
 #endif
 
-// Get and show any devices or the required device
+// Show a list of devices or the required device
 showDevices(deviceList[...], targetDevice)
 
 // Close cleanly
