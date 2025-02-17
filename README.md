@@ -1,4 +1,4 @@
-# dlist 0.1.4
+# dlist 0.1.5
 
 #### A Swift-based macOS/Linux CLI utility for listing connected MCU boards and USB-to-Serial adaptors
 
@@ -48,6 +48,12 @@ Including a numerical argument causes `dlist` to issue the specified device (by 
 Including `--info` or `-i` as a `dlist` argument will force it into list mode, however many devices are connected. 
 
 Because the output is intended to be readable by people, it is not suitable for piping into another command. Make sure you don’t include the flag if you’re using `dlist` to pipe the device path.
+
+## macOS Notes
+
+### Ignorable Devices
+
+macOS adds a two devices to the `/dev/cu.*` set, neither of which can be used for USB-to-serial roles. `dlist` ignores these. However, macOS may also add other devices which cannot be known at compile time. For example, after I have connected my Beats Solo Pro wireless headphones to my Mac, they can appear in `/dev/` as `cu.SmittytoneCans` based on the name I gave them. I can’t know what your wireless headphones are called, so `dlist` now reads a list of ignorable devices from `${HOME}/.config/dlist/ignorables`. Add the extra devices you want `dlist` to ignore there, on a one-device-per-line basis.
 
 ## Compiling
 

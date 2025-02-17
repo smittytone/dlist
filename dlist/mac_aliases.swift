@@ -132,12 +132,43 @@ func getSerialDevices(_ portIterator: io_iterator_t) -> [String: SerialDeviceInf
  */
 func doKeepDevice(_ path: String) -> Bool {
     
-    let removals = ["cu.debug-console", "cu.Bluetooth-Incoming-Port"]
-    for unwantedDevice in removals {
+    for unwantedDevice in ignorableDevices {
         if path.contains(unwantedDevice) {
             return false
         }
     }
     
     return true
+}
+
+
+/**
+ Make a list of serial devices we can ignore. Some are added by macOS, others by users
+ to avoid, eg. `cu.myAirPodsMax` appearing in the list. These can be added to the file
+ `${HOME}/.config/dlist/ignorables` on a one-per-line basis.
+ 
+ - Returns An array of device names to ignore.
+ */
+func getIgnorables() -> [String] {
+    
+    let knownIgnorables = ["cu.debug-console", "cu.Bluetooth-Incoming-Port"]
+    
+    let fm = FileManager.default
+    let ignoresFileURL = fm.homeDirectoryForCurrentUser.appendingPathComponent(".config/dlist/ignorables")
+    let ignoresFilePath = ignoresFileURL.path
+    if fm.fileExists(atPath: ignoresFilePath) {
+        if let ignores = try? String.init(contentsOfFile: ignoresFilePath, encoding: .utf8) {
+            let parts = ignores.split(separator: "\n")
+            if !parts.isEmpty {
+                var userIgnorables: [String] = []
+                for part in parts {
+                    userIgnorables.append(String(part))
+                }
+                
+                return userIgnorables + knownIgnorables
+            }
+        }
+    }
+    
+    return knownIgnorables
 }

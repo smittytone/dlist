@@ -233,6 +233,11 @@ func showHeader() {
 // Set up Ctrl-C trap
 configureSignalHandling()
 
+#if os(macOS)
+// FROM 0.1.5
+let ignorableDevices = getIgnorables()
+#endif
+
 // Process the (separated) arguments
 for argument in CommandLine.arguments {
     // Ignore the first argument
