@@ -71,9 +71,9 @@ macOS adds a two devices to the `/dev/cu.*` set, neither of which can be used fo
 * `cd /path/to/repo`
 * `swift build -c release`
 
-**Note** Use `swift build -c release --static-swift-stdlib` on the Raspberry Pi 5 to avoid 'backtrace' runtime messages.
+**Note** On the Raspberry Pi 5, the build process and running `dlist` will emit `swift runtime: unable to protect... disabling backtracing` messages. To avoid these, you can add the flag `--static-swift-stdlib`. The *quid pro quo* is that it may start up more slowly and will be a much larger build. An alternative approach is to add `export SWIFT_BACKTRACE='enable=no'` to your shell profile file. This removes the messages, keeps the binary size low, but of course disables Swift's improved crash reporting.
 
-The binary will be located in `.build/aarch64-unknown-linux-gnu/release/`
+The Linux binary will be located in `.build/aarch64-unknown-linux-gnu/release/`
 
 **Note** The script `bumpbuild.sh`, used in `dlist` development, currently only runs on macOS.
 
