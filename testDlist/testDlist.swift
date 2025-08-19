@@ -40,8 +40,8 @@ final class testDlist: XCTestCase {
         og.openConsolePipe()
         
         doShowData = false
-        showDevices(devices[...], -1)
-        
+        Dlist.showDevices(devices[...], -1)
+
         // Pause until we have data from the pipe
         var a = 0
         while !og.doneflag{
@@ -63,7 +63,7 @@ final class testDlist: XCTestCase {
         og.openConsolePipe()
         
         doShowData = false
-        showDevices(devices[...], -1)
+        Dlist.showDevices(devices[...], -1)
         
         // Pause until we have data from the pipe
         var a = 0
@@ -86,7 +86,7 @@ final class testDlist: XCTestCase {
         og.openConsolePipe()
         
         doShowData = true
-        showDevices(devices[...], -1)
+        Dlist.showDevices(devices[...], -1)
         
         var a = 0
         while !og.doneflag{
@@ -109,7 +109,7 @@ final class testDlist: XCTestCase {
         og.openConsolePipe()
         
         doShowData = false
-        showDevices(devices[...], 42)
+        Dlist.showDevices(devices[...], 42)
         
         var a = 0
         while !og.doneflag{
@@ -132,7 +132,7 @@ final class testDlist: XCTestCase {
         og.openConsolePipe()
         
         doShowData = true
-        showDevices(devices[...], 42)
+        Dlist.showDevices(devices[...], 42)
         
         var a = 0
         while !og.doneflag{
@@ -155,7 +155,7 @@ final class testDlist: XCTestCase {
         og.openConsolePipe()
         
         doShowData = false
-        showDevices(devices[...], -1)
+        Dlist.showDevices(devices[...], -1)
         
         var a = 0
         while !og.doneflag{
@@ -180,7 +180,7 @@ final class testDlist: XCTestCase {
         og.openConsolePipe()
         
         doShowData = true
-        showDevices(devices[...], -1)
+        Dlist.showDevices(devices[...], -1)
         
         var a = 0
         while !og.doneflag{
@@ -204,7 +204,7 @@ final class testDlist: XCTestCase {
         og.openConsolePipe()
         
         doShowData = false
-        showDevices(devices[...], 2)
+        Dlist.showDevices(devices[...], 2)
         
         var a = 0
         while !og.doneflag{
@@ -227,7 +227,7 @@ final class testDlist: XCTestCase {
         og.openConsolePipe()
         
         doShowData = true
-        showDevices(devices[...], 2)
+        Dlist.showDevices(devices[...], 2)
         
         var a = 0
         while !og.doneflag{
@@ -250,7 +250,7 @@ final class testDlist: XCTestCase {
         og.openConsolePipe()
         
         doShowData = false
-        showDevices(devices[...], 42)
+        Dlist.showDevices(devices[...], 42)
         
         var a = 0
         while !og.doneflag{
@@ -273,7 +273,7 @@ final class testDlist: XCTestCase {
         og.openConsolePipe()
         
         doShowData = true
-        showDevices(devices[...], 42)
+        Dlist.showDevices(devices[...], 42)
         
         var a = 0
         while !og.doneflag{

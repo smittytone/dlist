@@ -30,7 +30,9 @@ import Foundation
 
 extension NSDictionary {
     
-    // Create a Swift Dictionary based on the instance's keys and valus
+    /*
+     Create a Swift Dictionary based on the instance's keys and values.
+     */
     var swiftDictionary: Dictionary<String, Any> {
         var swiftDictionary = Dictionary<String, Any>()
 

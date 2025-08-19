@@ -12,12 +12,16 @@
 		3B3BF1972D5F57800083DE56 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF2DC6D2D50E0A900520F48 /* main.swift */; };
 		3B3BF1982D5F57890083DE56 /* mac_aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0C90182D5CABD2003FD494 /* mac_aliases.swift */; };
 		3B3BF1992D5F57BD0083DE56 /* entities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3BF18A2D5F50970083DE56 /* entities.swift */; };
-		3B3BF19C2D5F5A780083DE56 /* terminal_output.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF2DC6E2D50E0A900520F48 /* terminal_output.swift */; };
 		3B3BF19D2D5F5A820083DE56 /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B8D30F92D5E21EF0019031C /* extensions.swift */; };
+		3B757F522E545B8900567756 /* cli.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B757F502E545B8900567756 /* cli.swift */; };
+		3B757F532E545B8900567756 /* stdio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B757F512E545B8900567756 /* stdio.swift */; };
+		3B757F542E545B8900567756 /* cli.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B757F502E545B8900567756 /* cli.swift */; };
+		3B757F552E545B8900567756 /* stdio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B757F512E545B8900567756 /* stdio.swift */; };
+		3B757F582E546C6200567756 /* dlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B757F572E546C6200567756 /* dlist.swift */; };
+		3B757F592E546C6200567756 /* dlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B757F572E546C6200567756 /* dlist.swift */; };
 		3B8D30FA2D5E21EF0019031C /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B8D30F92D5E21EF0019031C /* extensions.swift */; };
 		3BAE669F2D539A3300AB79D3 /* linux_version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BAE669E2D539A3300AB79D3 /* linux_version.swift */; };
 		3BF2DC702D50E0A900520F48 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF2DC6D2D50E0A900520F48 /* main.swift */; };
-		3BF2DC712D50E0A900520F48 /* terminal_output.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF2DC6E2D50E0A900520F48 /* terminal_output.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -36,13 +40,16 @@
 		3B0C90182D5CABD2003FD494 /* mac_aliases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mac_aliases.swift; sourceTree = "<group>"; };
 		3B3BF18A2D5F50970083DE56 /* entities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = entities.swift; sourceTree = "<group>"; };
 		3B3BF1902D5F57400083DE56 /* testDlist.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = testDlist.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B757F502E545B8900567756 /* cli.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cli.swift; sourceTree = "<group>"; };
+		3B757F512E545B8900567756 /* stdio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = stdio.swift; sourceTree = "<group>"; };
+		3B757F562E546BB200567756 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
+		3B757F572E546C6200567756 /* dlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dlist.swift; sourceTree = "<group>"; };
 		3B8D30F92D5E21EF0019031C /* extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extensions.swift; sourceTree = "<group>"; };
 		3BAE669E2D539A3300AB79D3 /* linux_version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = linux_version.swift; sourceTree = "<group>"; };
 		3BAE66A12D53A1FE00AB79D3 /* bumpbuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = bumpbuild.sh; sourceTree = "<group>"; };
 		3BF2DC5A2D50C07E00520F48 /* dlist */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dlist; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BF2DC6C2D50E0A900520F48 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3BF2DC6D2D50E0A900520F48 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		3BF2DC6E2D50E0A900520F48 /* terminal_output.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = terminal_output.swift; sourceTree = "<group>"; };
 		3BF2DC912D50ECAB00520F48 /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
 		3BF2DC922D50ECB600520F48 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -96,11 +103,13 @@
 			isa = PBXGroup;
 			children = (
 				3BF2DC6D2D50E0A900520F48 /* main.swift */,
-				3BF2DC6E2D50E0A900520F48 /* terminal_output.swift */,
+				3B757F572E546C6200567756 /* dlist.swift */,
 				3B0C90182D5CABD2003FD494 /* mac_aliases.swift */,
 				3B8D30F92D5E21EF0019031C /* extensions.swift */,
 				3B3BF18A2D5F50970083DE56 /* entities.swift */,
 				3BAE669E2D539A3300AB79D3 /* linux_version.swift */,
+				3B757F502E545B8900567756 /* cli.swift */,
+				3B757F512E545B8900567756 /* stdio.swift */,
 				3BF2DC6C2D50E0A900520F48 /* Info.plist */,
 			);
 			path = dlist;
@@ -111,6 +120,7 @@
 			children = (
 				3BF2DC912D50ECAB00520F48 /* LICENSE.md */,
 				3BF2DC922D50ECB600520F48 /* README.md */,
+				3B757F562E546BB200567756 /* CHANGELOG.md */,
 				3BAE66A12D53A1FE00AB79D3 /* bumpbuild.sh */,
 			);
 			name = Misc;
@@ -168,7 +178,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1620;
-				LastUpgradeCheck = 1620;
+				LastUpgradeCheck = 1640;
 				TargetAttributes = {
 					3B3BF18F2D5F57400083DE56 = {
 						CreatedOnToolsVersion = 16.2;
@@ -217,7 +227,9 @@
 				3B3BF1982D5F57890083DE56 /* mac_aliases.swift in Sources */,
 				3B3BF19D2D5F5A820083DE56 /* extensions.swift in Sources */,
 				3B3BF1992D5F57BD0083DE56 /* entities.swift in Sources */,
-				3B3BF19C2D5F5A780083DE56 /* terminal_output.swift in Sources */,
+				3B757F522E545B8900567756 /* cli.swift in Sources */,
+				3B757F582E546C6200567756 /* dlist.swift in Sources */,
+				3B757F532E545B8900567756 /* stdio.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,7 +242,9 @@
 				3B3BF18B2D5F50970083DE56 /* entities.swift in Sources */,
 				3BF2DC702D50E0A900520F48 /* main.swift in Sources */,
 				3B0C90192D5CABD2003FD494 /* mac_aliases.swift in Sources */,
-				3BF2DC712D50E0A900520F48 /* terminal_output.swift in Sources */,
+				3B757F542E545B8900567756 /* cli.swift in Sources */,
+				3B757F592E546C6200567756 /* dlist.swift in Sources */,
+				3B757F552E545B8900567756 /* stdio.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,6 +256,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 21;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = Y5J3K52DNA;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
@@ -258,6 +273,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 21;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = Y5J3K52DNA;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
@@ -303,7 +319,8 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 21;
+				CURRENT_PROJECT_VERSION = 23;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -324,7 +341,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.2;
-				MARKETING_VERSION = 0.1.3;
+				MARKETING_VERSION = 0.2.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -369,7 +386,8 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 21;
+				CURRENT_PROJECT_VERSION = 23;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -384,7 +402,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.2;
-				MARKETING_VERSION = 0.1.3;
+				MARKETING_VERSION = 0.2.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -399,14 +417,15 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
-				CURRENT_PROJECT_VERSION = 21;
+				CURRENT_PROJECT_VERSION = 23;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = Y5J3K52DNA;
 				DSTROOT = $SRCROOT/build/pkgroot;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = dlist/Info.plist;
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
-				MARKETING_VERSION = 0.1.5;
+				MARKETING_VERSION = 0.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bps.dlist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -420,14 +439,15 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
-				CURRENT_PROJECT_VERSION = 21;
+				CURRENT_PROJECT_VERSION = 23;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = Y5J3K52DNA;
 				DSTROOT = $SRCROOT/build/pkgroot;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = dlist/Info.plist;
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
-				MARKETING_VERSION = 0.1.5;
+				MARKETING_VERSION = 0.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bps.dlist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
