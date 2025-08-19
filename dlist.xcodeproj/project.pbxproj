@@ -13,12 +13,12 @@
 		3B3BF1982D5F57890083DE56 /* mac_aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0C90182D5CABD2003FD494 /* mac_aliases.swift */; };
 		3B3BF1992D5F57BD0083DE56 /* entities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3BF18A2D5F50970083DE56 /* entities.swift */; };
 		3B3BF19D2D5F5A820083DE56 /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B8D30F92D5E21EF0019031C /* extensions.swift */; };
-		3B757F522E545B8900567756 /* cli.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B757F502E545B8900567756 /* cli.swift */; };
-		3B757F532E545B8900567756 /* stdio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B757F512E545B8900567756 /* stdio.swift */; };
-		3B757F542E545B8900567756 /* cli.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B757F502E545B8900567756 /* cli.swift */; };
-		3B757F552E545B8900567756 /* stdio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B757F512E545B8900567756 /* stdio.swift */; };
 		3B757F582E546C6200567756 /* dlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B757F572E546C6200567756 /* dlist.swift */; };
 		3B757F592E546C6200567756 /* dlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B757F572E546C6200567756 /* dlist.swift */; };
+		3B757F662E548B6D00567756 /* cli.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B757F642E548B6D00567756 /* cli.swift */; };
+		3B757F672E548B6D00567756 /* stdio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B757F652E548B6D00567756 /* stdio.swift */; };
+		3B757F682E548B6D00567756 /* cli.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B757F642E548B6D00567756 /* cli.swift */; };
+		3B757F692E548B6D00567756 /* stdio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B757F652E548B6D00567756 /* stdio.swift */; };
 		3B8D30FA2D5E21EF0019031C /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B8D30F92D5E21EF0019031C /* extensions.swift */; };
 		3BAE669F2D539A3300AB79D3 /* linux_version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BAE669E2D539A3300AB79D3 /* linux_version.swift */; };
 		3BF2DC702D50E0A900520F48 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF2DC6D2D50E0A900520F48 /* main.swift */; };
@@ -40,10 +40,10 @@
 		3B0C90182D5CABD2003FD494 /* mac_aliases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mac_aliases.swift; sourceTree = "<group>"; };
 		3B3BF18A2D5F50970083DE56 /* entities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = entities.swift; sourceTree = "<group>"; };
 		3B3BF1902D5F57400083DE56 /* testDlist.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = testDlist.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		3B757F502E545B8900567756 /* cli.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cli.swift; sourceTree = "<group>"; };
-		3B757F512E545B8900567756 /* stdio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = stdio.swift; sourceTree = "<group>"; };
 		3B757F562E546BB200567756 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		3B757F572E546C6200567756 /* dlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dlist.swift; sourceTree = "<group>"; };
+		3B757F642E548B6D00567756 /* cli.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = cli.swift; path = clicore/cli.swift; sourceTree = SOURCE_ROOT; };
+		3B757F652E548B6D00567756 /* stdio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = stdio.swift; path = clicore/stdio.swift; sourceTree = SOURCE_ROOT; };
 		3B8D30F92D5E21EF0019031C /* extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extensions.swift; sourceTree = "<group>"; };
 		3BAE669E2D539A3300AB79D3 /* linux_version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = linux_version.swift; sourceTree = "<group>"; };
 		3BAE66A12D53A1FE00AB79D3 /* bumpbuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = bumpbuild.sh; sourceTree = "<group>"; };
@@ -104,12 +104,12 @@
 			children = (
 				3BF2DC6D2D50E0A900520F48 /* main.swift */,
 				3B757F572E546C6200567756 /* dlist.swift */,
-				3B0C90182D5CABD2003FD494 /* mac_aliases.swift */,
-				3B8D30F92D5E21EF0019031C /* extensions.swift */,
 				3B3BF18A2D5F50970083DE56 /* entities.swift */,
+				3B8D30F92D5E21EF0019031C /* extensions.swift */,
+				3B0C90182D5CABD2003FD494 /* mac_aliases.swift */,
 				3BAE669E2D539A3300AB79D3 /* linux_version.swift */,
-				3B757F502E545B8900567756 /* cli.swift */,
-				3B757F512E545B8900567756 /* stdio.swift */,
+				3B757F642E548B6D00567756 /* cli.swift */,
+				3B757F652E548B6D00567756 /* stdio.swift */,
 				3BF2DC6C2D50E0A900520F48 /* Info.plist */,
 			);
 			path = dlist;
@@ -227,9 +227,9 @@
 				3B3BF1982D5F57890083DE56 /* mac_aliases.swift in Sources */,
 				3B3BF19D2D5F5A820083DE56 /* extensions.swift in Sources */,
 				3B3BF1992D5F57BD0083DE56 /* entities.swift in Sources */,
-				3B757F522E545B8900567756 /* cli.swift in Sources */,
+				3B757F662E548B6D00567756 /* cli.swift in Sources */,
+				3B757F672E548B6D00567756 /* stdio.swift in Sources */,
 				3B757F582E546C6200567756 /* dlist.swift in Sources */,
-				3B757F532E545B8900567756 /* stdio.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,9 +242,9 @@
 				3B3BF18B2D5F50970083DE56 /* entities.swift in Sources */,
 				3BF2DC702D50E0A900520F48 /* main.swift in Sources */,
 				3B0C90192D5CABD2003FD494 /* mac_aliases.swift in Sources */,
-				3B757F542E545B8900567756 /* cli.swift in Sources */,
+				3B757F682E548B6D00567756 /* cli.swift in Sources */,
+				3B757F692E548B6D00567756 /* stdio.swift in Sources */,
 				3B757F592E546C6200567756 /* dlist.swift in Sources */,
-				3B757F552E545B8900567756 /* stdio.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -417,7 +417,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 24;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = Y5J3K52DNA;
@@ -439,7 +439,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 24;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = Y5J3K52DNA;

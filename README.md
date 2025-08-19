@@ -60,6 +60,8 @@ macOS adds a number of devices to the `/dev/cu.*` set, neither of which can be u
 ### macOS
 
 * Clone this repo.
+* `cd /path/to/repo`
+* `git submodule update --init --recursive`
 * Open the `.xcodeproj` file.
 * Set your team under **Signing & Capabilities** for the *dlist* target.
 * Select **Build** from the **Product** menu.
@@ -69,6 +71,7 @@ macOS adds a number of devices to the `/dev/cu.*` set, neither of which can be u
 * [Install Swift](https://www.swift.org/install/linux/)
 * Clone this repo.
 * `cd /path/to/repo`
+* `git submodule update --init --recursive`
 * `swift build -c release`
 
 **Note** On the Raspberry Pi 5, the build process and running `dlist` will emit `swift runtime: unable to protect... disabling backtracing` messages. To avoid these, you can add the flag `--static-swift-stdlib`. The *quid pro quo* is that it may start up more slowly and will be a much larger build. An alternative approach is to add `export SWIFT_BACKTRACE='enable=no'` to your shell profile file. This removes the messages, keeps the binary size low, but of course disables Swift's improved crash reporting.
