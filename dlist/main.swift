@@ -29,6 +29,7 @@ import Foundation
 #if os(Linux)
 import Clibudev
 #endif
+import Clicore
 
 
 // MARK: Constants
