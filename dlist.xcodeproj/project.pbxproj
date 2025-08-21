@@ -41,7 +41,7 @@
 		3B757F572E546C6200567756 /* dlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dlist.swift; sourceTree = "<group>"; };
 		3B8D30F92D5E21EF0019031C /* extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extensions.swift; sourceTree = "<group>"; };
 		3BAE669E2D539A3300AB79D3 /* linux_version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = linux_version.swift; sourceTree = "<group>"; };
-		3BAE66A12D53A1FE00AB79D3 /* bumpbuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = bumpbuild.sh; sourceTree = "<group>"; };
+		3BAE66A12D53A1FE00AB79D3 /* bump.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = bump.sh; sourceTree = "<group>"; };
 		3BF2DC5A2D50C07E00520F48 /* dlist */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dlist; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BF2DC6C2D50E0A900520F48 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3BF2DC6D2D50E0A900520F48 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -115,7 +115,7 @@
 				3BF2DC912D50ECAB00520F48 /* LICENSE.md */,
 				3BF2DC922D50ECB600520F48 /* README.md */,
 				3B757F562E546BB200567756 /* CHANGELOG.md */,
-				3BAE66A12D53A1FE00AB79D3 /* bumpbuild.sh */,
+				3BAE66A12D53A1FE00AB79D3 /* bump.sh */,
 			);
 			name = Misc;
 			sourceTree = "<group>";
@@ -249,7 +249,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 21;
+				CURRENT_PROJECT_VERSION = 26;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = Y5J3K52DNA;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -266,7 +266,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 21;
+				CURRENT_PROJECT_VERSION = 26;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = Y5J3K52DNA;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -313,7 +313,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 26;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -380,7 +380,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 26;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -409,9 +409,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
 				CODE_SIGN_STYLE = Manual;
 				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
-				CURRENT_PROJECT_VERSION = 24;
+				CURRENT_PROJECT_VERSION = 26;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = Y5J3K52DNA;
@@ -420,6 +421,7 @@
 				INFOPLIST_FILE = dlist/Info.plist;
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
 				MARKETING_VERSION = 0.2.0;
+				OTHER_CODE_SIGN_FLAGS = "--timestamp";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bps.dlist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -431,9 +433,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
 				CODE_SIGN_STYLE = Manual;
 				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
-				CURRENT_PROJECT_VERSION = 24;
+				CURRENT_PROJECT_VERSION = 26;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = Y5J3K52DNA;
@@ -442,6 +445,7 @@
 				INFOPLIST_FILE = dlist/Info.plist;
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
 				MARKETING_VERSION = 0.2.0;
+				OTHER_CODE_SIGN_FLAGS = "--timestamp";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bps.dlist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

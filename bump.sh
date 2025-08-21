@@ -5,7 +5,7 @@
 current_build=$(xcrun agvtool what-version -terse)
 
 # Bump $CURRENT_PROJECT_VERSION
-xcrun agvtool bump
+result=$(xcrun agvtool bump -all)
 
 # Get the bumped $CURRENT_PROJECT_VERSION
 # This is separate from above to avoid having to extract the value
