@@ -87,33 +87,15 @@ for argument in CommandLine.arguments {
         if argument.prefix(1) == "-" {
             Stdio.reportErrorAndExit("Missing value for \(prevArg)")
         }
-
-        /*
-        switch argType {
-        case 0:
-            alias = argument
-            doApplyAlias = true
-        default:
-            reportErrorAndExit("Unknown argument: \(argument)")
-        }
-
-        argIsAValue = false
-        */
     } else {
         switch argument {
-            case "-i":
-                fallthrough
-            case "--info":
+            case "-i", "--info":
                 doShowData = true
-            case "-h":
-                fallthrough
-            case "--help":
+            case "-h", "--help":
                 showHelp()
                 Stdio.disableCtrlHandler()
                 exit(EXIT_SUCCESS)
-            case "-v":
-                fallthrough
-            case "--version":
+            case "-v", "--version":
                 showHeader()
                 Stdio.disableCtrlHandler()
                 exit(EXIT_SUCCESS)
@@ -191,11 +173,11 @@ func showHeader() {
     let version: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
     let build: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String
     let name:String = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as! String
-    Stdio.report("\(String(.bold))\(name) \(version) (\(build))\(String(.normal))")
+    Stdio.report("\(String(.bold))\(name) \(version) (\(build))\(String(.normal)) for macOS")
 #else
     // Linux output
     // TODO Automate based on build settings
-    Stdio.report("dlist \(LINUX_VERSION) (\(LINUX_BUILD))" + RESET)
+    Stdio.report("\(String(.bold))dlist \(LINUX_VERSION) (\(LINUX_BUILD))\(String(.normal)) for Linux")
 #endif
     Stdio.report("Copyright © 2025, Tony Smith (@smittytone). Source code available under the MIT licence.\n")
 }
