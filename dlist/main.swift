@@ -148,7 +148,7 @@ exit(EXIT_SUCCESS)
 private func showHelp() {
 
     showHeader()
-    Stdio.report("\(String(.bold))MISSION\(String(.normal))\n  List connected USB-to-serial adaptors.\n")
+    Stdio.report("\n\(String(.bold))MISSION\(String(.normal))\n  List connected USB-to-serial adaptors.\n")
     Stdio.report("\(String(.bold))USAGE\(String(.normal))\n  dlist [--info] [--version] [--help] [device index]\n")
     Stdio.report("Call \(String(.italic))dlist\(String(.normal)) to view or use a connected adaptor's device path. If multiple adaptors are connected,")
     Stdio.report("\(String(.italic))dlist\(String(.normal)) will list them. In this case, to use one of them, call \(String(.italic))dlist\(String(.normal)) with the required")
@@ -159,8 +159,10 @@ private func showHelp() {
     Stdio.report("  -h | --help          This help screen\n")
     Stdio.report("\(String(.bold))EXAMPLES\(String(.normal))")
     Stdio.report("  One device connected:                  minicom -d $(dlist) -b 9600")
+    Stdio.report("  One device connected, get info:        dlist -i")
     Stdio.report("  Two devices connected, list them:      dlist")
-    Stdio.report("  Two devices connected, use number 1:   minicom -d $(dlist 1) -b 9600\n")
+    Stdio.report("  Two devices connected, use number 1:   minicom -d $(dlist 1) -b 9600")
+    Stdio.report("  Two devices connected, get info on 2:  dlist -i 2\n")
 }
 
 
@@ -168,7 +170,7 @@ private func showHelp() {
     Display the app's version number.
  */
 func showHeader() {
-    
+
 #if os(macOS)
     let version: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
     let build: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String
@@ -179,5 +181,5 @@ func showHeader() {
     // TODO Automate based on build settings
     Stdio.report("\(String(.bold))dlist \(LINUX_VERSION) (\(LINUX_BUILD))\(String(.normal)) for Linux")
 #endif
-    Stdio.report("Copyright © 2025, Tony Smith (@smittytone). Source code available under the MIT licence.\n")
+    Stdio.report("Copyright © 2025, Tony Smith (@smittytone). Source code available under the MIT licence.")
 }
