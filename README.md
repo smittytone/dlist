@@ -64,7 +64,10 @@ macOS adds a number of devices to the `/dev/cu.*` set, neither of which can be u
 * `git submodule update --init --recursive`
 * Open the `.xcodeproj` file.
 * Set your team under **Signing & Capabilities** for the *dlist* target.
-* Select **Build** from the **Product** menu.
+* Select **Archive** from the **Product** menu.
+* In the **Archives** window, select the new build and click **Distribute Content**.
+* Follow the sequence, choosing **Custom** and **Build Products**, and save the output to the Desktop.
+* `sudo cp /path/to/exported/dlist/binary /usr/local/bin/dlist`.
 
 ### Linux
 
@@ -76,8 +79,8 @@ macOS adds a number of devices to the `/dev/cu.*` set, neither of which can be u
 
 **Note** On the Raspberry Pi 5, the build process and running `dlist` will emit `swift runtime: unable to protect... disabling backtracing` messages. To avoid these, you can add the flag `--static-swift-stdlib`. The *quid pro quo* is that it may start up more slowly and will be a much larger build. An alternative approach is to add `export SWIFT_BACKTRACE='enable=no'` to your shell profile file. This removes the messages, keeps the binary size low, but of course disables Swift's improved crash reporting.
 
-The Linux binary will be located in `.build/aarch64-unknown-linux-gnu/release/`
+The Linux binary will be located in `.build/{architecture}/release/`
 
-**Note** The script `bumpbuild.sh`, used in `dlist` development, currently only runs on macOS.
+**Note** The script `bump.sh`, used in `dlist` development, currently only runs on macOS.
 
 Copyright © 2025, Tony Smith (@smittytone)
