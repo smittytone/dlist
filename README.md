@@ -1,6 +1,6 @@
 # dlist 0.2.0
 
-#### A Swift-based macOS/Linux CLI utility for listing connected MCU boards and USB-to-Serial adaptors
+A Swift-based macOS/Linux CLI utility for listing connected MCU boards and USB-to-Serial adaptors
 
 ## Usage
 
@@ -45,7 +45,7 @@ Including a numerical argument causes `dlist` to issue the specified device (by 
 
 ## Options
 
-Including `--info` or `-i` as a `dlist` argument will force it into list mode, however many devices are connected. 
+Including `--info` or `-i` as a `dlist` argument will force it into list mode, however many devices are connected.
 
 Because the output is intended to be readable by people, it is not suitable for piping into another command. Make sure you don’t include the flag if you’re using `dlist` to pipe the device path.
 
