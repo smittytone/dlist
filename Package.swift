@@ -11,7 +11,6 @@ let package = Package(
     targets: [
         .executableTarget(
             name: "dlist",
-            //dependencies: [],
             dependencies: [
                 "Clibudev",
                 .product(name: "Clicore", package: "clicore"),
@@ -26,7 +25,7 @@ let package = Package(
         .systemLibrary(
             name: "Clibudev",
             path: "clibudev",
-            pkgConfig: "udev"
+            pkgConfig: "libudev"
         )
     ]
 )
