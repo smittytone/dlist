@@ -86,6 +86,7 @@ for argument in CommandLine.arguments {
         // Make sure we're not reading in an option rather than a value
         if argument.prefix(1) == "-" {
             Stdio.reportErrorAndExit("Missing value for \(prevArg)")
+            // ------------------------ END ------------------------
         }
     } else {
         switch argument {
@@ -93,15 +94,14 @@ for argument in CommandLine.arguments {
                 doShowData = true
             case "-h", "--help":
                 showHelp()
-                Stdio.disableCtrlHandler()
-                exit(EXIT_SUCCESS)
+                closeCleanly()
             case "-v", "--version":
                 showHeader()
-                Stdio.disableCtrlHandler()
-                exit(EXIT_SUCCESS)
+                closeCleanly()
             default:
                 if argument.prefix(1) == "-" {
                     Stdio.reportErrorAndExit("Unknown argument: \(argument)")
+                    // ------------------------- END ------------------------
                 }
 
                 // Get the device choice and convert string arg to int
@@ -109,6 +109,7 @@ for argument in CommandLine.arguments {
                     // Make sure zero was not provided
                     if deviceChoice == 0 {
                         Stdio.reportErrorAndExit("Device reference \(argument) is invalid (zero)")
+                        // --------------------------------- END ---------------------------------
                     }
 
                     targetDevice = deviceChoice
@@ -123,6 +124,7 @@ for argument in CommandLine.arguments {
     // Trap commands that come last and therefore have missing args
     if argCount == CommandLine.arguments.count && argIsAValue {
         Stdio.reportErrorAndExit("Missing value for \(argument)")
+        // ------------------------- END ------------------------
     }
 }
 
@@ -137,13 +139,15 @@ let deviceList = Dlist.getDevices(from: SYS_PATH_LINUX)
 Dlist.showDevices(deviceList[...], targetDevice)
 
 // Close cleanly
-Stdio.disableCtrlHandler()
-exit(EXIT_SUCCESS)
+closeCleanly()
+
+// MARK: Runtime End
 
 
 // MARK: Help and Info Functions
+
 /**
-    Display help
+ Display help.
  */
 private func showHelp() {
 
@@ -167,9 +171,9 @@ private func showHelp() {
 
 
 /**
-    Display the app's version number.
+ Display the app's version number.
  */
-func showHeader() {
+private func showHeader() {
 
 #if os(macOS)
     let version: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
@@ -182,4 +186,14 @@ func showHeader() {
     Stdio.report("\(String(.bold))dlist \(LINUX_VERSION) (\(LINUX_BUILD))\(String(.normal)) for Linux")
 #endif
     Stdio.report("Copyright © 2025, Tony Smith (@smittytone). Source code available under the MIT licence.")
+}
+
+
+/**
+ Close the utility cleanly.
+ */
+private func closeCleanly() {
+
+    Stdio.disableCtrlHandler()
+    exit(EXIT_SUCCESS)  
 }

@@ -29,10 +29,10 @@ import Foundation
 
 
 /*
- Basic structure to hold a subset of device information for use later
+ Basic structure to hold a subset of device information for use later.
  */
 struct SerialDeviceInfo {
-    var serialNumber: String    = "UNKNOWN"
+    var serialNumber: String    = "UNKNOWN SERIAL NUMBER"
     var productType: String     = "UNKNOWN PRODUCT TYPE"
     var vendorName: String      = "UNKNOWN MANUFACTURER"
 }

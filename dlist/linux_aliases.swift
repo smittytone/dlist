@@ -24,7 +24,7 @@
     SOFTWARE.
 */
 
-
+#if os(Linux)
 import Foundation
 import Clibudev
 
@@ -173,3 +173,4 @@ func writeRules(_ fileContents: String) -> Bool {
     return false
 }
 */
+#endif

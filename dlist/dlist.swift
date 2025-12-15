@@ -48,6 +48,7 @@ struct Dlist {
             list = try fm.contentsOfDirectory(atPath: devicesPath)
         } catch {
             Stdio.reportErrorAndExit("\(devicesPath) cannot be found", 2)
+            // --------------------------- END --------------------------
         }
 
         // For macOS, we just look out for devices in `/dev` prefixed `cu.`,
@@ -119,7 +120,7 @@ struct Dlist {
                 let deviceData = findConnectedSerialDevices()
 #endif
                 var count = 1
-                for device in deviceList {// List devices to STDERR (ie. for humans)
+                for device in deviceList {
 #if os(macOS)
                     let sd = deviceData[DEVICE_PATH + device] ?? SerialDeviceInfo()
 #else

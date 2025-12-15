@@ -36,7 +36,7 @@ extension NSDictionary {
     var swiftDictionary: Dictionary<String, Any> {
         var swiftDictionary = Dictionary<String, Any>()
 
-        for key : Any in self.allKeys {
+        for key: Any in self.allKeys {
             let stringKey = key as! String
             if let keyValue = self.value(forKey: stringKey){
                 swiftDictionary[stringKey] = keyValue

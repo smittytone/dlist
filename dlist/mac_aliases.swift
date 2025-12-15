@@ -52,8 +52,11 @@ func findConnectedSerialDevices() -> [String: SerialDeviceInfo] {
         // ...and convert it back again for use
         let matchesCFDictRef = (matches as NSDictionary) as CFDictionary
         if IOServiceGetMatchingServices(kIOMasterPortDefault, matchesCFDictRef, &portIterator) == KERN_SUCCESS {
-            // We got a port iterator back - ie. one or more matching devcies - so use it
-            defer { IOObjectRelease(portIterator) }
+            // We got a port iterator back - ie. one or more matching devices - so use it
+            defer { 
+                IOObjectRelease(portIterator) 
+            }
+            
             return getSerialDevices(portIterator)
         }
     }
@@ -126,7 +129,7 @@ func getSerialDevices(_ portIterator: io_iterator_t) -> [String: SerialDeviceInf
  Compare a discovered device for the standard ones macOS adds and which we
  are not interested in.
  
- - Parameter
+ - Parameters
     - path: The device's Unix file path.
  
  - Returns `true` if the device is good to use, otherwise `false`.
@@ -146,7 +149,7 @@ func doKeepDevice(_ path: String) -> Bool {
 /**
  Make a list of serial devices we can ignore. Some are added by macOS, others by users,
  eg. `cu.myAirPodsMax`. These can be added to the file `${HOME}/.config/dlist/ignorables`
- on a one-per-line basis. 
+ on a one-per-line basis, and `dlist` will not list them. 
 
  - Returns An array of device names to ignore.
  */
