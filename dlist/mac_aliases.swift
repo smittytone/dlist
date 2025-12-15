@@ -143,10 +143,10 @@ func doKeepDevice(_ path: String) -> Bool {
 
 
 /**
- Make a list of serial devices we can ignore. Some are added by macOS, others by users
- to avoid, eg. `cu.myAirPodsMax` appearing in the list. These can be added to the file
- `${HOME}/.config/dlist/ignorables` on a one-per-line basis.
- 
+ Make a list of serial devices we can ignore. Some are added by macOS, others by users,
+ eg. `cu.myAirPodsMax`. These can be added to the file `${HOME}/.config/dlist/ignorables`
+ on a one-per-line basis. 
+
  - Returns An array of device names to ignore.
  */
 func getIgnorables() -> [String] {
@@ -162,7 +162,15 @@ func getIgnorables() -> [String] {
             if !parts.isEmpty {
                 var userIgnorables: [String] = []
                 for part in parts {
-                    userIgnorables.append(String(part))
+                    // FROM 0.2.1
+                    // Remove the `/dev/` from the ignorable name, if it's included
+                    if part.hasPrefix("/dev/") {
+                        let deviceNameIndex = part.index(part.startIndex, offsetBy: 5)
+                        let deviceName = part[deviceNameIndex..<part.endIndex]
+                        userIgnorables.append(String(deviceName))
+                    } else {
+                        userIgnorables.append(String(part))
+                    }
                 }
                 
                 return userIgnorables + knownIgnorables

@@ -1,6 +1,7 @@
 ## Release Notes ##
 
 - 0.2.1 *Unreleased*
+    - Handle ignorable device on macOS that are prefixed with `/dev/`.
     - Remove unnecessary Linux build instruction.
     - Fix build warnings on Linux.
     - Update to clicore 0.3.0.
