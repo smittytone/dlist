@@ -25,6 +25,7 @@
 */
 
 
+#if os(macOS)
 import Foundation
 import IOKit
 // Extra imports required to access certain constants
@@ -180,3 +181,4 @@ func getIgnorables() -> [String] {
     
     return knownIgnorables
 }
+#endif
