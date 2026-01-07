@@ -36,7 +36,9 @@ import Clicore
 
 let DEVICE_PATH             = "/dev/"
 let SYS_PATH_LINUX          = "/sys/class/tty/"
+/* The following is retained as part of the Linux device alias code and may be removed
 let UDEV_RULES_PATH_LINUX   = "/etc/udev/rules.d/99-dlist-usb-serial-devices.rules"
+*/
 
 
 // MARK: Global Variables
@@ -47,13 +49,14 @@ var argType             = -1
 var argCount            = 0
 var prevArg             = ""
 // App control
-var doApplyAlias        = false
-var doShowData          = false
-var alias               = ""
 var targetDevice        = -1
+var doShowData          = false
+/* The following is retained as part of the Linux device alias code and may be removed
+var doApplyAlias        = false
+var alias               = ""
 // Computed
 var isRunAsSudo: Bool {
-    // This is required on Linux for access to `UDEV_RULES_PATH_LINUX`.
+    // This is required on Linux for access to Linux Udev rules.
     get {
         if let value: String = ProcessInfo.processInfo.environment["USER"] {
             return (value == "root")
@@ -62,6 +65,7 @@ var isRunAsSudo: Bool {
         return false
     }
 }
+*/
 
 
 // MARK: Runtime Start
