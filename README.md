@@ -83,4 +83,4 @@ The Linux binary will be located in `.build/{architecture}/release/`
 
 **Note** The script `bump.sh`, used in `dlist` development, currently only runs on macOS.
 
-Copyright © 2025, Tony Smith (@smittytone)
+Copyright © 2026, Tony Smith (@smittytone)

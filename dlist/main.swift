@@ -2,7 +2,7 @@
     dlist
     main.swift
 
-    Copyright © 2025 Tony Smith. All rights reserved.
+    Copyright © 2026 Tony Smith. All rights reserved.
 
     MIT License
     Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -189,7 +189,7 @@ private func showHeader() {
     // TODO Automate based on build settings
     Stdio.report("\(String(.bold))dlist \(LINUX_VERSION) (\(LINUX_BUILD))\(String(.normal)) for Linux")
 #endif
-    Stdio.report("Copyright © 2025, Tony Smith (@smittytone). Source code available under the MIT licence.")
+    Stdio.report("Copyright © 2026, Tony Smith (@smittytone). Source code available under the MIT licence.")
 }
 
 
