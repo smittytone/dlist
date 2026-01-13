@@ -2,6 +2,7 @@
 
 - 0.2.2 *Unreleased*
     - Style check and code tidy.
+    - New year, new date.
 - 0.2.1 *15 December 2025*
     - Handle ignorable device on macOS that are prefixed with `/dev/`.
     - Remove unnecessary Linux build instruction.
