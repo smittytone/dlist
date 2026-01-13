@@ -1,6 +1,6 @@
 ## Release Notes ##
 
-- 0.2.2 *Unreleased*
+- 0.2.2 *13 January 2026*
     - Style check and code tidy.
     - New year, new date.
 - 0.2.1 *15 December 2025*
