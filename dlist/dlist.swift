@@ -37,7 +37,7 @@ struct Dlist {
 
      - Returns An array of the items in `/dev`.
      */
-    static func getDevices(from devicesPath: String) -> [String] {
+    static func getDevices(from devicesPath: String, _ ignorableDevices: ArraySlice<String>) -> [String] {
 
         var list: [String] = []
         var finalList: [String] = []
@@ -51,19 +51,18 @@ struct Dlist {
             // --------------------------- END --------------------------
         }
 
+#if os(macOS)
         // For macOS, we just look out for devices in `/dev` prefixed `cu.`,
         // and make sure we ignore macOS-added items, eg. `cu.Bluetooth-Incoming`.
-#if os(macOS)
         for device in list {
-            if device.hasPrefix("cu.") && doKeepDevice(device) {
+            if device.hasPrefix("cu.") && doKeepDevice(device, ignorableDevices) {
                 finalList.append(device)
             }
         }
-
+#elseif os(Linux)
         // We need a narrower focus for Linux: devices will be `/dev/ttyUSBx` or `/dev/ttyACMx`.
         // These are listed even if no device is connected, so we check `/sys/class/tty/ttyUSB*` and
         // `/sys/class/tty/ttyACM*` which only appear when devices *are* connected
-#elseif os(Linux)
         for device in list {
             if device.hasPrefix("ttyUSB") || device.hasPrefix("ttyACM") {
                 finalList.append(device)
@@ -90,7 +89,7 @@ struct Dlist {
      - Parameters:
         - targetDevice The index of a specified device on a dlist-generated list.
      */
-    static func showDevices(_ deviceList: ArraySlice<String>, _ targetDevice: Int) {
+    static func showDevices(_ deviceList: ArraySlice<String>, _ targetDevice: Int, _ ignorableDevices: ArraySlice<String>) {
 
         if deviceList.count > 0 {
             if deviceList.count == 1 && !doShowData {
@@ -100,9 +99,10 @@ struct Dlist {
                 }
 
                 // Write the path of the only device to STDOUT
-                Stdio.output(DEVICE_PATH + deviceList[0])
+                Stdio.output(DEV_PATH + deviceList[0])
             } else {
                 // Check any specified index is valid
+                // NOTE Presented list initital index is 1
                 var useDevice = targetDevice
                 if useDevice > deviceList.count {
                     Stdio.reportWarning("\(targetDevice) is out of range (1-\(deviceList.count))")
@@ -111,28 +111,28 @@ struct Dlist {
 
                 // Write the path of the valid chosen device to STDOUT
                 if useDevice != -1 && !doShowData {
-                    Stdio.output(DEVICE_PATH + deviceList[useDevice - 1])
+                    Stdio.output(DEV_PATH + deviceList[useDevice - 1])
                     return
                 }
 
                 // List devices to STDERR (ie. for humans)
 #if os(macOS)
-                let deviceData = findConnectedSerialDevices()
+                let deviceData = findConnectedSerialDevices(ignorableDevices)
 #endif
                 var count = 1
                 for device in deviceList {
 #if os(macOS)
-                    let sd = deviceData[DEVICE_PATH + device] ?? SerialDeviceInfo()
+                    let sd = deviceData[DEV_PATH + device] ?? SerialDeviceInfo()
 #else
                     let sd = getDeviceInfo(device)
 #endif
 
                     if useDevice == -1 {
                         // No device specified so output all
-                        Stdio.report(String(format: "%d. %@\t\t[%@, %@]", count, DEVICE_PATH + device, sd.productType, sd.vendorName))
+                        Stdio.report(String(format: "%d. %@\t\t[%@, %@]", count, DEV_PATH + device, sd.productType, sd.vendorName))
                     } else if useDevice == count {
                         // Device specified so no need to present its index
-                        Stdio.report(String(format: "%@\t\t[%@, %@]", DEVICE_PATH + device, sd.productType, sd.vendorName))
+                        Stdio.report(String(format: "%@\t\t[%@, %@]", DEV_PATH + device, sd.productType, sd.vendorName))
                     }
 
                     count += 1

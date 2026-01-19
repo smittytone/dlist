@@ -34,7 +34,7 @@ import Clicore
 
 // MARK: Constants
 
-let DEVICE_PATH             = "/dev/"
+let DEV_PATH                = "/dev/"
 let SYS_PATH_LINUX          = "/sys/class/tty/"
 /* The following is retained as part of the Linux device alias code and may be removed
 let UDEV_RULES_PATH_LINUX   = "/etc/udev/rules.d/99-dlist-usb-serial-devices.rules"
@@ -44,16 +44,16 @@ let UDEV_RULES_PATH_LINUX   = "/etc/udev/rules.d/99-dlist-usb-serial-devices.rul
 // MARK: Global Variables
 
 // CLI argument management
-var argIsAValue         = false
-var argType             = -1
-var argCount            = 0
-var prevArg             = ""
+var argIsAValue             = false
+var argType                 = -1
+var argCount                = 0
+var prevArg                 = ""
 // App control
-var targetDevice        = -1
-var doShowData          = false
+var targetDevice            = -1
+var doShowData              = false
 /* The following is retained as part of the Linux device alias code and may be removed
-var doApplyAlias        = false
-var alias               = ""
+var doApplyAlias            = false
+var alias                   = ""
 // Computed
 var isRunAsSudo: Bool {
     // This is required on Linux for access to Linux Udev rules.
@@ -72,11 +72,6 @@ var isRunAsSudo: Bool {
 
 // Set up Ctrl-C trap
 Stdio.enableCtrlHandler("dlist interrupted -- halting")
-
-#if os(macOS)
-// FROM 0.1.5
-let ignorableDevices = getIgnorables()
-#endif
 
 // Process the (separated) arguments
 for argument in CommandLine.arguments {
@@ -134,13 +129,15 @@ for argument in CommandLine.arguments {
 
 // Get a list of appropriate devices
 #if os(macOS)
-let deviceList = Dlist.getDevices(from: DEVICE_PATH)
+let ignorableDevices: [String] = getIgnorables()
+let deviceList = Dlist.getDevices(from: DEV_PATH, ignorableDevices[...])
 #elseif os(Linux)
+let ignorableDevices: [String] = []
 let deviceList = Dlist.getDevices(from: SYS_PATH_LINUX)
 #endif
 
 // Show a list of devices or the required device
-Dlist.showDevices(deviceList[...], targetDevice)
+Dlist.showDevices(deviceList[...], targetDevice, ignorableDevices[...])
 
 // Close cleanly
 closeCleanly()

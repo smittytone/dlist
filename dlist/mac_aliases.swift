@@ -35,11 +35,14 @@ import IOKit.usb
 
 /**
  Scan the IO registry for serial port devices.
- 
+
+ - Parameters
+    - ignorableDevies: Slice of an array of device name strings. Lists devices we don't care about.
+
  - Returns A dictionary of device data keyed by device path, or an empty dictionary.
  */
-func findConnectedSerialDevices() -> [String: SerialDeviceInfo] {
-    
+func findConnectedSerialDevices(_ ignorableDevies: ArraySlice<String>) -> [String: SerialDeviceInfo] {
+
     var portIterator: io_iterator_t = 0
     
     if let matchesCFDict = IOServiceMatching(kIOSerialBSDServiceValue) {
@@ -57,7 +60,7 @@ func findConnectedSerialDevices() -> [String: SerialDeviceInfo] {
                 IOObjectRelease(portIterator) 
             }
             
-            return getSerialDevices(portIterator)
+            return getSerialDevices(portIterator, ignorableDevies)
         }
     }
     
@@ -71,12 +74,13 @@ func findConnectedSerialDevices() -> [String: SerialDeviceInfo] {
  one's device file path and its unique USB serial number.
  
  - Parameters
-    - portIterator: An IOKit iterator for walking a list of devices.
- 
+    - portIterator:    An IOKit iterator for walking a list of devices.
+    - ignorableDevies: Slice of an array of device name strings. Lists devices we don't care about.
+
  - Returns A dictionary of device data keyed by device path, or an empty dictionary.
  */
-func getSerialDevices(_ portIterator: io_iterator_t) -> [String: SerialDeviceInfo] {
-    
+func getSerialDevices(_ portIterator: io_iterator_t, _ ignoreableDevices: ArraySlice<String>) -> [String: SerialDeviceInfo] {
+
     var serialDevices: [String: SerialDeviceInfo] = [:]
     var serialDevice: io_service_t
     
@@ -91,7 +95,7 @@ func getSerialDevices(_ portIterator: io_iterator_t) -> [String: SerialDeviceInf
         let devicePathAsCFString: CFTypeRef? = IORegistryEntryCreateCFProperty(serialDevice, kIOCalloutDeviceKey as CFString, kCFAllocatorDefault, 0).takeUnretainedValue()
         if let devicePath = devicePathAsCFString as? String {
             // Make sure we don't include cu.Bluetooth etc
-            if doKeepDevice(devicePath) {
+            if doKeepDevice(devicePath, ignoreableDevices) {
                 var serialDeviceInfo = SerialDeviceInfo()
                 let searchOptions : IOOptionBits = IOOptionBits(kIORegistryIterateParents) | IOOptionBits(kIORegistryIterateRecursively)
                 
@@ -130,12 +134,13 @@ func getSerialDevices(_ portIterator: io_iterator_t) -> [String: SerialDeviceInf
  are not interested in.
  
  - Parameters
-    - path: The device's Unix file path.
- 
+    - path:            The device's Unix file path.
+    - ignorableDevies: Slice of an array of device name strings. Lists devices we don't care about.
+
  - Returns `true` if the device is good to use, otherwise `false`.
  */
-func doKeepDevice(_ path: String) -> Bool {
-    
+func doKeepDevice(_ path: String, _ ignorableDevices: ArraySlice<String>) -> Bool {
+
     for unwantedDevice in ignorableDevices {
         if path.contains(unwantedDevice) {
             return false
