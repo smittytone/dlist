@@ -12,9 +12,10 @@ final class testDlist: XCTestCase {
     var testDevices: [String: SerialDeviceInfo] = [:]
     let deviceNames: [String] = ["cu.usbmodem01", "cu.usbmodem02"]
     let devicePath = "/dev/"
-    
+    let ignorables: [String] = getIgnorables()
+
     override func setUpWithError() throws {
-        
+
         var testDevice1 = SerialDeviceInfo()
         testDevice1.vendorName = "ALPHA"
         testDevice1.productType = "A TYPE"
@@ -33,14 +34,14 @@ final class testDlist: XCTestCase {
     /*
      Should output "no devices" on STDERR
      */
-    func testShowDevies_NoDevice_NoInfo() throws {
+    func testShowDevices_NoDevice_NoInfo() throws {
         
         let devices: [String] = []
         let og = OutputGrabber.init(useStdout: false)
         og.openConsolePipe()
         
         doShowData = false
-        Dlist.showDevices(devices[...], -1)
+        Dlist.showDevices(devices[...], -1, ignorables[...])
 
         // Pause until we have data from the pipe
         var a = 0
@@ -56,15 +57,15 @@ final class testDlist: XCTestCase {
     /*
      Should output devices[0] on STDOUT
      */
-    func testShowDevies_OneDevice_NoInfo() throws {
+    func testShowDevices_OneDevice_NoInfo() throws {
         
         let devices: [String] = [self.deviceNames[0]]
         let og = OutputGrabber.init(useStdout: true)
         og.openConsolePipe()
         
         doShowData = false
-        Dlist.showDevices(devices[...], -1)
-        
+        Dlist.showDevices(devices[...], -1, ignorables[...])
+
         // Pause until we have data from the pipe
         var a = 0
         while !og.doneflag{
@@ -79,15 +80,15 @@ final class testDlist: XCTestCase {
     /*
      Should output devices[0] + info on STDERR
      */
-    func testShowDevies_OneDevice_Info() throws {
-        
+    func testShowDevices_OneDevice_Info() throws {
+
         let devices: [String] = [self.deviceNames[0]]
         let og = OutputGrabber.init(useStdout: false)
         og.openConsolePipe()
         
         doShowData = true
-        Dlist.showDevices(devices[...], -1)
-        
+        Dlist.showDevices(devices[...], -1, ignorables[...])
+
         var a = 0
         while !og.doneflag{
             a += 1
@@ -102,15 +103,15 @@ final class testDlist: XCTestCase {
     /*
      Should output error on STDERR
      */
-    func testShowDevies_OneDevice_NoInfo_BadIndex() throws {
+    func testShowDevices_OneDevice_NoInfo_BadIndex() throws {
         
         let devices: [String] = [self.deviceNames[0]]
         let og = OutputGrabber.init(useStdout: false)
         og.openConsolePipe()
         
         doShowData = false
-        Dlist.showDevices(devices[...], 42)
-        
+        Dlist.showDevices(devices[...], 42, ignorables[...])
+
         var a = 0
         while !og.doneflag{
             a += 1
@@ -118,22 +119,22 @@ final class testDlist: XCTestCase {
         
         _ = og.closeConsolePipe()
         
-        let expected = "\u{1b}[0;33m\u{1b}[1mWARNING\u{1b}[0m 42 is out of range (1)\n"
-        XCTAssert(og.errors.count == 0 && og.contents == expected)
+        let expected = "\u{1b}[33m\u{1b}[1mWARNING \u{1b}[0m42 is out of range (1)\n"
+        XCTAssert(og.errors.count == 0 && og.contents == expected, "\(og.contents)")
     }
     
     /*
      Should output error on STDERR
      */
-    func testShowDevies_OneDevice_Info_BadIndex() throws {
+    func testShowDevices_OneDevice_Info_BadIndex() throws {
         
         let devices: [String] = [self.deviceNames[0]]
         let og = OutputGrabber.init(useStdout: false)
         og.openConsolePipe()
         
         doShowData = true
-        Dlist.showDevices(devices[...], 42)
-        
+        Dlist.showDevices(devices[...], 42, ignorables[...])
+
         var a = 0
         while !og.doneflag{
             a += 1
@@ -141,22 +142,22 @@ final class testDlist: XCTestCase {
         
         _ = og.closeConsolePipe()
         
-        let expected = "\u{1b}[0;33m\u{1b}[1mWARNING\u{1b}[0m 42 is out of range (1-1)\n"
-        XCTAssert(og.errors.count == 0 && og.contents == expected, "\(og.contents)")
+        let expected = "\u{1b}[33m\u{1b}[1mWARNING \u{1b}[0m42 is out of range (1-1)\n"
+        XCTAssert(og.errors.count == 0 && og.contents.hasPrefix(expected), "\(og.contents)")
     }
     
     /*
      Should output devices[0] + info and devices[1] + info on STDERR
      */
-    func testShowDevies_TwoDevices_NoInfo() throws {
+    func testShowDevices_TwoDevices_NoInfo() throws {
         
         let devices: [String] = [self.deviceNames[0], self.deviceNames[1]]
         let og = OutputGrabber.init(useStdout: false)
         og.openConsolePipe()
         
         doShowData = false
-        Dlist.showDevices(devices[...], -1)
-        
+        Dlist.showDevices(devices[...], -1, ignorables[...])
+
         var a = 0
         while !og.doneflag{
             a += 1
@@ -167,21 +168,21 @@ final class testDlist: XCTestCase {
         
         var expected = "1. " + devices[0] + "\t\t[UNKNOWN PRODUCT TYPE, UNKNOWN MANUFACTURER]\n"
         expected += "2. " + devices[1] + "\t\t[UNKNOWN PRODUCT TYPE, UNKNOWN MANUFACTURER]\n"
-        XCTAssert(og.errors.count == 0 && og.contents == expected)
+        XCTAssert(og.errors.count == 0 && og.contents == expected, "\(og.contents)")
     }
     
     /*
      Should output devices[0] + info and devices[1] + info on STDERR (identical to above)
      */
-    func testShowDevies_TwoDevices_Info() throws {
+    func testShowDevices_TwoDevices_Info() throws {
         
         let devices: [String] = [self.deviceNames[0], self.deviceNames[1]]
         let og = OutputGrabber.init(useStdout: false)
         og.openConsolePipe()
         
         doShowData = true
-        Dlist.showDevices(devices[...], -1)
-        
+        Dlist.showDevices(devices[...], -1, ignorables[...])
+
         var a = 0
         while !og.doneflag{
             a += 1
@@ -191,21 +192,21 @@ final class testDlist: XCTestCase {
         
         var expected = "1. " + devices[0] + "\t\t[UNKNOWN PRODUCT TYPE, UNKNOWN MANUFACTURER]\n"
         expected += "2. " + devices[1] + "\t\t[UNKNOWN PRODUCT TYPE, UNKNOWN MANUFACTURER]\n"
-        XCTAssert(og.errors.count == 0 && og.contents == expected)
+        XCTAssert(og.errors.count == 0 && og.contents == expected, "\(og.contents)")
     }
     
     /*
      Should output devices[1] on STDOUT
      */
-    func testShowDevies_TwoDevices_OneSpecified_NoInfo() throws {
+    func testShowDevices_TwoDevices_OneSpecified_NoInfo() throws {
         
         let devices: [String] = [self.deviceNames[0], self.deviceNames[1]]
         let og = OutputGrabber.init(useStdout: true)
         og.openConsolePipe()
         
         doShowData = false
-        Dlist.showDevices(devices[...], 2)
-        
+        Dlist.showDevices(devices[...], 2, ignorables[...])
+
         var a = 0
         while !og.doneflag{
             a += 1
@@ -220,15 +221,15 @@ final class testDlist: XCTestCase {
     /*
      Should output devices[0] + info on STDERR
      */
-    func testShowDevies_TwoDevices_OneSpecified_Info() throws {
+    func testShowDevices_TwoDevices_OneSpecified_Info() throws {
         
         let devices: [String] = [self.deviceNames[0], self.deviceNames[1]]
         let og = OutputGrabber.init(useStdout: false)
         og.openConsolePipe()
         
         doShowData = true
-        Dlist.showDevices(devices[...], 2)
-        
+        Dlist.showDevices(devices[...], 2, ignorables[...])
+
         var a = 0
         while !og.doneflag{
             a += 1
@@ -243,15 +244,15 @@ final class testDlist: XCTestCase {
     /*
      Should show error on STDERR
      */
-    func testShowDevies_TwoDevices_OneSpecified_NoInfo_BadIndex() throws {
+    func testShowDevices_TwoDevices_OneSpecified_NoInfo_BadIndex() throws {
         
         let devices: [String] = [self.deviceNames[0], self.deviceNames[1]]
         let og = OutputGrabber.init(useStdout: false)
         og.openConsolePipe()
         
         doShowData = false
-        Dlist.showDevices(devices[...], 42)
-        
+        Dlist.showDevices(devices[...], 42, ignorables[...])
+
         var a = 0
         while !og.doneflag{
             a += 1
@@ -259,22 +260,22 @@ final class testDlist: XCTestCase {
         
         _ = og.closeConsolePipe()
         
-        let expected = "\u{1b}[0;33m\u{1b}[1mWARNING\u{1b}[0m 42 is out of range (1-2)\n"
+        let expected = "\u{1b}[33m\u{1b}[1mWARNING \u{1b}[0m42 is out of range (1-2)\n"
         XCTAssert(og.errors.count == 0 && og.contents.hasPrefix(expected), "\(og.contents)")
     }
     
     /*
      Should show error on STDERR
      */
-    func testShowDevies_TwoDevices_OneSpecified_Info_BadIndex() throws {
+    func testShowDevices_TwoDevices_OneSpecified_Info_BadIndex() throws {
         
         let devices: [String] = [self.deviceNames[0], self.deviceNames[1]]
         let og = OutputGrabber.init(useStdout: false)
         og.openConsolePipe()
         
         doShowData = true
-        Dlist.showDevices(devices[...], 42)
-        
+        Dlist.showDevices(devices[...], 42, ignorables[...])
+
         var a = 0
         while !og.doneflag{
             a += 1
@@ -282,7 +283,7 @@ final class testDlist: XCTestCase {
         
         _ = og.closeConsolePipe()
         
-        let expected = "\u{1b}[0;33m\u{1b}[1mWARNING\u{1b}[0m 42 is out of range (1-2)\n"
+        let expected = "\u{1b}[33m\u{1b}[1mWARNING \u{1b}[0m42 is out of range (1-2)\n"
         XCTAssert(og.errors.count == 0 && og.contents.hasPrefix(expected), "\(og.contents)")
     }
     
@@ -291,7 +292,7 @@ final class testDlist: XCTestCase {
      */
     func testDoKeepDevice_DoRemove_01() throws {
         
-        XCTAssert(!doKeepDevice("/dev/cu.Bluetooth-Incoming-Port"))
+        XCTAssert(!doKeepDevice("/dev/cu.Bluetooth-Incoming-Port", ignorables[...]))
     }
     
     /*
@@ -299,7 +300,7 @@ final class testDlist: XCTestCase {
      */
     func testDoKeepDevice_DoRemove_02() throws {
         
-        XCTAssert(!doKeepDevice("/dev/cu.debug-console"))
+        XCTAssert(!doKeepDevice("/dev/cu.debug-console", ignorables[...]))
     }
     
     /*
@@ -307,6 +308,6 @@ final class testDlist: XCTestCase {
      */
     func testDoKeepDevice_DoKeep() throws {
         
-        XCTAssert(doKeepDevice("/dev/cu.usbmodem1101"))
+        XCTAssert(doKeepDevice("/dev/cu.usbmodem1101", ignorables[...]))
     }
 }
