@@ -84,7 +84,6 @@
 				3BF2DC6F2D50E0A900520F48 /* dlist */,
 				3BF2DC8E2D50EC8700520F48 /* Misc */,
 				3B3BF1912D5F57400083DE56 /* testDlist */,
-				3BFD581A2F1E484500C41183 /* Frameworks */,
 				3BF2DC5B2D50C07E00520F48 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -121,13 +120,6 @@
 				3BAE66A12D53A1FE00AB79D3 /* bump.sh */,
 			);
 			name = Misc;
-			sourceTree = "<group>";
-		};
-		3BFD581A2F1E484500C41183 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -435,7 +427,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = dlist/Info.plist;
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
-				MARKETING_VERSION = 0.2.2;
+				MARKETING_VERSION = 0.2.3;
 				OTHER_CODE_SIGN_FLAGS = "--timestamp";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bps.dlist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -459,7 +451,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = dlist/Info.plist;
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
-				MARKETING_VERSION = 0.2.2;
+				MARKETING_VERSION = 0.2.3;
 				OTHER_CODE_SIGN_FLAGS = "--timestamp";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bps.dlist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -551,7 +543,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = dlist/Info.plist;
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
-				MARKETING_VERSION = 0.2.2;
+				MARKETING_VERSION = 0.2.3;
 				OTHER_CODE_SIGN_FLAGS = "--timestamp";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bps.dlist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
