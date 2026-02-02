@@ -133,7 +133,7 @@ let ignorableDevices: [String] = getIgnorables()
 let deviceList = Dlist.getDevices(from: DEV_PATH, ignorableDevices[...])
 #elseif os(Linux)
 let ignorableDevices: [String] = []
-let deviceList = Dlist.getDevices(from: SYS_PATH_LINUX)
+let deviceList = Dlist.getDevices(from: SYS_PATH_LINUX, ignorableDevices[...])
 #endif
 
 // Show a list of devices or the required device
