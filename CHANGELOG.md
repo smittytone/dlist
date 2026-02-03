@@ -1,6 +1,6 @@
 ## Release Notes ##
 
-- 0.2.3 *Unreleased*
+- 0.2.3 *3 February 2026*
     - Fix version number.
     - Update to clicore 0.4.0.
 - 0.2.2 *13 January 2026*
