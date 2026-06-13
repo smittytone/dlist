@@ -70,6 +70,12 @@ var isRunAsSudo: Bool {
 
 // MARK: Runtime Start
 
+// FROM 0.2.4
+// Use emoji markers on macOS
+#if os(macOS)
+Stdio.settings.useEmoji = true
+#endif
+
 // Set up Ctrl-C trap
 Stdio.enableCtrlHandler("dlist interrupted -- halting")
 
