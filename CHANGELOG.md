@@ -1,6 +1,6 @@
 ## Release Notes ##
 
-- 0.2.4 *Unreleased*
+- 0.2.4 *1 July 2026*
     - Signal errors, warnings, etc. on macOS with emoji.
     - Update to clicore 0.5.0.
 - 0.2.3 *3 February 2026*
