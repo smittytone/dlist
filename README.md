@@ -1,4 +1,4 @@
-# dlist 0.2.4
+# dlist 0.2.5
 
 A Swift-based macOS/Linux CLI utility for listing connected MCU boards and USB-to-Serial adaptors
 

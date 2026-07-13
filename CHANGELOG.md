@@ -1,5 +1,8 @@
 ## Release Notes ##
 
+- 0.2.5 *Unreleased*
+    - Tabulate info output.
+    - Fix Linux version.
 - 0.2.4 *1 July 2026*
     - Signal errors, warnings, etc. on macOS with emoji.
     - Update to clicore 0.5.0.
