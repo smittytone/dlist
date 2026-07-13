@@ -119,7 +119,7 @@ struct Dlist {
 #if os(macOS)
                 let deviceData = findConnectedSerialDevices(ignorableDevices)
 #endif
-                var count = 1
+                /*
                 for device in deviceList {
 #if os(macOS)
                     let sd = deviceData[DEV_PATH + device] ?? SerialDeviceInfo()
@@ -137,6 +137,45 @@ struct Dlist {
 
                     count += 1
                 }
+                */
+
+                // FROM 0.2.5
+                // Tabulate info output
+                var rows: [[String]] = [[" ", "Device Path", "Device Type", "Vendor"]]
+                var widths = [rows[0][0].count, rows[0][1].count, rows[0][2].count, rows[0][3].count]
+                var count = 1
+                for device in deviceList {
+                    let deviceNumber = String(format: "%d", count)
+                    let devicePath = DEV_PATH + device
+#if os(macOS)
+                    let sd = deviceData[devicePath] ?? SerialDeviceInfo()
+#else
+                    let sd = getDeviceInfo(device)
+#endif
+                    rows.append([deviceNumber, devicePath, sd.productType, sd.vendorName])
+
+                    if widths[0] < deviceNumber.count   { widths[0] = deviceNumber.count }
+                    if widths[1] < devicePath.count     { widths[1] = devicePath.count }
+                    if widths[2] < sd.productType.count { widths[2] = sd.productType.count }
+                    if widths[3] < sd.vendorName.count  { widths[3] = sd.vendorName.count }
+
+                    count += 1
+                }
+
+                // Print the top of the table
+                Stdio.report("┌─" + String(repeating: "─", count: widths[0]) + "─┬─" + String(repeating: "─", count: widths[1]) + "─┬─" + String(repeating: "─", count: widths[2]) + "─┬─" + String(repeating: "─", count: widths[3]) + "─┐")
+
+                // Print the rows
+                for row in rows {
+                    Stdio.report("│ " + row[0] + String(repeating: " ", count: widths[0] - row[0].count) + " │ " + row[1] + String(repeating: " ", count: widths[1] - row[1].count) + " │ " + row[2] + String(repeating: " ", count: widths[2] - row[2].count) + " │ " + row[3] + String(repeating: " ", count: widths[3] - row[3].count) + " │")
+
+                    if row != rows.last {
+                        Stdio.report("├─" + String(repeating: "─", count: widths[0]) + "─┼─" + String(repeating: "─", count: widths[1]) + "─┼─" + String(repeating: "─", count: widths[2]) + "─┼─" + String(repeating: "─", count: widths[3]) + "─┤")
+                    }
+                }
+
+                // Print the bottom of the table
+                Stdio.report("└─" + String(repeating: "─", count: widths[0]) + "─┴─" + String(repeating: "─", count: widths[1]) + "─┴─" + String(repeating: "─", count: widths[2]) + "─┴─" + String(repeating: "─", count: widths[3]) + "─┘")
             }
         } else {
             Stdio.report("No connected devices")
