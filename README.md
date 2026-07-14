@@ -15,7 +15,7 @@ $ dlist
 /dev/cu.PL2303G-USBtoUART10
 ```
 
-The device file path is issued to `STDOUT` so that it can be passed into other  commands. For example:
+The device file path is issued to `STDOUT` so that it can be passed into other commands. For example:
 
 ```shell
 minicom -D $(dlist) -b 9600
@@ -29,7 +29,7 @@ $ dlist
 2. /dev/cu.USB-MODEM-001
 ```
 
-This list is issued to `STDERR`, so it’s printed in a terminal but will typically not be passed to another program. This allows you to select which item you then wish to use. For example:
+This list is issued to `STDERR`, so it’s printed in a terminal but will typically not be available to be passed to another program. This allows you to select which device you then wish to use. For example:
 
 ```shell
 $ dlist
@@ -47,13 +47,13 @@ Including a numerical argument causes `dlist` to issue the specified device (by 
 
 Including `--info` or `-i` as a `dlist` argument will force it into list mode, however many devices are connected.
 
-Because the output is intended to be readable by people, it is not suitable for piping into another command. Make sure you don’t include the flag if you’re using `dlist` to pipe the device path.
+Because the output is intended to be readable by people, it can’t be piped into another command. Make sure you don’t include the flag if you’re using `dlist` to pipe the device path.
 
 ## macOS Notes
 
 ### Ignorable Devices
 
-macOS adds a number of devices to the `/dev/cu.*` set, neither of which can be used for USB-to-serial roles. `dlist` ignores these. However, macOS may also add other devices which cannot be known at compile time. For example, after I have connected my Beats Solo Pro wireless headphones to my Mac, they can appear in `/dev/` as `cu.SmittytoneCans` based on the name I gave them. I can’t know what your wireless headphones are called, so `dlist` now reads a list of ignorable devices from `${HOME}/.config/dlist/ignorables`. Add the extra devices you want `dlist` to ignore there, on a one-device-per-line basis.
+macOS adds a number of devices to the `/dev/cu.*` set, none of which can be used for USB-to-serial roles. `dlist` therefore ignores these. However, macOS may also add other devices which cannot be known at compile time. For example, after I have connected my Beats Solo Pro wireless headphones to my Mac, they can appear in `/dev/` as `cu.SmittytoneCans` based on the name I gave them. I can’t know what your wireless headphones (or whatever) are called, so `dlist` now reads a list of ignorable devices from the file `${HOME}/.config/dlist/ignorables`. Add to this file the extra devices you want `dlist` to ignore, on a one-device-per-line basis.
 
 ## Compiling
 
