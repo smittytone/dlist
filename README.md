@@ -1,6 +1,6 @@
 # dlist 0.2.5
 
-A Swift-based macOS/Linux CLI utility for listing connected MCU boards and USB-to-Serial adaptors
+A Swift-based macOS/Linux CLI utility for accessing the device paths connected MCU boards and USB-to-Serial adaptors.
 
 ## Usage
 
@@ -23,18 +23,19 @@ minicom -D $(dlist) -b 9600
 
 If multiple MCUs are connected, `dlist` will return a numerical list:
 
-```shell
-$ dlist
-1. /dev/cu.PL2303G-USBtoUART10
-2. /dev/cu.USB-MODEM-001
-```
+![](/images/dlist-025-001.webp)
 
 This list is issued to `STDERR`, so it’s printed in a terminal but will typically not be available to be passed to another program. This allows you to select which device you then wish to use. For example:
 
 ```shell
 $ dlist
-1. /dev/cu.PL2303G-USBtoUART10
-2. /dev/cu.USB-MODEM-001
+┌───┬───────────────────────────────┬────────────────────────────┬───────────────────────────┐
+│   │ Device Path                   │ Device Type                │ Vendor                    │
+├───┼───────────────────────────────┼────────────────────────────┼───────────────────────────┤
+│ 1 │ /dev/cu.PL2303G-USBtoUART1120 │ USB-Serial Controller      │ Prolific Technology Inc.  │
+├───┼───────────────────────────────┼────────────────────────────┼───────────────────────────┤
+│ 2 │ /dev/cu.usbmodem11101         │ MCP2221 USB-I2C/UART Combo │ Microchip Technology Inc. │
+└───┴───────────────────────────────┴────────────────────────────┴───────────────────────────┘
 
 $ minicom -D $(dlist 2) -b 115200
 ```
