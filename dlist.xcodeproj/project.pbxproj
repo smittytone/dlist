@@ -42,7 +42,6 @@
 		3B757F572E546C6200567756 /* dlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dlist.swift; sourceTree = "<group>"; };
 		3B8D30F92D5E21EF0019031C /* extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extensions.swift; sourceTree = "<group>"; };
 		3BAE669E2D539A3300AB79D3 /* linux_version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = linux_version.swift; sourceTree = "<group>"; };
-		3BAE66A12D53A1FE00AB79D3 /* bump.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = bump.sh; sourceTree = "<group>"; };
 		3BF2DC5A2D50C07E00520F48 /* dlist */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dlist; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BF2DC6C2D50E0A900520F48 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3BF2DC6D2D50E0A900520F48 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -117,7 +116,6 @@
 				3BF2DC912D50ECAB00520F48 /* LICENSE.md */,
 				3BF2DC922D50ECB600520F48 /* README.md */,
 				3B757F562E546BB200567756 /* CHANGELOG.md */,
-				3BAE66A12D53A1FE00AB79D3 /* bump.sh */,
 			);
 			name = Misc;
 			sourceTree = "<group>";
