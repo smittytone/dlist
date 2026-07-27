@@ -1,5 +1,8 @@
 ## Release Notes ##
 
+- 0.2.6 *Unreleased*
+    - Add missing emoji to 'No connected devices' message.
+    - Remove redundant version-bump script.
 - 0.2.5 *16 July 2026*
     - Tabulate `--info` output.
     - Fix Linux version.
