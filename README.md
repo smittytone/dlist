@@ -58,19 +58,28 @@ macOS adds a number of devices to the `/dev/cu.*` set, none of which can be used
 
 ## Compiling
 
-### macOS
+### macOS (Xcode)
+
+**IMPORTANT** A paid Apple Developer Program membership is required to produce a signed release build that can be notarised.
 
 * Clone this repo
 * `cd /path/to/repo`
-* `git submodule update --init --recursive`
 * Open the `.xcodeproj` file
-* Set your team under **Signing & Capabilities** for the *dlist* target
+* For signed builds set your team under **Signing & Capabilities** for the *dlist* target
 * Select **Archive** from the **Product** menu
 * In the **Archives** window, select the new build and click **Distribute Content**
 * Follow the sequence, choosing **Custom** and **Build Products**, and save the output to the Desktop
 * `sudo cp /path/to/exported/dlist/binary /usr/local/bin/dlist`
 
-### Linux
+### macOS (Swift Compiler)
+
+* Clone this repo
+* `cd /path/to/repo`
+* `swift build -c release`
+
+The macOS binary will be located in `.build/{architecture}/release/`
+
+### Linux (Swift Compiler)
 
 * Install pre-requisites: `sudo apt update && sudo apt install pkg-config libudev-dev libusb-dev libftdi-dev`
 * [Install Swift](https://www.swift.org/install/linux/)
@@ -81,7 +90,5 @@ macOS adds a number of devices to the `/dev/cu.*` set, none of which can be used
 **Note** On the Raspberry Pi 5, the build process and running `dlist` will emit `swift runtime: unable to protect... disabling backtracing` messages. To avoid these, you can add the flag `--static-swift-stdlib`. The *quid pro quo* is that it may start up more slowly and will be a much larger build. An alternative approach is to add `export SWIFT_BACKTRACE='enable=no'` to your shell profile file. This removes the messages, keeps the binary size low, but of course disables Swift's improved crash reporting.
 
 The Linux binary will be located in `.build/{architecture}/release/`
-
-**Note** The script `bump.sh`, used in `dlist` development, currently only runs on macOS.
 
 Copyright © 2026, Tony Smith (@smittytone)
