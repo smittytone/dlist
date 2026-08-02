@@ -8,7 +8,7 @@
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
     in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    to use, copy, modify, merge, publish, distribute, sub-license, and/or sell
     copies of the Software, and to permit persons to whom the Software is
     furnished to do so, subject to the following conditions:
 
@@ -17,7 +17,7 @@
 
     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
     AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -36,9 +36,6 @@ import Clicore
 
 let DEV_PATH                = "/dev/"
 let SYS_PATH_LINUX          = "/sys/class/tty/"
-/* The following is retained as part of the Linux device alias code and may be removed
-let UDEV_RULES_PATH_LINUX   = "/etc/udev/rules.d/99-dlist-usb-serial-devices.rules"
-*/
 
 
 // MARK: Global Variables
@@ -51,21 +48,6 @@ var prevArg                 = ""
 // App control
 var targetDevice            = -1
 var doShowData              = false
-/* The following is retained as part of the Linux device alias code and may be removed
-var doApplyAlias            = false
-var alias                   = ""
-// Computed
-var isRunAsSudo: Bool {
-    // This is required on Linux for access to Linux Udev rules.
-    get {
-        if let value: String = ProcessInfo.processInfo.environment["USER"] {
-            return (value == "root")
-        }
-
-        return false
-    }
-}
-*/
 
 
 // MARK: Runtime Start
@@ -182,14 +164,13 @@ private func showHelp() {
 private func showHeader() {
 
 #if os(macOS)
-    let version: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
-    let build: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String
-    let name:String = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as! String
+    let version: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? SWIFT_BUILD_PROCESS_DLIST_VERSION
+    let build: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "\(SWIFT_BUILD_PROCESS_DLIST_BUILD)"
+    let name:String = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String ?? "dlist"
     Stdio.report("\(String(.bold))\(name) \(version) (\(build))\(String(.normal)) for macOS")
 #else
     // Linux output
-    // TODO Automate based on build settings
-    Stdio.report("\(String(.bold))dlist \(LINUX_VERSION) (\(LINUX_BUILD))\(String(.normal)) for Linux")
+    Stdio.report("\(String(.bold))dlist \(SWIFT_BUILD_PROCESS_DLIST_VERSION) (\(SWIFT_BUILD_PROCESS_DLIST_BUILD))\(String(.normal)) for Linux")
 #endif
     Stdio.report("Copyright © 2026, Tony Smith (@smittytone). Source code available under the MIT licence.")
 }
@@ -201,5 +182,5 @@ private func showHeader() {
 private func closeCleanly() {
 
     Stdio.disableCtrlHandler()
-    exit(EXIT_SUCCESS)  
+    exit(EXIT_SUCCESS)
 }
