@@ -17,7 +17,8 @@
 		3B757F592E546C6200567756 /* dlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B757F572E546C6200567756 /* dlist.swift */; };
 		3B8812712E550BD80023DDF1 /* Clicore in Frameworks */ = {isa = PBXBuildFile; productRef = 3B8812702E550BD80023DDF1 /* Clicore */; };
 		3B8D30FA2D5E21EF0019031C /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B8D30F92D5E21EF0019031C /* extensions.swift */; };
-		3BAE669F2D539A3300AB79D3 /* linux_version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BAE669E2D539A3300AB79D3 /* linux_version.swift */; };
+		3BDEF240301FEBB200625C41 /* swift_version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDEF23F301FE72A00625C41 /* swift_version.swift */; };
+		3BDEF241301FEBB200625C41 /* swift_version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDEF23F301FE72A00625C41 /* swift_version.swift */; };
 		3BF2DC702D50E0A900520F48 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF2DC6D2D50E0A900520F48 /* main.swift */; };
 		3BFD581C2F1E484500C41183 /* Clicore in Frameworks */ = {isa = PBXBuildFile; productRef = 3BFD581B2F1E484500C41183 /* Clicore */; };
 /* End PBXBuildFile section */
@@ -41,7 +42,7 @@
 		3B757F562E546BB200567756 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		3B757F572E546C6200567756 /* dlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dlist.swift; sourceTree = "<group>"; };
 		3B8D30F92D5E21EF0019031C /* extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extensions.swift; sourceTree = "<group>"; };
-		3BAE669E2D539A3300AB79D3 /* linux_version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = linux_version.swift; sourceTree = "<group>"; };
+		3BDEF23F301FE72A00625C41 /* swift_version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = swift_version.swift; sourceTree = "<group>"; };
 		3BF2DC5A2D50C07E00520F48 /* dlist */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dlist; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BF2DC6C2D50E0A900520F48 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3BF2DC6D2D50E0A900520F48 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -104,7 +105,7 @@
 				3B3BF18A2D5F50970083DE56 /* entities.swift */,
 				3B8D30F92D5E21EF0019031C /* extensions.swift */,
 				3B0C90182D5CABD2003FD494 /* mac_aliases.swift */,
-				3BAE669E2D539A3300AB79D3 /* linux_version.swift */,
+				3BDEF23F301FE72A00625C41 /* swift_version.swift */,
 				3BF2DC6C2D50E0A900520F48 /* Info.plist */,
 			);
 			path = dlist;
@@ -222,6 +223,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3BDEF241301FEBB200625C41 /* swift_version.swift in Sources */,
 				3B3BF1972D5F57800083DE56 /* main.swift in Sources */,
 				3B3BF1982D5F57890083DE56 /* mac_aliases.swift in Sources */,
 				3B3BF19D2D5F5A820083DE56 /* extensions.swift in Sources */,
@@ -235,10 +237,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				3B8D30FA2D5E21EF0019031C /* extensions.swift in Sources */,
-				3BAE669F2D539A3300AB79D3 /* linux_version.swift in Sources */,
 				3B3BF18B2D5F50970083DE56 /* entities.swift in Sources */,
 				3BF2DC702D50E0A900520F48 /* main.swift in Sources */,
 				3B0C90192D5CABD2003FD494 /* mac_aliases.swift in Sources */,
+				3BDEF240301FEBB200625C41 /* swift_version.swift in Sources */,
 				3B757F592E546C6200567756 /* dlist.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -417,7 +419,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
 				CODE_SIGN_STYLE = Manual;
 				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
-				CURRENT_PROJECT_VERSION = 35;
+				CURRENT_PROJECT_VERSION = 36;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = Y5J3K52DNA;
@@ -425,7 +427,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = dlist/Info.plist;
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
-				MARKETING_VERSION = 0.2.5;
+				MARKETING_VERSION = 0.2.6;
 				OTHER_CODE_SIGN_FLAGS = "--timestamp";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bps.dlist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -441,7 +443,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
 				CODE_SIGN_STYLE = Manual;
 				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
-				CURRENT_PROJECT_VERSION = 35;
+				CURRENT_PROJECT_VERSION = 36;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = Y5J3K52DNA;
@@ -449,7 +451,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = dlist/Info.plist;
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
-				MARKETING_VERSION = 0.2.5;
+				MARKETING_VERSION = 0.2.6;
 				OTHER_CODE_SIGN_FLAGS = "--timestamp";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bps.dlist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -533,7 +535,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
 				CODE_SIGN_STYLE = Manual;
 				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
-				CURRENT_PROJECT_VERSION = 35;
+				CURRENT_PROJECT_VERSION = 36;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = Y5J3K52DNA;
@@ -541,7 +543,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = dlist/Info.plist;
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
-				MARKETING_VERSION = 0.2.5;
+				MARKETING_VERSION = 0.2.6;
 				OTHER_CODE_SIGN_FLAGS = "--timestamp";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bps.dlist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
