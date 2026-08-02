@@ -8,7 +8,7 @@
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
     in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    to use, copy, modify, merge, publish, distribute, sub-license, and/or sell
     copies of the Software, and to permit persons to whom the Software is
     furnished to do so, subject to the following conditions:
 
@@ -17,7 +17,7 @@
 
     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
     AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -32,7 +32,7 @@ import Clibudev
 /**
  Use udev to get a USB-connected serial adaptor's USB Serial Number.
 
- - Note Code derived from 
+ - Note Code derived from
     `http://cholla.mmto.org/computers/usb/OLD/tutorial_usbloger.html` and
     `https://github.com/robertalks/udev-examples/blob/master/udev_example1.c`
 
@@ -40,7 +40,7 @@ import Clibudev
     - device: The device name, eg. `ttyUSB0`.
 
  - Returns The device's serial number, or `nil` on error.
- 
+
 func getSerialNumber(_ device: String) -> String? {
 
     // Get the `/sys` path to the specified device
@@ -51,7 +51,7 @@ func getSerialNumber(_ device: String) -> String? {
     // before the function exits
     guard let udev = udev_new() else { return nil }
     defer { udev_unref(udev) }
-    
+
     // Get the udev representation of the specified device.
     // Again, make sure we free it before the function exits
     guard var dev = udev_device_new_from_syspath(udev, devicePath) else { return nil }
@@ -89,7 +89,7 @@ func getDeviceInfo(_ device: String) -> SerialDeviceInfo {
     // before the function exits
     guard let udev = udev_new() else { return serialDeviceInfo }
     defer { udev_unref(udev) }
-    
+
     // Get the udev representation of the specified device.
     // Again, make sure we free it before the function exits
     guard var dev = udev_device_new_from_syspath(udev, devicePath) else { return serialDeviceInfo }
@@ -112,7 +112,7 @@ func getDeviceInfo(_ device: String) -> SerialDeviceInfo {
     } else if let value = udev_device_get_sysattr_value(dev, "idVendor") {
         serialDeviceInfo.vendorName = "0x" + String(cString: value).trimmingCharacters(in: .whitespacesAndNewlines)
     }
-    
+
     return serialDeviceInfo
 }
 
@@ -126,19 +126,19 @@ func apply(alias: String, to serial: String, path: String = "") -> Bool {
     if fm.fileExists(atPath: UDEV_RULES_PATH_LINUX) {
         do {
             var rulesFileText = try String(contentsOfFile: UDEV_RULES_PATH_LINUX)
-            
+
             // Make sure the alias is not in use
             if rulesFileText.contains("SYMLINK+=\"\(alias)\"") {
                 reportErrorAndExit("Alias \(alias) already in use", 3)
             }
-            
+
             // Check the serial number
             // If it already exists, update its alias
             if let matchSerial = rulesFileText.firstMatch(of: #/ATTRS{serial}=="(.*?)"/#) {
-                let oldSerial = String(matchSerial.1) 
-                
+                let oldSerial = String(matchSerial.1)
+
                 if let matchAlias = rulesFileText.firstMatch(of: #/SYMLINK\+="(.*?)"/#) {
-                    let oldAlias = String(matchAlias.1) 
+                    let oldAlias = String(matchAlias.1)
                     if oldAlias != alias {
                         rulesFileText = rulesFileText.replacingOccurrences(of: "+=\"\(oldAlias)", with: "+=\"\(alias)")
                         reportInfo("Alias changed from \(oldAlias) to \(alias) -- reconnect your device to make use of it")
@@ -147,7 +147,7 @@ func apply(alias: String, to serial: String, path: String = "") -> Bool {
             } else {
                 rulesFileText += deviceLine
             }
-            
+
             return writeRules(rulesFileText)
         } catch {
             // Fallthrough
@@ -161,7 +161,7 @@ func apply(alias: String, to serial: String, path: String = "") -> Bool {
 
 
 func writeRules(_ fileContents: String) -> Bool {
-    
+
     do {
         try fileContents.write(toFile: UDEV_RULES_PATH_LINUX, atomically: false, encoding: .utf8)
         return true
@@ -169,7 +169,7 @@ func writeRules(_ fileContents: String) -> Bool {
         // Fallthrough
         print("WRITE FAIL")
     }
-    
+
     return false
 }
 */

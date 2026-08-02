@@ -8,7 +8,7 @@
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
     in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    to use, copy, modify, merge, publish, distribute, sub-license, and/or sell
     copies of the Software, and to permit persons to whom the Software is
     furnished to do so, subject to the following conditions:
 
@@ -17,7 +17,7 @@
 
     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
     AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -119,26 +119,6 @@ struct Dlist {
 #if os(macOS)
                 let deviceData = findConnectedSerialDevices(ignorableDevices)
 #endif
-                /*
-                for device in deviceList {
-#if os(macOS)
-                    let sd = deviceData[DEV_PATH + device] ?? SerialDeviceInfo()
-#else
-                    let sd = getDeviceInfo(device)
-#endif
-
-                    if useDevice == -1 {
-                        // No device specified so output all
-                        Stdio.report(String(format: "%d. %@\t\t[%@, %@]", count, DEV_PATH + device, sd.productType, sd.vendorName))
-                    } else if useDevice == count {
-                        // Device specified so no need to present its index
-                        Stdio.report(String(format: "%@\t\t[%@, %@]", DEV_PATH + device, sd.productType, sd.vendorName))
-                    }
-
-                    count += 1
-                }
-                */
-
                 // FROM 0.2.5
                 // Tabulate info output
                 var rows: [[String]] = [[" ", "Device Path", "Device Type", "Vendor"]]
