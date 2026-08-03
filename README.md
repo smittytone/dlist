@@ -40,6 +40,8 @@ $ dlist
 $ minicom -D $(dlist 2) -b 115200
 ```
 
+**Note** The values used to populate the *Device Type* and *Vendor* columns are those reported by the device itself over USB (see `getDeviceInfo()` in `dlist/linux_aliases.swift` or `findConnectedSerialDevices()` in `dlist\mac_aliases.swift`).
+
 Including a numerical argument causes `dlist` to issue the specified device (by index in the list) to subsequent commands through `STDOUT`.
 
 **Note** If there is only one MCU connected and you still specify a value but one that is not `1`, this will generate a warning on `STERR` but will still issue the single device's path.
