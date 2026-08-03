@@ -91,4 +91,6 @@ The macOS binary will be located in `.build/{architecture}/release/`
 
 The Linux binary will be located in `.build/{architecture}/release/`
 
+**NOTE** The script `sync-version.sh` is intended to be run on macOS only, either as a standalone script or (more appropriately) called via the Xcode build process.
+
 Copyright © 2026, Tony Smith (@smittytone)

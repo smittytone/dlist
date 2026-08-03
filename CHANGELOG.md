@@ -4,7 +4,7 @@
     - Add missing emoji to `No connected devices` message.
     - Avoid crash risk by guarding against `IORegistryEntryCreateCFProperty()` yielding a `nil` in `mac_aliases.swift`’s `getSerialDevices()`.
     - Enable macOS builds using the Swift compiler.
-    - Remove redundant version-bump script.
+    - Revised cross-version version number management script.
     - Remove old, commented-out code.
 - 0.2.5 *16 July 2026*
     - Tabulate `--info` output.
