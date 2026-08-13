@@ -1,6 +1,6 @@
 ## Release Notes ##
 
-- 0.2.6 *Unreleased*
+- 0.3.0 *Unreleased*
     - Allow macOS binary to be built using the Swift compiler (previously Linux only).
     - Add new version control script to update Linux and macOS Swift compiler builds from Xcode project source of truth.
     - Add missing emoji to `No connected devices` message.
