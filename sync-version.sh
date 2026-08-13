@@ -24,6 +24,7 @@ set -eu
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 XCODEPROJ="${SCRIPT_DIR}/dlist.xcodeproj"
 TARGET_FILE="${SCRIPT_DIR}/dlist/swift_version.swift"
+TARGET_PLIST="${SCRIPT_DIR}/dlist/swift.plist"
 CONFIGURATION="${CONFIGURATION:-${1:-Release}}"
 
 if [ -n "${MARKETING_VERSION:-}" ] && [ -n "${CURRENT_PROJECT_VERSION:-}" ]; then
@@ -104,3 +105,12 @@ let SWIFT_BUILD_PROCESS_DLIST_BUILD: Int = ${BUILD}
 EOF
 
 printf 'Version written to %s: version %s, build %s\n' "${TARGET_FILE}" "${VERSION}" "${BUILD})"
+
+if [ -f "${TARGET_PLIST}" ]; then
+    /usr/libexec/plistbuddy -c "set CFBundleShortVersionString ${ESCAPED_VERSION}" "${TARGET_PLIST}"
+    /usr/libexec/plistbuddy -c "set CFBundleVersion ${BUILD}" "${TARGET_PLIST}"
+    printf 'Version written to %s: version %s, build %s\n' "${TARGET_PLIST}" "${VERSION}" "${BUILD})"
+else
+    printf '[ERROR] Pre-formed `swift.plist` file missing from the source directory'
+fi
+
