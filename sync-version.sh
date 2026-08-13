@@ -21,6 +21,13 @@
 
 set -eu
 
+# This script depends on xcodebuild and /usr/libexec/PlistBuddy, which are
+# macOS-only tools. Abort immediately on any other platform.
+if [ "$(uname)" != "Darwin" ]; then
+    printf '[ERROR] sync-version.sh requires macOS\n' >&2
+    exit 1
+fi
+
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 XCODEPROJ="${SCRIPT_DIR}/dlist.xcodeproj"
 TARGET_FILE="${SCRIPT_DIR}/dlist/swift_version.swift"
