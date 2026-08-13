@@ -21,10 +21,10 @@ let package = Package(
                 "swift.plist"
             ],
             linkerSettings: [
-                // Embed Info.plist into the __TEXT,__info_plist Mach-O section so the binary
+                // Embed `swift.plist` into the __TEXT,__info_plist Mach-O section so the binary
                 // can be signed and notarized. `.unsafeFlags` is fine here because `dlist` is
-                // a top-level executable, not a library dependency. macOS only: Linux has no
-                // Mach-O format and no notarization requirement.
+                // a top-level executable, not a library dependency.
+                // macOS only: Linux has no Mach-O format and no notarization requirement.
                 .unsafeFlags(
                     ["-Xlinker", "-sectcreate",
                      "-Xlinker", "__TEXT",
