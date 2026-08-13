@@ -1,5 +1,7 @@
 ## Release Notes ##
 
+- 0.3.1 *13 August 2026*
+    - Remove script calls from Xcode build Scheme to fix CLI build toolchain errors.
 - 0.3.0 *13 August 2026*
     - Allow macOS binary to be built using the Swift compiler (previously Linux only).
     - Add new version control script to update Linux and macOS Swift compiler builds from Xcode project source of truth.

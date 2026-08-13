@@ -29,5 +29,5 @@
          source of truth for the app's version and build numbers.
 */
 
-let SWIFT_BUILD_PROCESS_DLIST_VERSION: String = "0.3.0"
-let SWIFT_BUILD_PROCESS_DLIST_BUILD: Int = 39
+let SWIFT_BUILD_PROCESS_DLIST_VERSION: String = "0.3.1"
+let SWIFT_BUILD_PROCESS_DLIST_BUILD: Int = 40
