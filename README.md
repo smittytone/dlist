@@ -93,6 +93,10 @@ The macOS binary will be located in `.build/{architecture}/release/`
 
 The Linux binary will be located in `.build/{architecture}/release/`
 
-**NOTE** The script `sync-version.sh` is intended to be run on macOS only, either as a standalone script or (more appropriately) called via the Xcode build process.
+## Version Management
+
+The source of truth for version information is the Xcode project. If you compile `dlist` for macOS using the Swift compiler, the file `swift.plist` will be compiled into the binary to provide version information and to permit subsequent notarisation (after code signing). If you compile under Linux, the file `swift_version.swift` is used to inject version information into the Linux build process.
+
+The `sync-version` script is my tool to update the subsidiary files after I have updated the app using Xcode. The current version of the app, in the `main` branch of the repo, will always contain up-to-date `dlist` version information with the subsidiary version information files, so you should not need to alter these files yourself. The script is currently macOS only.
 
 Copyright © 2026, Tony Smith (@smittytone)
