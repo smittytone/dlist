@@ -1,5 +1,8 @@
 ## Release Notes ##
 
+- 0.3.2 *Unreleased*
+    - Update versioning script for better Xcode support.
+    - Update to clicore 0.5.1.
 - 0.3.1 *13 August 2026*
     - Remove script calls from Xcode build Scheme to fix CLI build toolchain errors.
 - 0.3.0 *13 August 2026*
