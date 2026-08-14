@@ -33,6 +33,7 @@ XCODEPROJ="${SCRIPT_DIR}/dlist.xcodeproj"
 TARGET_FILE="${SCRIPT_DIR}/dlist/swift_version.swift"
 TARGET_PLIST="${SCRIPT_DIR}/dlist/swift.plist"
 CONFIGURATION="${CONFIGURATION:-${1:-Release}}"
+IN_XCODE=""
 
 if [ -n "${MARKETING_VERSION:-}" ] && [ -n "${CURRENT_PROJECT_VERSION:-}" ]; then
     # Already running inside an Xcode build phase for a specific target/
@@ -41,6 +42,7 @@ if [ -n "${MARKETING_VERSION:-}" ] && [ -n "${CURRENT_PROJECT_VERSION:-}" ]; the
     # xcodebuild again.
     VERSION="${MARKETING_VERSION}"
     BUILD="${CURRENT_PROJECT_VERSION}"
+    IN_XCODE=1
 else
     # Script run standalone
     if [ ! -d "${XCODEPROJ}" ]; then
@@ -67,7 +69,11 @@ fi
 # CURRENT_PROJECT_VERSION must be a plain integer -- it's emitted as a Swift Int literal below.
 case "${BUILD}" in
     ''|*[!0-9]*)
-        printf '[ERROR] CURRENT_PROJECT_VERSION is not a plain integer: %s\n' "${BUILD}" >&2
+        if [ "${IN_XCODE}" = "1" ]; then
+            echo "sync-version:74:error:CURRENT_PROJECT_VERSION is not a plain integer: ${BUILD}"
+        else
+            printf '[ERROR] CURRENT_PROJECT_VERSION is not a plain integer: %s\n' "${BUILD}" >&2
+        fi
         exit 1
         ;;
 esac
@@ -116,8 +122,17 @@ printf 'Version written to %s: version %s, build %s\n' "${TARGET_FILE}" "${VERSI
 if [ -f "${TARGET_PLIST}" ]; then
     /usr/libexec/plistbuddy -c "set CFBundleShortVersionString ${ESCAPED_VERSION}" "${TARGET_PLIST}"
     /usr/libexec/plistbuddy -c "set CFBundleVersion ${BUILD}" "${TARGET_PLIST}"
-    printf 'Version written to %s: version %s, build %s\n' "${TARGET_PLIST}" "${VERSION}" "${BUILD})"
+    
+    if [ "${IN_XCODE}" = "1" ]; then
+        echo "sync-version:122:error:Version written to ${TARGET_PLIST}: version ${VERSION}, build ${BUILD})"
+    else
+        printf 'Version written to %s: version %s, build %s\n' "${TARGET_PLIST}" "${VERSION}" "${BUILD})"
+    fi
 else
-    printf '[ERROR] Pre-formed `swift.plist` file missing from the source directory'
+    if [ "${IN_XCODE}" = "1" ]; then
+        echo "sync-version:122:error:Pre-formed swift.plist file missing from the source directory"
+    else
+        printf '[ERROR] Pre-formed swift.plist file missing from the source directory'
+    fi
 fi
 
