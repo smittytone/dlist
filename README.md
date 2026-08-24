@@ -1,4 +1,4 @@
-# dlist 0.3.1
+# dlist 0.4.0
 
 A Swift-based macOS/Linux CLI utility for accessing the device paths connected MCU boards and USB-to-Serial adaptors.
 

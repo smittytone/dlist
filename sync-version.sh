@@ -113,8 +113,8 @@ cat > "${TARGET_FILE}" <<EOF
          source of truth for the app's version and build numbers.
 */
 
-let SWIFT_BUILD_PROCESS_DLIST_VERSION: String = "${ESCAPED_VERSION}"
-let SWIFT_BUILD_PROCESS_DLIST_BUILD: Int = ${BUILD}
+let SWIFT_BUILD_PROCESS_DLIST_VERSION = "${ESCAPED_VERSION}"
+let SWIFT_BUILD_PROCESS_DLIST_BUILD = ${BUILD}
 EOF
 
 printf 'Version written to %s: version %s, build %s\n' "${TARGET_FILE}" "${VERSION}" "${BUILD})"

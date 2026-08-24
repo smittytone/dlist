@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "dlist",
     dependencies: [
-        .package(url: "https://github.com/smittytone/clicore", branch: "main"),
+        .package(url: "https://github.com/smittytone/clicore", branch: "develop"),
     ],
     targets: [
         .executableTarget(

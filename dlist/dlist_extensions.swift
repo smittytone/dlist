@@ -1,6 +1,6 @@
 /*
     dlist
-    dlist.swift
+    dlist_extensions.swift
 
     Copyright © 2026 Tony Smith. All rights reserved.
 
@@ -28,12 +28,16 @@ import Foundation
 import Clicore
 
 
-struct Dlist {
+extension Dlist {
 
     /**
      Get a list of possible devices from the `/dev` directory.
      At this point we don't parse the list: we just obtain it, but
      we only include those devices prefixed `cu.`.
+
+     - Parameters:
+        - from:             The Unix path at which to look for devices.
+        - ignorableDevices: A slice of devices the user has told us to ignore.
 
      - Returns An array of the items in `/dev`.
      */
@@ -48,7 +52,6 @@ struct Dlist {
             list = try fm.contentsOfDirectory(atPath: devicesPath)
         } catch {
             Stdio.reportErrorAndExit("\(devicesPath) cannot be found", 2)
-            // --------------------------- END --------------------------
         }
 
 #if os(macOS)
@@ -87,37 +90,43 @@ struct Dlist {
      If no devices are present, write a warning to STDERR.
 
      - Parameters:
-        - targetDevice The index of a specified device on a dlist-generated list.
+        - deviceList:       A slice of known connected devices.
+        - ignorableDevices: A slice of devices the user has told us to ignore.
+        - settings:         A structure of settings values.
      */
-    static func showDevices(_ deviceList: ArraySlice<String>, _ targetDevice: Int, _ ignorableDevices: ArraySlice<String>) {
+    static func showDevices(_ deviceList: ArraySlice<String>, _ ignorableDevices: ArraySlice<String>, _ settings: Settings) {
 
         if deviceList.count > 0 {
-            if deviceList.count == 1 && !doShowData {
+            if deviceList.count == 1 && !settings.doShowData {
                 // Warn if a device has been specified anyway
-                if targetDevice != -1 && targetDevice != 1 {
-                    Stdio.reportWarning("\(targetDevice) is out of range (1)")
+                if settings.targetDevice != -1 && settings.targetDevice != 1 {
+                    Stdio.reportWarning("\(settings.targetDevice) is out of range (1)")
                 }
 
                 // Write the path of the only device to STDOUT
-                Stdio.output(DEV_PATH + deviceList[0])
+                Stdio.output(settings.DEV_PATH + deviceList[0])
             } else {
                 // Check any specified index is valid
                 // NOTE Presented list initital index is 1
-                var useDevice = targetDevice
+                var useDevice = settings.targetDevice
                 if useDevice > deviceList.count {
-                    Stdio.reportWarning("\(targetDevice) is out of range (1-\(deviceList.count))")
+                    Stdio.reportWarning("\(settings.targetDevice) is out of range (1-\(deviceList.count))")
                     useDevice = -1
                 }
 
                 // Write the path of the valid chosen device to STDOUT
-                if useDevice != -1 && !doShowData {
-                    Stdio.output(DEV_PATH + deviceList[useDevice - 1])
+                if useDevice != -1 && !settings.doShowData {
+                    Stdio.output(settings.DEV_PATH + deviceList[useDevice - 1])
                     return
                 }
 
                 // List devices to STDERR (ie. for humans)
 #if os(macOS)
                 let deviceData = findConnectedSerialDevices(ignorableDevices)
+                if deviceData.isEmpty {
+                    Stdio.reportError("Unable to read connected devices")
+                    return
+                }
 #endif
                 // FROM 0.2.5
                 // Tabulate info output
@@ -126,11 +135,14 @@ struct Dlist {
                 var count = 1
                 for device in deviceList {
                     let deviceNumber = String(format: "%d", count)
-                    let devicePath = DEV_PATH + device
+                    let devicePath = settings.DEV_PATH + device
 #if os(macOS)
                     let sd = deviceData[devicePath] ?? SerialDeviceInfo()
 #else
-                    let sd = getDeviceInfo(device)
+                    let deviceSysPath = settings.SYS_PATH_LINUX.hasSuffix("/")
+                        ? settings.SYS_PATH_LINUX + device
+                        : settings.SYS_PATH_LINUX + "/" + device
+                    let sd = getDeviceInfo(deviceSysPath)
 #endif
                     rows.append([deviceNumber, devicePath, sd.productType, sd.vendorName])
 

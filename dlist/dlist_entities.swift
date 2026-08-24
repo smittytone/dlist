@@ -1,6 +1,6 @@
 /*
     dlist
-    extensions.swift
+    dlist_entities.swift
 
     Copyright © 2026 Tony Smith. All rights reserved.
 
@@ -8,7 +8,7 @@
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
     in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, su-blicense, and/or sell
+    to use, copy, modify, merge, publish, distribute, sub-license, and/or sell
     copies of the Software, and to permit persons to whom the Software is
     furnished to do so, subject to the following conditions:
 
@@ -28,21 +28,25 @@
 import Foundation
 
 
-extension NSDictionary {
+/*
+ Basic structure to hold a subset of device information for use later.
+ */
+struct SerialDeviceInfo {
+    
+    var serialNumber: String        = "UNKNOWN SERIAL NUMBER"
+    var productType: String         = "UNKNOWN PRODUCT TYPE"
+    var vendorName: String          = "UNKNOWN MANUFACTURER"
+}
 
-    /*
-     Create a Swift Dictionary based on the instance's keys and values.
-     */
-    var swiftDictionary: Dictionary<String, Any> {
-        var swiftDictionary = Dictionary<String, Any>()
 
-        for key: Any in self.allKeys {
-            let stringKey = key as! String
-            if let keyValue = self.value(forKey: stringKey){
-                swiftDictionary[stringKey] = keyValue
-            }
-        }
+/*
+ Basic structure to hold dlist-specific passable values.
+ */
+struct Settings {
 
-        return swiftDictionary
-    }
+    let DEV_PATH                    = "/dev/"
+    let SYS_PATH_LINUX              = "/sys/class/tty/"
+
+    var targetDevice                = -1
+    var doShowData                  = false
 }
