@@ -40,7 +40,7 @@ extension Dlist {
 
      - Returns The device's data, or an unpopulated struct on error.
     */
-    func getDeviceInfo(_ deviceFullSysPath: String) -> SerialDeviceInfo {
+    static internal func getDeviceInfo(_ deviceFullSysPath: String) -> SerialDeviceInfo {
 
         var serialDeviceInfo = SerialDeviceInfo()
 
@@ -89,7 +89,7 @@ extension Dlist {
 
     - Returns The device's serial number, or `nil` on error.
 
-    func getSerialNumber(_ device: String) -> String? {
+    static internal func getSerialNumber(_ device: String) -> String? {
 
         // Get the `/sys` path to the specified device
         let devicePath = SYS_PATH_LINUX + device
@@ -115,7 +115,7 @@ extension Dlist {
     }
 
 
-    func apply(alias: String, to serial: String, path: String = "") -> Bool {
+    static internal func apply(alias: String, to serial: String, path: String = "") -> Bool {
 
         // TODO Update deviceLine for ttyACMx devices too
         let deviceLine = "KERNEL==\"ttyUSB?\", ATTRS{serial}==\"\(serial)\", SYMLINK+=\"\(alias)\", MODE=\"0666\"\n"
@@ -157,7 +157,7 @@ extension Dlist {
     }
 
 
-    func writeRules(_ fileContents: String) -> Bool {
+    static internal func writeRules(_ fileContents: String) -> Bool {
 
         do {
             try fileContents.write(toFile: UDEV_RULES_PATH_LINUX, atomically: false, encoding: .utf8)
