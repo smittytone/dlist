@@ -62,13 +62,8 @@ Stdio.settings.useEmoji = true
 Stdio.enableCtrlHandler("dlist interrupted -- halting")
 
 // Process the (separated) arguments
-for argument in CommandLine.arguments {
-    // Ignore the first argument
-    if argCount == 0 {
-        argCount += 1
-        continue
-    }
-
+let collatedArguments = Cli.unify(args: CommandLine.arguments)
+for argument in collatedArguments {
     if argIsAValue {
         // Make sure we're not reading in an option rather than a value
         if argument.prefix(1) == "-" {
@@ -109,7 +104,7 @@ for argument in CommandLine.arguments {
     argCount += 1
 
     // Trap commands that come last and therefore have missing args
-    if argCount == CommandLine.arguments.count && argIsAValue {
+    if argCount == collatedArguments.count && argIsAValue {
         Stdio.reportErrorAndExit("Missing value for \(argument)")
         // ------------------------- END ------------------------
     }
@@ -117,7 +112,7 @@ for argument in CommandLine.arguments {
 
 // Get a list of appropriate devices
 #if os(macOS)
-let ignorableDevices: [String] = getIgnorables()
+let ignorableDevices = getIgnorables()
 let deviceList = Dlist.getDevices(from: DEV_PATH, ignorableDevices[...])
 #elseif os(Linux)
 let ignorableDevices: [String] = []
@@ -164,9 +159,9 @@ private func showHelp() {
 private func showHeader() {
 
 #if os(macOS)
-    let version: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? SWIFT_BUILD_PROCESS_DLIST_VERSION
-    let build: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "\(SWIFT_BUILD_PROCESS_DLIST_BUILD)"
-    let name:String = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String ?? "dlist"
+    let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? SWIFT_BUILD_PROCESS_DLIST_VERSION
+    let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "\(SWIFT_BUILD_PROCESS_DLIST_BUILD)"
+    let name = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String ?? "dlist"
     Stdio.report("\(String(.bold))\(name) \(version) (\(build))\(String(.normal)) for macOS")
 #else
     // Linux output
