@@ -39,11 +39,11 @@ extension Dlist {
      Scan the IO registry for serial port devices.
 
      - Parameters
-        - ignorableDevies: Slice of an array of device name strings. Lists devices we don't care about.
+        - ignorableDevices: Slice of an array of device name strings. Lists devices we don't care about.
 
      - Returns A dictionary of device data keyed by device path, or an empty dictionary.
      */
-    static internal func findConnectedSerialDevices(_ ignorableDevies: ArraySlice<String>) -> [String: SerialDeviceInfo] {
+    static internal func findConnectedSerialDevices(_ ignorableDevices: ArraySlice<String>) -> [String: SerialDeviceInfo] {
 
         var portIterator: io_iterator_t = 0
 
@@ -62,7 +62,7 @@ extension Dlist {
                     IOObjectRelease(portIterator)
                 }
 
-                return getSerialDevices(portIterator, ignorableDevies)
+                return getSerialDevices(portIterator, ignorableDevices)
             }
         }
 
@@ -76,12 +76,12 @@ extension Dlist {
      one's device file path and its unique USB serial number.
 
      - Parameters
-        - portIterator:    An IOKit iterator for walking a list of devices.
-        - ignorableDevies: Slice of an array of device name strings. Lists devices we don't care about.
+        - portIterator:     An IOKit iterator for walking a list of devices.
+        - ignorableDevices: Slice of an array of device name strings. Lists devices we don't care about.
 
      - Returns A dictionary of device data keyed by device path, or an empty dictionary.
      */
-    static internal func getSerialDevices(_ portIterator: io_iterator_t, _ ignoreableDevices: ArraySlice<String>) -> [String: SerialDeviceInfo] {
+    static internal func getSerialDevices(_ portIterator: io_iterator_t, _ ignorableDevices: ArraySlice<String>) -> [String: SerialDeviceInfo] {
 
         var serialDevices: [String: SerialDeviceInfo] = [:]
         var serialDevice: io_service_t
@@ -102,7 +102,7 @@ extension Dlist {
 
             if let devicePath = unmanagedPath.takeUnretainedValue() as? String {
                 // Make sure we don't include cu.Bluetooth etc
-                if doKeepDevice(devicePath, ignoreableDevices) {
+                if doKeepDevice(devicePath, ignorableDevices) {
                     var serialDeviceInfo = SerialDeviceInfo()
                     let searchOptions : IOOptionBits = IOOptionBits(kIORegistryIterateParents) | IOOptionBits(kIORegistryIterateRecursively)
 
@@ -141,8 +141,8 @@ extension Dlist {
      are not interested in.
 
      - Parameters
-        - path:            The device's Unix file path.
-        - ignorableDevies: Slice of an array of device name strings. Lists devices we don't care about.
+        - path:             The device's Unix file path.
+        - ignorableDevices: Slice of an array of device name strings. Lists devices we don't care about.
 
      - Returns `true` if the device is good to use, otherwise `false`.
      */

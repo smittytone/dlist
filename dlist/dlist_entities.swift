@@ -44,9 +44,9 @@ struct SerialDeviceInfo {
  */
 struct Settings {
 
-    let DEV_PATH                    = "/dev/"
-    let SYS_PATH_LINUX              = "/sys/class/tty/"
+    let DEV_DIR_PATH: String        = "/dev/"
+    let SYS_PATH_LINUX: String      = "/sys/class/tty/"
 
-    var targetDevice                = -1
-    var doShowData                  = false
+    var targetDevice: Int           = -1
+    var doShowData: Bool            = false
 }

@@ -86,7 +86,7 @@ struct Dlist {
         // Get a list of appropriate devices
 #if os(macOS)
         let ignorableDevices = Dlist.getIgnorables()
-        let deviceList = Dlist.getDevices(from: settings.DEV_PATH, ignorableDevices[...])
+        let deviceList = Dlist.getDevices(from: settings.DEV_DIR_PATH, ignorableDevices[...])
 #elseif os(Linux)
         let ignorableDevices: [String] = []
         let deviceList = Dlist.getDevices(from: settings.SYS_PATH_LINUX, ignorableDevices[...])

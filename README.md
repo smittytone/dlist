@@ -44,7 +44,7 @@ $ minicom -D $(dlist 2) -b 115200
 
 Including a numerical argument causes `dlist` to issue the specified device (by index in the list) to subsequent commands through `STDOUT`.
 
-**Note** If there is only one MCU connected and you still specify a value but one that is not `1`, this will generate a warning on `STERR` but will still issue the single device's path.
+**Note** If there is only one MCU connected and you still specify a value but one that is not `1`, this will generate a warning on `STDERR` but will still issue the single device's path.
 
 ## Options
 

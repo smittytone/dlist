@@ -104,10 +104,10 @@ extension Dlist {
                 }
 
                 // Write the path of the only device to STDOUT
-                Stdio.output(settings.DEV_PATH + deviceList[0])
+                Stdio.output(settings.DEV_DIR_PATH + deviceList[0])
             } else {
                 // Check any specified index is valid
-                // NOTE Presented list initital index is 1
+                // NOTE Presented list initial index is 1
                 var useDevice = settings.targetDevice
                 if useDevice > deviceList.count {
                     Stdio.reportWarning("\(settings.targetDevice) is out of range (1-\(deviceList.count))")
@@ -116,7 +116,7 @@ extension Dlist {
 
                 // Write the path of the valid chosen device to STDOUT
                 if useDevice != -1 && !settings.doShowData {
-                    Stdio.output(settings.DEV_PATH + deviceList[useDevice - 1])
+                    Stdio.output(settings.DEV_DIR_PATH + deviceList[useDevice - 1])
                     return
                 }
 
@@ -135,7 +135,7 @@ extension Dlist {
                 var count = 1
                 for device in deviceList {
                     let deviceNumber = String(format: "%d", count)
-                    let devicePath = settings.DEV_PATH + device
+                    let devicePath = settings.DEV_DIR_PATH + device
 #if os(macOS)
                     let sd = deviceData[devicePath] ?? SerialDeviceInfo()
 #else
