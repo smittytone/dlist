@@ -3,7 +3,7 @@
 - 0.4.0 *Unreleased*
     - Major code structure revision with no functionality changes.
     - Update versioning script for better Xcode support.
-    - Update to clicore 0.6.0.
+    - Update to clicore 0.6.0 (tracks `develop`).
 - 0.3.1 *13 August 2026*
     - Remove script calls from Xcode build Scheme to fix CLI build toolchain errors.
 - 0.3.0 *13 August 2026*
