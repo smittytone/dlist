@@ -1,6 +1,6 @@
 ## Release Notes ##
 
-- 0.4.0 *Unreleased*
+- 0.4.0 *26 August 2026*
     - Major code structure revision with no functionality changes.
     - Update versioning script for better Xcode support.
     - Update to clicore 0.6.0 (tracks `develop`).
