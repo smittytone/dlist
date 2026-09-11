@@ -644,7 +644,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/smittytone/clicore";
 			requirement = {
-				branch = develop;
+				branch = main;
 				kind = branch;
 			};
 		};
