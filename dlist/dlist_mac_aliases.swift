@@ -56,7 +56,7 @@ extension Dlist {
 
             // ...and convert it back again for use
             let matchesCFDictRef = (matches as NSDictionary) as CFDictionary
-            if IOServiceGetMatchingServices(kIOMasterPortDefault, matchesCFDictRef, &portIterator) == KERN_SUCCESS {
+            if IOServiceGetMatchingServices(kIOMainPortDefault, matchesCFDictRef, &portIterator) == KERN_SUCCESS {
                 // We got a port iterator back - ie. one or more matching devices - so use it
                 defer {
                     IOObjectRelease(portIterator)

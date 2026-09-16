@@ -48,5 +48,7 @@ struct Settings {
     let SYS_PATH_LINUX: String      = "/sys/class/tty/"
 
     var targetDevice: Int           = -1
-    var doShowData: Bool            = false
+    var showData: Bool              = false
+    // FROM 0.4.1
+    var silent: Bool                = false
 }

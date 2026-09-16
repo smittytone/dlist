@@ -97,7 +97,7 @@ extension Dlist {
     static func showDevices(_ deviceList: ArraySlice<String>, _ ignorableDevices: ArraySlice<String>, _ settings: Settings) {
 
         if deviceList.count > 0 {
-            if deviceList.count == 1 && !settings.doShowData {
+            if deviceList.count == 1 && !settings.showData {
                 // Warn if a device has been specified anyway
                 if settings.targetDevice != -1 && settings.targetDevice != 1 {
                     Stdio.reportWarning("\(settings.targetDevice) is out of range (1)")
@@ -115,7 +115,7 @@ extension Dlist {
                 }
 
                 // Write the path of the valid chosen device to STDOUT
-                if useDevice != -1 && !settings.doShowData {
+                if useDevice != -1 && !settings.showData {
                     Stdio.output(settings.DEV_DIR_PATH + deviceList[useDevice - 1])
                     return
                 }
@@ -170,11 +170,13 @@ extension Dlist {
                 Stdio.report("└─" + String(repeating: "─", count: widths[0]) + "─┴─" + String(repeating: "─", count: widths[1]) + "─┴─" + String(repeating: "─", count: widths[2]) + "─┴─" + String(repeating: "─", count: widths[3]) + "─┘")
             }
         } else {
+            if !settings.silent {
 #if os(macOS)
-            Stdio.report(withEmoji: "🚫", "No connected devices")
+                Stdio.report(withEmoji: "🚫", "No connected devices")
 #else
-            Stdio.report("No connected devices")
+                Stdio.report("No connected devices")
 #endif
+            }
         }
     }
 }

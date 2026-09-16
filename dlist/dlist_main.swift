@@ -57,13 +57,15 @@ struct Dlist {
         for argument in collatedArguments {
             switch argument {
                 case "-i", "--info":
-                    settings.doShowData = true
+                    settings.showData = true
                 case "-h", "--help":
                     showHelp()
                     closeCleanly()
                 case "-v", "--version":
                     showHeader()
                     closeCleanly()
+                case "-s", "--silent":
+                    settings.silent = true
                 default:
                     if argument.prefix(1) == "-" {
                         Stdio.reportErrorAndExit("Unknown argument: \(argument)")
