@@ -12,7 +12,7 @@ final class testDlist: XCTestCase {
     var testDevices: [String: SerialDeviceInfo] = [:]
     let deviceNames: [String] = ["cu.usbmodem01", "cu.usbmodem02"]
     let devicePath = "/dev/"
-    let ignorables: [String] = getIgnorables()
+    let ignorables: [String] = Dlist.getIgnorables()
 
     override func setUpWithError() throws {
 
@@ -40,8 +40,9 @@ final class testDlist: XCTestCase {
         let og = OutputGrabber.init(useStdout: false)
         og.openConsolePipe()
         
-        doShowData = false
-        Dlist.showDevices(devices[...], -1, ignorables[...])
+        var settings = Settings()
+        settings.showData = false
+        Dlist.showDevices(devices[...], ignorables[...], settings)
 
         // Pause until we have data from the pipe
         var a = 0
@@ -50,7 +51,7 @@ final class testDlist: XCTestCase {
         }
         _ = og.closeConsolePipe()
         
-        let expected = "No connected devices\n"
+        let expected = "🚫 No connected devices\n"
         XCTAssert(og.errors.count == 0 && og.contents == expected)
     }
     
@@ -63,8 +64,9 @@ final class testDlist: XCTestCase {
         let og = OutputGrabber.init(useStdout: true)
         og.openConsolePipe()
         
-        doShowData = false
-        Dlist.showDevices(devices[...], -1, ignorables[...])
+        var settings = Settings()
+        settings.showData = false
+        Dlist.showDevices(devices[...], ignorables[...], settings)
 
         // Pause until we have data from the pipe
         var a = 0
@@ -73,7 +75,7 @@ final class testDlist: XCTestCase {
         }
         _ = og.closeConsolePipe()
         
-        let expected = devices[0] + "\n"
+        let expected = "/dev/" + devices[0] + "\n"
         XCTAssert(og.errors.count == 0 && og.contents == expected)
     }
     
@@ -86,8 +88,9 @@ final class testDlist: XCTestCase {
         let og = OutputGrabber.init(useStdout: false)
         og.openConsolePipe()
         
-        doShowData = true
-        Dlist.showDevices(devices[...], -1, ignorables[...])
+        var settings = Settings()
+        settings.showData = true
+        Dlist.showDevices(devices[...], ignorables[...], settings)
 
         var a = 0
         while !og.doneflag{
@@ -109,8 +112,10 @@ final class testDlist: XCTestCase {
         let og = OutputGrabber.init(useStdout: false)
         og.openConsolePipe()
         
-        doShowData = false
-        Dlist.showDevices(devices[...], 42, ignorables[...])
+        var settings = Settings()
+        settings.showData = false
+        settings.targetDevice = 42
+        Dlist.showDevices(devices[...], ignorables[...], settings)
 
         var a = 0
         while !og.doneflag{
@@ -132,8 +137,10 @@ final class testDlist: XCTestCase {
         let og = OutputGrabber.init(useStdout: false)
         og.openConsolePipe()
         
-        doShowData = true
-        Dlist.showDevices(devices[...], 42, ignorables[...])
+        var settings = Settings()
+        settings.showData = true
+        settings.targetDevice = 42
+        Dlist.showDevices(devices[...], ignorables[...], settings)
 
         var a = 0
         while !og.doneflag{
@@ -155,8 +162,9 @@ final class testDlist: XCTestCase {
         let og = OutputGrabber.init(useStdout: false)
         og.openConsolePipe()
         
-        doShowData = false
-        Dlist.showDevices(devices[...], -1, ignorables[...])
+        var settings = Settings()
+        settings.showData = false
+        Dlist.showDevices(devices[...], ignorables[...], settings)
 
         var a = 0
         while !og.doneflag{
@@ -180,8 +188,9 @@ final class testDlist: XCTestCase {
         let og = OutputGrabber.init(useStdout: false)
         og.openConsolePipe()
         
-        doShowData = true
-        Dlist.showDevices(devices[...], -1, ignorables[...])
+        var settings = Settings()
+        settings.showData = true
+        Dlist.showDevices(devices[...], ignorables[...], settings)
 
         var a = 0
         while !og.doneflag{
@@ -204,8 +213,10 @@ final class testDlist: XCTestCase {
         let og = OutputGrabber.init(useStdout: true)
         og.openConsolePipe()
         
-        doShowData = false
-        Dlist.showDevices(devices[...], 2, ignorables[...])
+        var settings = Settings()
+        settings.showData = false
+        settings.targetDevice = 2
+        Dlist.showDevices(devices[...], ignorables[...], settings)
 
         var a = 0
         while !og.doneflag{
@@ -227,8 +238,10 @@ final class testDlist: XCTestCase {
         let og = OutputGrabber.init(useStdout: false)
         og.openConsolePipe()
         
-        doShowData = true
-        Dlist.showDevices(devices[...], 2, ignorables[...])
+        var settings = Settings()
+        settings.showData = true
+        settings.targetDevice = 2
+        Dlist.showDevices(devices[...], ignorables[...], settings)
 
         var a = 0
         while !og.doneflag{
@@ -250,8 +263,10 @@ final class testDlist: XCTestCase {
         let og = OutputGrabber.init(useStdout: false)
         og.openConsolePipe()
         
-        doShowData = false
-        Dlist.showDevices(devices[...], 42, ignorables[...])
+        var settings = Settings()
+        settings.showData = false
+        settings.targetDevice = 42
+        Dlist.showDevices(devices[...], ignorables[...], settings)
 
         var a = 0
         while !og.doneflag{
@@ -273,8 +288,10 @@ final class testDlist: XCTestCase {
         let og = OutputGrabber.init(useStdout: false)
         og.openConsolePipe()
         
-        doShowData = true
-        Dlist.showDevices(devices[...], 42, ignorables[...])
+        var settings = Settings()
+        settings.showData = true
+        settings.targetDevice = 42
+        Dlist.showDevices(devices[...], ignorables[...], settings)
 
         var a = 0
         while !og.doneflag{
@@ -292,7 +309,7 @@ final class testDlist: XCTestCase {
      */
     func testDoKeepDevice_DoRemove_01() throws {
         
-        XCTAssert(!doKeepDevice("/dev/cu.Bluetooth-Incoming-Port", ignorables[...]))
+        XCTAssert(!Dlist.doKeepDevice("/dev/cu.Bluetooth-Incoming-Port", ignorables[...]))
     }
     
     /*
@@ -300,7 +317,7 @@ final class testDlist: XCTestCase {
      */
     func testDoKeepDevice_DoRemove_02() throws {
         
-        XCTAssert(!doKeepDevice("/dev/cu.debug-console", ignorables[...]))
+        XCTAssert(!Dlist.doKeepDevice("/dev/cu.debug-console", ignorables[...]))
     }
     
     /*
@@ -308,6 +325,6 @@ final class testDlist: XCTestCase {
      */
     func testDoKeepDevice_DoKeep() throws {
         
-        XCTAssert(doKeepDevice("/dev/cu.usbmodem1101", ignorables[...]))
+        XCTAssert(Dlist.doKeepDevice("/dev/cu.usbmodem1101", ignorables[...]))
     }
 }
