@@ -65,7 +65,7 @@ struct Dlist {
                     showHeader()
                     closeCleanly()
                 case "-s", "--silent":
-                    settings.silent = true
+                    settings.silenceNoDevicesWarning = true
                 default:
                     if argument.prefix(1) == "-" {
                         Stdio.reportErrorAndExit("Unknown argument: \(argument)")

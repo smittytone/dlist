@@ -33,9 +33,9 @@ import Foundation
  */
 struct SerialDeviceInfo {
     
-    var serialNumber: String        = "UNKNOWN SERIAL NUMBER"
-    var productType: String         = "UNKNOWN PRODUCT TYPE"
-    var vendorName: String          = "UNKNOWN MANUFACTURER"
+    var serialNumber: String            = "UNKNOWN SERIAL NUMBER"
+    var productType: String             = "UNKNOWN PRODUCT TYPE"
+    var vendorName: String              = "UNKNOWN MANUFACTURER"
 }
 
 
@@ -44,11 +44,11 @@ struct SerialDeviceInfo {
  */
 struct Settings {
 
-    let DEV_DIR_PATH: String        = "/dev/"
-    let SYS_PATH_LINUX: String      = "/sys/class/tty/"
+    let DEV_DIR_PATH: String            = "/dev/"
+    let SYS_PATH_LINUX: String          = "/sys/class/tty/"
 
-    var targetDevice: Int           = -1
-    var showData: Bool              = false
+    var targetDevice: Int               = -1
+    var showData: Bool                  = false
     // FROM 0.4.1
-    var silent: Bool                = false
+    var silenceNoDevicesWarning: Bool   = false
 }

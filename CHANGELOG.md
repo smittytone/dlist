@@ -1,6 +1,7 @@
 ## Release Notes ##
 
-- 0.4.1 *Unreleased*
+- 0.5.0 *Unreleased*
+    - Add silent mode for commands piping: nothing is reported when there are no connected devices.
     - Updated to clicore 0.6.1 (tracks `develop`).
 - 0.4.0 *26 August 2026*
     - Major code structure revision with no functionality changes.

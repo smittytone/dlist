@@ -170,13 +170,14 @@ extension Dlist {
                 Stdio.report("└─" + String(repeating: "─", count: widths[0]) + "─┴─" + String(repeating: "─", count: widths[1]) + "─┴─" + String(repeating: "─", count: widths[2]) + "─┴─" + String(repeating: "─", count: widths[3]) + "─┘")
             }
         } else {
-            if !settings.silent {
-#if os(macOS)
-                Stdio.report(withEmoji: "🚫", "No connected devices")
-#else
-                Stdio.report("No connected devices")
-#endif
+            if settings.silenceNoDevicesWarning {
+                return
             }
+#if os(macOS)
+            Stdio.report(withEmoji: "🚫", "No connected devices")
+#else
+            Stdio.report("No connected devices")
+#endif
         }
     }
 }

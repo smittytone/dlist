@@ -1,4 +1,4 @@
-# dlist 0.4.0
+# dlist 0.5.0
 
 A Swift-based macOS/Linux CLI utility for accessing the device paths connected MCU boards and USB-to-Serial adaptors.
 
@@ -51,6 +51,8 @@ Including a numerical argument causes `dlist` to issue the specified device (by 
 Including `--info` or `-i` as a `dlist` argument will force it into list mode, however many devices are connected.
 
 Because the output is intended to be readable by people, it can’t be piped into another command. Make sure you don’t include the flag if you’re using `dlist` to pipe the device path.
+
+Use `--silent` or `-s` to prevent `dlist` from issuing `No connected devices` messages. This can be useful you are piping the utility’s output into another which will present just such a message of its own.
 
 ## macOS Notes
 
