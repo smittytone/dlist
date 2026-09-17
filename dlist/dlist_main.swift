@@ -109,7 +109,7 @@ struct Dlist {
      */
     private static func showHelp() {
 
-        let dlist = "\(String(.italic))dlist\(String(.normal))"
+        let dlist = "\(String(.bold))dlist\(String(.normal))"
         let helpText = """
             
             Call \(dlist) to view or use a connected adaptor board's device path. If multiple adaptors are
@@ -121,6 +121,7 @@ struct Dlist {
             
             \(String(.bold))OPTIONS\(String(.normal))
               -i | --info          Present extra, human-readable device info: product type, manufacturer
+              -s | --silent        Silence the 'no connected devices' output when piping output to other apps
               -v | --version       \(dlist) version information
               -h | --help          This help screen
             
