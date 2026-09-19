@@ -45,11 +45,10 @@ extension Dlist {
 
         var list: [String] = []
         var finalList: [String] = []
-        let fm = FileManager.default
 
         // Get the files in the target directory
         do {
-            list = try fm.contentsOfDirectory(atPath: devicesPath)
+            list = try FileManager.default.contentsOfDirectory(atPath: devicesPath)
         } catch {
             Stdio.reportErrorAndExit("\(devicesPath) cannot be found", 2)
         }
@@ -180,4 +179,5 @@ extension Dlist {
 #endif
         }
     }
+
 }

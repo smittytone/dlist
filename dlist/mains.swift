@@ -1,6 +1,6 @@
 /*
     dlist
-    dlist.swift
+    mains.swift
 
     Copyright © 2026 Tony Smith. All rights reserved.
 
@@ -24,7 +24,6 @@
     SOFTWARE.
 */
 
-
 import Foundation
 #if os(Linux)
 import Clibudev
@@ -40,7 +39,6 @@ struct Dlist {
      */
     static func main() {
 
-        // FROM 0.6.0
         var settings = Settings()
 
 #if os(macOS)
@@ -99,60 +97,6 @@ struct Dlist {
 
         // Close cleanly
         closeCleanly()
-    }
-
-
-    // MARK: Help and Info Functions
-
-    /**
-     Display help.
-     */
-    private static func showHelp() {
-
-        let dlist = "\(String(.bold))dlist\(String(.normal))"
-        let helpText = """
-            
-            Call \(dlist) to view or use a connected adaptor board's device path. If multiple adaptors are
-            connected, \(dlist) will list them. In this case, to use one of them, call \(dlist) with the
-            required adaptor board's index as shown in the presented list.
-            
-            \(String(.bold))USAGE\(String(.normal))
-              dlist [--info] [--version] [--help] [device index]
-            
-            \(String(.bold))OPTIONS\(String(.normal))
-              -i | --info          Present extra, human-readable device info: product type, manufacturer
-              -s | --silent        Silence the 'no connected devices' output when piping output to other apps
-              -v | --version       \(dlist) version information
-              -h | --help          This help screen
-            
-            \(String(.bold))EXAMPLES\(String(.normal))
-              One device connected:                  minicom -d $(dlist) -b 9600
-              One device connected, get info:        dlist -i
-              Two devices connected, use number 1:   minicom -d $(dlist 1) -b 9600
-              Two devices connected, get info on 2:  dlist -i 2
-            
-            """
-
-        showHeader()
-        Stdio.report(helpText)
-    }
-
-
-    /**
-     Display the app's version number.
-     */
-    private static func showHeader() {
-
-#if os(macOS)
-        let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? SWIFT_BUILD_PROCESS_DLIST_VERSION
-        let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "\(SWIFT_BUILD_PROCESS_DLIST_BUILD)"
-        let name = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String ?? "dlist"
-        Stdio.report("\(String(.bold))\(name) \(version) (\(build))\(String(.normal)) for macOS")
-#else
-        // Linux output
-        Stdio.report("\(String(.bold))dlist \(SWIFT_BUILD_PROCESS_DLIST_VERSION) (\(SWIFT_BUILD_PROCESS_DLIST_BUILD))\(String(.normal)) for Linux")
-#endif
-        Stdio.report("Copyright © 2026, Tony Smith (@smittytone). Source code available under the MIT licence.")
     }
 
 
