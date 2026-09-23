@@ -3,7 +3,7 @@
 - 0.5.0 *Unreleased*
     - Add silent mode for commands piping: nothing is reported when there are no connected devices.
     - Some code reorganisation.
-    - Updated to clicore 0.6.1 (tracks `develop`).
+    - Updated to clicore 0.7.0 (tracks `develop`).
 - 0.4.0 *26 August 2026*
     - Major code structure revision with no functionality changes.
     - Update versioning script for better Xcode support.

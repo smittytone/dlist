@@ -102,3 +102,5 @@ The source of truth for version information is the Xcode project. If you compile
 The `sync-version.sh` script is my tool to update the subsidiary files after I have updated the app using Xcode. The current version of the app, in the `main` branch of the repo, will always contain up-to-date `dlist` version information with the subsidiary version information files, so you should not need to alter these files yourself. The script is currently macOS only.
 
 Copyright © 2026, Tony Smith (@smittytone)
+
+_AI was not used in the development of this software. This is a statement of plain fact, not of policy. AI tools may be used in future._
