@@ -24,7 +24,7 @@ set -eu
 # This script depends on xcodebuild and /usr/libexec/PlistBuddy, which are
 # macOS-only tools. Abort immediately on any other platform.
 if [ "$(uname)" != "Darwin" ]; then
-    printf '[ERROR] sync-version.sh requires macOS\n' >&2
+    printf '⛔️ sync-version.sh requires macOS\n' >&2
     exit 1
 fi
 
@@ -46,12 +46,12 @@ if [ -n "${MARKETING_VERSION:-}" ] && [ -n "${CURRENT_PROJECT_VERSION:-}" ]; the
 else
     # Script run standalone
     if [ ! -d "${XCODEPROJ}" ]; then
-        printf '[ERROR] Cannot find %s\n' "${XCODEPROJ}" >&2
+        printf '⛔️ Cannot find %s\n' "${XCODEPROJ}" >&2
         exit 1
     fi
 
     if ! command -v xcodebuild >/dev/null 2>&1; then
-        printf '[ERROR] xcodebuild not found -- install Xcode/Command Line Tools\n' >&2
+        printf '⛔️ xcodebuild not found -- install Xcode/Command Line Tools\n' >&2
         exit 1
     fi
 
@@ -61,7 +61,7 @@ else
     BUILD=$(printf '%s\n' "${BUILD_SETTINGS}" | awk -F' = ' '/ CURRENT_PROJECT_VERSION /{print $2; exit}')
 
     if [ -z "${VERSION}" ] || [ -z "${BUILD}" ]; then
-        printf '[ERROR] could not read MARKETING_VERSION/CURRENT_PROJECT_VERSION from Xcode (configuration: %s)\n' "${CONFIGURATION}" >&2
+        printf '⛔️ could not read MARKETING_VERSION/CURRENT_PROJECT_VERSION from Xcode (configuration: %s)\n' "${CONFIGURATION}" >&2
         exit 1
     fi
 fi
@@ -72,7 +72,7 @@ case "${BUILD}" in
         if [ "${IN_XCODE}" = "1" ]; then
             echo "sync-version:74:error:CURRENT_PROJECT_VERSION is not a plain integer: ${BUILD}"
         else
-            printf '[ERROR] CURRENT_PROJECT_VERSION is not a plain integer: %s\n' "${BUILD}" >&2
+            printf '⛔️ CURRENT_PROJECT_VERSION is not a plain integer: %s\n' "${BUILD}" >&2
         fi
         exit 1
         ;;
@@ -113,8 +113,8 @@ cat > "${TARGET_FILE}" <<EOF
          source of truth for the app's version and build numbers.
 */
 
-let SWIFT_BUILD_PROCESS_DLIST_VERSION = "${ESCAPED_VERSION}"
-let SWIFT_BUILD_PROCESS_DLIST_BUILD = ${BUILD}
+let SWIFT_BUILD_PROCESS_VERSION = "${ESCAPED_VERSION}"
+let SWIFT_BUILD_PROCESS_BUILD = ${BUILD}
 EOF
 
 printf 'Version written to %s: version %s, build %s\n' "${TARGET_FILE}" "${VERSION}" "${BUILD})"
@@ -132,7 +132,7 @@ else
     if [ "${IN_XCODE}" = "1" ]; then
         echo "sync-version:122:error:Pre-formed swift.plist file missing from the source directory"
     else
-        printf '[ERROR] Pre-formed swift.plist file missing from the source directory'
+        printf '⛔️ Pre-formed swift.plist file missing from the source directory'
     fi
 fi
 
