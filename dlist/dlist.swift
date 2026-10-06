@@ -1,6 +1,6 @@
 /*
     dlist
-    mains.swift
+    dlist.swift
 
     Copyright © 2026 Tony Smith. All rights reserved.
 
