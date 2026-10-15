@@ -28,7 +28,9 @@ if [ "$(uname)" != "Darwin" ]; then
     exit 1
 fi
 
+########################
 NAME=dlist
+########################
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 XCODEPROJ="${SCRIPT_DIR}/${NAME}.xcodeproj"
 TARGET_FILE="${SCRIPT_DIR}/${NAME}/swift_version.swift"
