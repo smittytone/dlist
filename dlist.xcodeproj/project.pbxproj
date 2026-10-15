@@ -43,6 +43,7 @@
 		3B3BF1902D5F57400083DE56 /* testDlist.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = testDlist.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B757F562E546BB200567756 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		3B757F572E546C6200567756 /* devices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = devices.swift; sourceTree = "<group>"; };
+		3B884AA03081358700C50EDB /* swift.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = swift.plist; sourceTree = "<group>"; };
 		3B8D30F92D5E21EF0019031C /* extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extensions.swift; sourceTree = "<group>"; };
 		3BA64648305ECD5C006467EA /* help.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = help.swift; sourceTree = "<group>"; };
 		3BDEF23F301FE72A00625C41 /* swift_version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = swift_version.swift; sourceTree = "<group>"; };
@@ -112,6 +113,7 @@
 				3B0C90182D5CABD2003FD494 /* mac_aliases.swift */,
 				3B8D30F92D5E21EF0019031C /* extensions.swift */,
 				3BDEF23F301FE72A00625C41 /* swift_version.swift */,
+				3B884AA03081358700C50EDB /* swift.plist */,
 				3BF2DC6C2D50E0A900520F48 /* Info.plist */,
 			);
 			path = dlist;
@@ -453,7 +455,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
 				CODE_SIGN_STYLE = Manual;
 				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
-				CURRENT_PROJECT_VERSION = 49;
+				CURRENT_PROJECT_VERSION = 50;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = Y5J3K52DNA;
@@ -479,7 +481,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
 				CODE_SIGN_STYLE = Manual;
 				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
-				CURRENT_PROJECT_VERSION = 49;
+				CURRENT_PROJECT_VERSION = 50;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = Y5J3K52DNA;
@@ -573,7 +575,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
 				CODE_SIGN_STYLE = Manual;
 				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
-				CURRENT_PROJECT_VERSION = 49;
+				CURRENT_PROJECT_VERSION = 50;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = Y5J3K52DNA;
