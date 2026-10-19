@@ -57,6 +57,7 @@ extension Dlist  {
           Two devices connected, use number 1:   minicom -d $(dlist 1) -b 9600
           Two devices connected, get info on 2:  dlist -i 2
 
+        \(String(.italic))https://smittytone.net/dlist/index.html\(String(.normal))
         """
 
         showHeader()
