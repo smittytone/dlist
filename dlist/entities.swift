@@ -50,4 +50,6 @@ struct Settings {
     var showData: Bool                  = false
     // FROM 0.4.1
     var silenceNoDevicesWarning: Bool   = false
+    // FROM 0.5.1
+    var inTest: Bool                    = false
 }
