@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "F610C94E-600B-4985-90EB-568DC530B6E2",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:dlist.xcodeproj",
+        "identifier" : "3B3BF18F2D5F57400083DE56",
+        "name" : "testDlist"
+      }
+    }
+  ],
+  "version" : 1
+}

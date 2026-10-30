@@ -6,6 +6,8 @@
 //
 
 import XCTest
+import Clicore
+
 
 final class testDlist: XCTestCase {
     
@@ -31,6 +33,7 @@ final class testDlist: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+
     /*
      Should output "no devices" on STDERR
      */
@@ -42,6 +45,7 @@ final class testDlist: XCTestCase {
         
         var settings = Settings()
         settings.showData = false
+        settings.inTest = true
         Dlist.showDevices(devices[...], ignorables[...], settings)
 
         // Pause until we have data from the pipe
@@ -54,7 +58,33 @@ final class testDlist: XCTestCase {
         let expected = "🚫 No connected devices\n"
         XCTAssert(og.errors.count == 0 && og.contents == expected)
     }
-    
+
+
+    /*
+     Should output nothing on STDERR
+     */
+    func testShowDevices_NoDevice_NoInfo_Silent() throws {
+
+        let devices: [String] = []
+        let og = OutputGrabber.init(useStdout: false)
+        og.openConsolePipe()
+
+        var settings = Settings()
+        settings.showData = false
+        settings.silenceNoDevicesWarning = true
+        settings.inTest = true
+        Dlist.showDevices(devices[...], ignorables[...], settings)
+
+        // Pause for 5s while the pipe listens for data
+        // (which should not come)
+        sleep(5)
+        _ = og.closeConsolePipe()
+
+        let expected = ""
+        XCTAssert(og.errors.count == 0 && og.contents == expected)
+    }
+
+
     /*
      Should output devices[0] on STDOUT
      */
@@ -66,6 +96,7 @@ final class testDlist: XCTestCase {
         
         var settings = Settings()
         settings.showData = false
+        settings.inTest = true
         Dlist.showDevices(devices[...], ignorables[...], settings)
 
         // Pause until we have data from the pipe
@@ -74,11 +105,13 @@ final class testDlist: XCTestCase {
             a += 1
         }
         _ = og.closeConsolePipe()
-        
-        let expected = "/dev/" + devices[0] + "\n"
+
+        let prefix = "/dev/"
+        let expected = prefix + devices[0] + "\n"
         XCTAssert(og.errors.count == 0 && og.contents == expected)
     }
-    
+
+
     /*
      Should output devices[0] + info on STDERR
      */
@@ -90,6 +123,7 @@ final class testDlist: XCTestCase {
         
         var settings = Settings()
         settings.showData = true
+        settings.inTest = true
         Dlist.showDevices(devices[...], ignorables[...], settings)
 
         var a = 0
@@ -99,10 +133,20 @@ final class testDlist: XCTestCase {
         
         _ = og.closeConsolePipe()
         
-        let expected = "1. " + devices[0] + "\t\t[UNKNOWN PRODUCT TYPE, UNKNOWN MANUFACTURER]\n"
+        let expected = """
+        ┌───┬────────────────────┬──────────────────────┬──────────────────────┐
+        │   │ Device Path        │ Device Type          │ Vendor               │
+        ├───┼────────────────────┼──────────────────────┼──────────────────────┤
+        │ 1 │ /dev/cu.usbmodem01 │ UNKNOWN PRODUCT TYPE │ UNKNOWN MANUFACTURER │
+        └───┴────────────────────┴──────────────────────┴──────────────────────┘
+        
+        """
+
+        print(og.contents)
         XCTAssert(og.errors.count == 0 && og.contents == expected)
     }
-    
+
+
     /*
      Should output error on STDERR
      */
@@ -114,7 +158,9 @@ final class testDlist: XCTestCase {
         
         var settings = Settings()
         settings.showData = false
+        settings.inTest = true
         settings.targetDevice = 42
+        Stdio.settings.useEmoji = true
         Dlist.showDevices(devices[...], ignorables[...], settings)
 
         var a = 0
@@ -124,10 +170,11 @@ final class testDlist: XCTestCase {
         
         _ = og.closeConsolePipe()
         
-        let expected = "\u{1b}[33m\u{1b}[1mWARNING \u{1b}[0m42 is out of range (1)\n"
+        let expected = "⚠️ 42 is out of range (1)\n"
         XCTAssert(og.errors.count == 0 && og.contents == expected, "\(og.contents)")
     }
-    
+
+
     /*
      Should output error on STDERR
      */
@@ -139,6 +186,7 @@ final class testDlist: XCTestCase {
         
         var settings = Settings()
         settings.showData = true
+        settings.inTest = true
         settings.targetDevice = 42
         Dlist.showDevices(devices[...], ignorables[...], settings)
 
@@ -152,7 +200,8 @@ final class testDlist: XCTestCase {
         let expected = "\u{1b}[33m\u{1b}[1mWARNING \u{1b}[0m42 is out of range (1-1)\n"
         XCTAssert(og.errors.count == 0 && og.contents.hasPrefix(expected), "\(og.contents)")
     }
-    
+
+
     /*
      Should output devices[0] + info and devices[1] + info on STDERR
      */
@@ -163,6 +212,7 @@ final class testDlist: XCTestCase {
         og.openConsolePipe()
         
         var settings = Settings()
+        settings.inTest = true
         settings.showData = false
         Dlist.showDevices(devices[...], ignorables[...], settings)
 
@@ -172,13 +222,21 @@ final class testDlist: XCTestCase {
         }
         
         _ = og.closeConsolePipe()
-        
-        
-        var expected = "1. " + devices[0] + "\t\t[UNKNOWN PRODUCT TYPE, UNKNOWN MANUFACTURER]\n"
-        expected += "2. " + devices[1] + "\t\t[UNKNOWN PRODUCT TYPE, UNKNOWN MANUFACTURER]\n"
+
+        let expected = """
+            ┌───┬────────────────────┬──────────────────────┬──────────────────────┐
+            │   │ Device Path        │ Device Type          │ Vendor               │
+            ├───┼────────────────────┼──────────────────────┼──────────────────────┤
+            │ 1 │ /dev/cu.usbmodem01 │ UNKNOWN PRODUCT TYPE │ UNKNOWN MANUFACTURER │
+            ├───┼────────────────────┼──────────────────────┼──────────────────────┤
+            │ 2 │ /dev/cu.usbmodem02 │ UNKNOWN PRODUCT TYPE │ UNKNOWN MANUFACTURER │
+            └───┴────────────────────┴──────────────────────┴──────────────────────┘
+
+            """
         XCTAssert(og.errors.count == 0 && og.contents == expected, "\(og.contents)")
     }
-    
+
+
     /*
      Should output devices[0] + info and devices[1] + info on STDERR (identical to above)
      */
@@ -190,6 +248,7 @@ final class testDlist: XCTestCase {
         
         var settings = Settings()
         settings.showData = true
+        settings.inTest = true
         Dlist.showDevices(devices[...], ignorables[...], settings)
 
         var a = 0
@@ -199,11 +258,20 @@ final class testDlist: XCTestCase {
         
         _ = og.closeConsolePipe()
         
-        var expected = "1. " + devices[0] + "\t\t[UNKNOWN PRODUCT TYPE, UNKNOWN MANUFACTURER]\n"
-        expected += "2. " + devices[1] + "\t\t[UNKNOWN PRODUCT TYPE, UNKNOWN MANUFACTURER]\n"
+        let expected = """
+            ┌───┬────────────────────┬──────────────────────┬──────────────────────┐
+            │   │ Device Path        │ Device Type          │ Vendor               │
+            ├───┼────────────────────┼──────────────────────┼──────────────────────┤
+            │ 1 │ /dev/cu.usbmodem01 │ UNKNOWN PRODUCT TYPE │ UNKNOWN MANUFACTURER │
+            ├───┼────────────────────┼──────────────────────┼──────────────────────┤
+            │ 2 │ /dev/cu.usbmodem02 │ UNKNOWN PRODUCT TYPE │ UNKNOWN MANUFACTURER │
+            └───┴────────────────────┴──────────────────────┴──────────────────────┘
+            
+            """
         XCTAssert(og.errors.count == 0 && og.contents == expected, "\(og.contents)")
     }
-    
+
+
     /*
      Should output devices[1] on STDOUT
      */
@@ -216,6 +284,7 @@ final class testDlist: XCTestCase {
         var settings = Settings()
         settings.showData = false
         settings.targetDevice = 2
+        settings.inTest = true
         Dlist.showDevices(devices[...], ignorables[...], settings)
 
         var a = 0
@@ -224,11 +293,13 @@ final class testDlist: XCTestCase {
         }
         
         _ = og.closeConsolePipe()
-        
-        let expected = devices[1] + "\n"
+
+        let prefix = "/dev/"
+        let expected = prefix + devices[settings.targetDevice - 1] + "\n"
         XCTAssert(og.errors.count == 0 && og.contents == expected)
     }
-    
+
+
     /*
      Should output devices[0] + info on STDERR
      */
@@ -240,6 +311,7 @@ final class testDlist: XCTestCase {
         
         var settings = Settings()
         settings.showData = true
+        settings.inTest = true
         settings.targetDevice = 2
         Dlist.showDevices(devices[...], ignorables[...], settings)
 
@@ -250,9 +322,18 @@ final class testDlist: XCTestCase {
         
         _ = og.closeConsolePipe()
         
-        let expected = devices[1] + "\t\t[UNKNOWN PRODUCT TYPE, UNKNOWN MANUFACTURER]\n"
+        let expected = """
+        ┌───┬────────────────────┬──────────────────────┬──────────────────────┐
+        │   │ Device Path        │ Device Type          │ Vendor               │
+        ├───┼────────────────────┼──────────────────────┼──────────────────────┤
+        │ 1 │ /dev/cu.usbmodem02 │ UNKNOWN PRODUCT TYPE │ UNKNOWN MANUFACTURER │
+        └───┴────────────────────┴──────────────────────┴──────────────────────┘
+
+        """
+        print(og.contents)
         XCTAssert(og.errors.count == 0 && og.contents == expected)
     }
+
 
     /*
      Should show error on STDERR
@@ -265,7 +346,9 @@ final class testDlist: XCTestCase {
         
         var settings = Settings()
         settings.showData = false
+        settings.inTest = true
         settings.targetDevice = 42
+        Stdio.settings.useEmoji = true
         Dlist.showDevices(devices[...], ignorables[...], settings)
 
         var a = 0
@@ -275,10 +358,11 @@ final class testDlist: XCTestCase {
         
         _ = og.closeConsolePipe()
         
-        let expected = "\u{1b}[33m\u{1b}[1mWARNING \u{1b}[0m42 is out of range (1-2)\n"
+        let expected = "⚠️ 42 is out of range (1-2)\n"
         XCTAssert(og.errors.count == 0 && og.contents.hasPrefix(expected), "\(og.contents)")
     }
-    
+
+
     /*
      Should show error on STDERR
      */
@@ -290,7 +374,9 @@ final class testDlist: XCTestCase {
         
         var settings = Settings()
         settings.showData = true
+        settings.inTest = true
         settings.targetDevice = 42
+        Stdio.settings.useEmoji = true
         Dlist.showDevices(devices[...], ignorables[...], settings)
 
         var a = 0
@@ -300,10 +386,11 @@ final class testDlist: XCTestCase {
         
         _ = og.closeConsolePipe()
         
-        let expected = "\u{1b}[33m\u{1b}[1mWARNING \u{1b}[0m42 is out of range (1-2)\n"
+        let expected = "⚠️ 42 is out of range (1-2)\n"
         XCTAssert(og.errors.count == 0 && og.contents.hasPrefix(expected), "\(og.contents)")
     }
-    
+
+
     /*
      Should reject macOS file
      */
@@ -311,7 +398,8 @@ final class testDlist: XCTestCase {
         
         XCTAssert(!Dlist.doKeepDevice("/dev/cu.Bluetooth-Incoming-Port", ignorables[...]))
     }
-    
+
+
     /*
      Should reject macOS file
      */
@@ -319,7 +407,8 @@ final class testDlist: XCTestCase {
         
         XCTAssert(!Dlist.doKeepDevice("/dev/cu.debug-console", ignorables[...]))
     }
-    
+
+
     /*
      Should accept USB modem file
      */
