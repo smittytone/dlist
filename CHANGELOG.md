@@ -1,7 +1,9 @@
 ## Release Notes ##
 
 - 0.5.1 *Unreleased*
+    - Fix bug where only one device’s info was asked for, but `dlist` showed all devices’ info.
     - Updated to clicore 0.8.0 (tracks `develop`).
+    - Update and extend tests.
 - 0.5.0 *6 October 2026*
     - Add silent mode for commands piping: nothing is reported when there are no connected devices.
     - Some code reorganisation.
