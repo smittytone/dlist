@@ -121,18 +121,28 @@ extension Dlist {
 
                 // List devices to STDERR (ie. for humans)
 #if os(macOS)
-                let deviceData = findConnectedSerialDevices(ignorableDevices)
-                if deviceData.isEmpty {
-                    Stdio.reportError("Unable to read connected devices")
-                    return
+                var deviceData: [String: SerialDeviceInfo] = [:]
+                if !settings.inTest {
+                    deviceData = findConnectedSerialDevices(ignorableDevices)
+                    if deviceData.isEmpty {
+                        Stdio.reportError("Unable to read connected devices")
+                        return
+                    }
                 }
 #endif
+                // FROM 0.5.1
+                // Correctly list one item when specified
+                var showDeviceList = deviceList
+                if useDevice != -1 {
+                    showDeviceList = [deviceList[useDevice - 1]]
+                }
+
                 // FROM 0.2.5
                 // Tabulate info output
                 var rows: [[String]] = [[" ", "Device Path", "Device Type", "Vendor"]]
                 var widths = [rows[0][0].count, rows[0][1].count, rows[0][2].count, rows[0][3].count]
                 var count = 1
-                for device in deviceList {
+                for device in showDeviceList {
                     let deviceNumber = String(format: "%d", count)
                     let devicePath = settings.DEV_DIR_PATH + device
 #if os(macOS)
