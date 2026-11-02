@@ -330,7 +330,6 @@ final class testDlist: XCTestCase {
         └───┴────────────────────┴──────────────────────┴──────────────────────┘
 
         """
-        print(og.contents)
         XCTAssert(og.errors.count == 0 && og.contents == expected)
     }
 

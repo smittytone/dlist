@@ -13,6 +13,9 @@
 		3B3BF1982D5F57890083DE56 /* mac_aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0C90182D5CABD2003FD494 /* mac_aliases.swift */; };
 		3B3BF1992D5F57BD0083DE56 /* entities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3BF18A2D5F50970083DE56 /* entities.swift */; };
 		3B3BF19D2D5F5A820083DE56 /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B8D30F92D5E21EF0019031C /* extensions.swift */; };
+		3B628B5C3098EBB40019E70F /* output-grabber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B628B583098EBB40019E70F /* output-grabber.swift */; };
+		3B628B5D3098EBB40019E70F /* testDlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B628B5A3098EBB40019E70F /* testDlist.swift */; };
+		3B628B5E3098EBB40019E70F /* test_plan.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 3B628B593098EBB40019E70F /* test_plan.xctestplan */; };
 		3B757F582E546C6200567756 /* devices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B757F572E546C6200567756 /* devices.swift */; };
 		3B757F592E546C6200567756 /* devices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B757F572E546C6200567756 /* devices.swift */; };
 		3B8812712E550BD80023DDF1 /* Clicore in Frameworks */ = {isa = PBXBuildFile; productRef = 3B8812702E550BD80023DDF1 /* Clicore */; };
@@ -41,6 +44,9 @@
 		3B0C90182D5CABD2003FD494 /* mac_aliases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mac_aliases.swift; sourceTree = "<group>"; };
 		3B3BF18A2D5F50970083DE56 /* entities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = entities.swift; sourceTree = "<group>"; };
 		3B3BF1902D5F57400083DE56 /* testDlist.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = testDlist.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B628B583098EBB40019E70F /* output-grabber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "output-grabber.swift"; sourceTree = "<group>"; };
+		3B628B593098EBB40019E70F /* test_plan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = test_plan.xctestplan; sourceTree = "<group>"; };
+		3B628B5A3098EBB40019E70F /* testDlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = testDlist.swift; sourceTree = "<group>"; };
 		3B757F562E546BB200567756 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		3B757F572E546C6200567756 /* devices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = devices.swift; sourceTree = "<group>"; };
 		3B884AA03081358700C50EDB /* swift.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = swift.plist; sourceTree = "<group>"; };
@@ -55,14 +61,6 @@
 		3BF2DC912D50ECAB00520F48 /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
 		3BF2DC922D50ECB600520F48 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		3B3BF1912D5F57400083DE56 /* testDlist */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = testDlist;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		3B3BF18D2D5F57400083DE56 /* Frameworks */ = {
@@ -84,12 +82,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3B628B5B3098EBB40019E70F /* testDlist */ = {
+			isa = PBXGroup;
+			children = (
+				3B628B5A3098EBB40019E70F /* testDlist.swift */,
+				3B628B583098EBB40019E70F /* output-grabber.swift */,
+				3B628B593098EBB40019E70F /* test_plan.xctestplan */,
+			);
+			path = testDlist;
+			sourceTree = "<group>";
+		};
 		3BF2DC512D50C07E00520F48 = {
 			isa = PBXGroup;
 			children = (
 				3BF2DC6F2D50E0A900520F48 /* dlist */,
 				3BF2DC8E2D50EC8700520F48 /* Misc */,
-				3B3BF1912D5F57400083DE56 /* testDlist */,
+				3B628B5B3098EBB40019E70F /* testDlist */,
 				3BF2DC5B2D50C07E00520F48 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -145,9 +153,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				3B3BF1912D5F57400083DE56 /* testDlist */,
 			);
 			name = testDlist;
 			packageProductDependencies = (
@@ -224,6 +229,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B628B5E3098EBB40019E70F /* test_plan.xctestplan in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,6 +267,8 @@
 				3B3BF1972D5F57800083DE56 /* dlist.swift in Sources */,
 				3BA64649305ECD5E006467EA /* help.swift in Sources */,
 				3B3BF1982D5F57890083DE56 /* mac_aliases.swift in Sources */,
+				3B628B5C3098EBB40019E70F /* output-grabber.swift in Sources */,
+				3B628B5D3098EBB40019E70F /* testDlist.swift in Sources */,
 				3B3BF19D2D5F5A820083DE56 /* extensions.swift in Sources */,
 				3B3BF1992D5F57BD0083DE56 /* entities.swift in Sources */,
 				3B757F582E546C6200567756 /* devices.swift in Sources */,
